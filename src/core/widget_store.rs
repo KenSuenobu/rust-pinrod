@@ -215,10 +215,10 @@ impl WidgetStore {
 
                 // Skip over item widgets that have a width and height of 0.
                 if widget_size.w > 0 && widget_size.h > 0 {
-                    if point.x >= widget_point.x
-                        && point.x <= widget_point.x + widget_size.w
-                        && point.y >= widget_point.y
-                        && point.y <= widget_point.y + widget_size.h
+                    if point[0] >= widget_point[0]
+                        && point[0] <= widget_point[0] + widget_size.w
+                        && point[1] >= widget_point[1]
+                        && point[1] <= widget_point[1] + widget_size.h
                     {
                         found_id = pos as i32;
                     }
@@ -365,7 +365,7 @@ impl WidgetStore {
 
             eprintln!("Resizing widget: id={}", widget.get_widget_id());
 
-            widget.set_point(CONFIG_ORIGIN, point.x, point.y);
+            widget.set_point(CONFIG_ORIGIN, point[0], point[1]);
             widget.set_size(CONFIG_BODY_SIZE, size.w, size.h);
         }
 
@@ -466,7 +466,7 @@ impl WidgetStore {
                         let new_context: Context = Context {
                             viewport: c.viewport,
                             view: c.view,
-                            transform: c.transform.trans(origin.x as f64, origin.y as f64),
+                            transform: c.transform.trans(origin[0] as f64, origin[1] as f64),
                             draw_state: c.draw_state,
                         };
 
@@ -491,8 +491,8 @@ impl WidgetStore {
                             g.rectangle(
                                 &Rectangle::new([0.0, 0.0, 0.0, 0.8]),
                                 [
-                                    origin.x as f64,
-                                    origin.y as f64,
+                                    origin[0] as f64,
+                                    origin[1] as f64,
                                     size.w as f64,
                                     size.h as f64,
                                 ],

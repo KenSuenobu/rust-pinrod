@@ -120,7 +120,7 @@ impl Configurable {
 
     /// Sets a point for a configuration key.
     pub fn set_point(&mut self, config: u8, x: i32, y: i32) {
-        self.set(config, Config::Point(Point { x, y }));
+        self.set(config, Config::Point([x, y]));
     }
 
     /// Sets a size for a configuration key.

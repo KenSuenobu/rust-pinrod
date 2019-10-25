@@ -20,7 +20,6 @@ use piston::input::*;
 
 use crate::core::callbacks::CallbackEvent::WidgetClicked;
 use crate::core::callbacks::*;
-use crate::core::point::Point;
 use crate::core::widget_store::*;
 use crate::widget::box_widget::*;
 use crate::widget::config::*;
@@ -102,15 +101,15 @@ impl Drawable for ImageButtonWidget {
 
         self.image_widget
             .get_drawable()
-            .draw_with_offset(c, g, &clip, Point { x: 2, y: 2 });
+            .draw_with_offset(c, g, &clip, [2, 2]);
         self.text_widget.get_drawable().draw_with_offset(
             c,
             g,
             &clip,
-            Point {
-                x: size.h + border + 4,
-                y: 0,
-            },
+            [
+                size.h + border + 4,
+                0,
+            ],
         );
 
         // Then clear invalidation.
