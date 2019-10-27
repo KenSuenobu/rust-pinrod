@@ -1,5 +1,9 @@
 # rust-pushrod
 
+**IMPORTANT NOTE**: 
+The rendering engine is being currently rewritten.  
+[Click here](https://www.github.com/KenSuenobu/rust-pushrod-render/) to view the project.
+
 ## Project Description
 
 [![Build Status](https://travis-ci.org/KenSuenobu/rust-pushrod.svg?branch=master)](https://travis-ci.org/KenSuenobu/rust-pushrod)
@@ -7,9 +11,6 @@
 [![docs.rs for rust-pushrod](https://docs.rs/rust-pushrod/badge.svg)](https://docs.rs/rust-pushrod)
 
 **Cross Platform UI Widget Library for Rust that uses OpenGL as its rendering engine.**
-
-The rendering engine is being currently rewritten.  
-[Click here](https://www.github.com/KenSuenobu/rust-pushrod-render/) to view the project.
 
 Draws inspiration from lots of GUI libraries.
 
