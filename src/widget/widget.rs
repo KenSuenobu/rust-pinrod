@@ -45,7 +45,7 @@ pub trait Drawable {
         point_offset: Point,
     ) {
         self.draw(
-            c.trans(point_offset.x as f64, point_offset.y as f64),
+            c.trans(point_offset[0] as f64, point_offset[1] as f64),
             g,
             clip,
         );
@@ -110,7 +110,7 @@ pub trait Widget {
 
     /// Sets a point value for a configuration key.
     fn set_point(&mut self, config: u8, x: i32, y: i32) {
-        self.set_config(config, Config::Point(Point { x, y }));
+        self.set_config(config, Config::Point([x, y]));
     }
 
     /// Sets a size value for a configuration key.
@@ -262,12 +262,12 @@ impl Widget for CanvasWidget {
     }
 
     fn set_point(&mut self, config: u8, x: i32, y: i32) {
-        self.set_config(config, Config::Point(Point { x, y }));
+        self.set_config(config, Config::Point([x, y]));
 
         if self.widget_id != 0 {
             self.event_list.push(CallbackEvent::WidgetMoved {
                 widget_id: self.widget_id,
-                point: Point { x, y },
+                point: [x, y],
             });
         }
     }

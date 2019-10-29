@@ -41,20 +41,20 @@ impl LayoutManager for VerticalLayoutManager {
         let height_per_widget = (size.h / num_widgets) - (self.padding.spacing / 2);
         let mut widget_origins: Vec<Point> = vec![];
         let mut widget_sizes: Vec<Size> = vec![];
-        let current_x: i32 = origin.x;
-        let mut current_y: i32 = origin.y;
+        let current_x: i32 = origin[0];
+        let mut current_y: i32 = origin[1];
 
         for x in 0..num_widgets {
             if x == 0 {
-                current_y = self.padding.top + origin.y;
+                current_y = self.padding.top + origin[1];
             } else {
                 current_y += height_per_widget + (self.padding.spacing / 2);
             }
 
-            widget_origins.push(Point {
-                x: current_x + self.padding.left,
-                y: current_y,
-            });
+            widget_origins.push([
+                current_x + self.padding.left,
+                current_y,
+            ]);
 
             if x == num_widgets - 1 {
                 widget_sizes.push(Size {

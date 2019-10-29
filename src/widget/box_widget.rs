@@ -18,7 +18,7 @@ use opengl_graphics::GlGraphics;
 use piston::input::*;
 
 use crate::core::callbacks::*;
-use crate::core::point::{Point, Size};
+use crate::core::point::Size;
 use crate::core::widget_store::WidgetContainer;
 use crate::widget::config::*;
 use crate::widget::widget::*;
@@ -115,12 +115,12 @@ impl Widget for BoxWidget {
     }
 
     fn set_point(&mut self, config: u8, x: i32, y: i32) {
-        self.set_config(config, Config::Point(Point { x, y }));
+        self.set_config(config, Config::Point([x, y]));
 
         if self.widget_id != 0 {
             self.event_list.push(CallbackEvent::WidgetMoved {
                 widget_id: self.widget_id,
-                point: Point { x, y },
+                point: [x, y],
             });
         }
 

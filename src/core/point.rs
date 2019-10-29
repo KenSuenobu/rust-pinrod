@@ -12,13 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Structure identifying a point on the screen by X and Y coordinates.  X and Y coordinates
-/// are represented from the upper left-hand corner of the base object.
-#[derive(Clone, Debug, Default, PartialEq)]
-pub struct Point {
-    pub x: i32,
-    pub y: i32,
-}
+/// Type identifying a point on the screen by X and Y coordinates.  X and Y coordinates
+/// are represented from the upper left-hand corner of the base object and are at indices 0 and 1,
+/// respectively.
+pub type Point = [i32; 2];
 
 /// Structure identifying a size of an object by W (width) and H (height), respectively.
 /// Other systems may use "width" and "height" as nomenclature, however, we wanted to keep
@@ -31,7 +28,7 @@ pub struct Size {
 
 /// Convenience method to create a new `Point`.
 pub fn make_point_i32(x: i32, y: i32) -> Point {
-    Point { x, y }
+    [x, y]
 }
 
 /// Convenience method to create a `Point` of origin, defined as an X and Y coordinate of 0.
@@ -45,15 +42,15 @@ pub fn make_point_i32(x: i32, y: i32) -> Point {
 /// # }
 /// ```
 pub fn make_origin_point() -> Point {
-    Point { x: 0, y: 0 }
+    [0; 2]
 }
 
 /// Convenience method to convert floating point X and Y positions to a graphical `Point`.
 pub fn make_point_f64(x: f64, y: f64) -> Point {
-    Point {
-        x: x as i32,
-        y: y as i32,
-    }
+    [
+        x as i32,
+        y as i32,
+    ]
 }
 
 /// Convenience method to create a non-existent size, defined as a width and height of 0.
