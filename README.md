@@ -1,9 +1,5 @@
 # rust-pushrod
 
-**IMPORTANT NOTE**: 
-The rendering engine is being currently rewritten.  
-[Click here](https://www.github.com/KenSuenobu/rust-pushrod-render/) to view the project.
-
 ## Project Description
 
 [![Build Status](https://travis-ci.org/KenSuenobu/rust-pushrod.svg?branch=master)](https://travis-ci.org/KenSuenobu/rust-pushrod)
