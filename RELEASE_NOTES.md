@@ -1,5 +1,10 @@
 # Pushrod Releases
 
+## 0.4.7
+
+- Moved render and widget libraries into top-level for monorepo (#200)
+- Created `workspaces` section in `Cargo.toml` file so that the entire project can be built at a time.
+
 ## 0.4.6
 
 - Added on_mouse_button callback (#184, #185)
