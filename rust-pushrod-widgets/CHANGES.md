@@ -9,3 +9,4 @@ first.
 - Removed the `BoxWidget`, as this is effectively handled by the top level `BaseWidget`, and is not necessary.
 - Added font assets from `rust-pushrod`
 - Moved to `rust-pushrod` project.
+- Porting `TextWidget` to `Widget` library.

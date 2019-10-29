@@ -15,5 +15,5 @@
 
 #[macro_use]
 
-/// This is a `BoxWidget`, which draws a `BaseWidget` with a specified border width and color.
-pub mod box_widget;
+/// This is a `TextWidget`, which draws text in a clipped area.
+pub mod text_widget;

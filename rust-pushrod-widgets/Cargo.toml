@@ -21,3 +21,8 @@ path = "src/lib.rs"
 
 [dependencies]
 rust-pushrod-render = "^0.1"
+
+[dependencies.sdl2]
+version = "^0.32"
+features = ["ttf"]
+
