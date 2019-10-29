@@ -19,7 +19,6 @@ use opengl_graphics::GlGraphics;
 use piston::input::*;
 
 use crate::core::callbacks::*;
-use crate::core::point::Point;
 use crate::core::widget_store::*;
 use crate::widget::box_widget::*;
 use crate::widget::config::*;
@@ -94,19 +93,19 @@ impl Drawable for CheckboxWidget {
         if self.selected {
             self.selected_widget
                 .get_drawable()
-                .draw_with_offset(c, g, &clip, Point { x: 0, y: 0 });
+                .draw_with_offset(c, g, &clip, [0; 2]);
         } else {
             self.unselected_widget.get_drawable().draw_with_offset(
                 c,
                 g,
                 &clip,
-                Point { x: 0, y: 0 },
+                [0; 2],
             );
         }
 
         self.text_widget
             .get_drawable()
-            .draw_with_offset(c, g, &clip, Point { x: 38, y: 0 });
+            .draw_with_offset(c, g, &clip, [38, 0]);
 
         // Then clear invalidation.
         self.clear_invalidate();

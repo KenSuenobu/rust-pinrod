@@ -41,20 +41,20 @@ impl LayoutManager for HorizontalLayoutManager {
         let width_per_widget = size.w / num_widgets;
         let mut widget_origins: Vec<Point> = vec![];
         let mut widget_sizes: Vec<Size> = vec![];
-        let mut current_x: i32 = origin.x;
-        let current_y: i32 = origin.y;
+        let mut current_x: i32 = origin[0];
+        let current_y: i32 = origin[1];
 
         for x in 0..num_widgets {
             if x == 0 {
-                current_x = self.padding.left + origin.x;
+                current_x = self.padding.left + origin[0];
             } else {
                 current_x += width_per_widget + (self.padding.spacing / 2);
             }
 
-            widget_origins.push(Point {
-                x: current_x,
-                y: current_y + self.padding.top,
-            });
+            widget_origins.push([
+                current_x,
+                current_y + self.padding.top,
+            ]);
 
             if x == num_widgets - 1 {
                 widget_sizes.push(Size {

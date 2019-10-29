@@ -255,8 +255,8 @@ impl Pushrod {
             event.mouse_cursor(|pos| {
                 let mouse_point = make_point_f64(pos[0], pos[1]);
 
-                if mouse_point.x != previous_mouse_position.x
-                    || mouse_point.y != previous_mouse_position.y
+                if mouse_point[0] != previous_mouse_position[0]
+                    || mouse_point[1] != previous_mouse_position[1]
                 {
                     previous_mouse_position = mouse_point.clone();
 

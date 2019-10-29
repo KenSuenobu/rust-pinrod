@@ -167,7 +167,7 @@ impl PushrodCallbackEvents for SimpleWindowEventHandler {
                 CONFIG_DISPLAY_TEXT,
                 Config::Text(format!(
                     "Dimensions: x={} y={} w={} h={}",
-                    widget_point.x, widget_point.y, widget_size.w, widget_size.h
+                    widget_point[0], widget_point[1], widget_size.w, widget_size.h
                 ))
                 .clone(),
             );
@@ -207,17 +207,17 @@ impl PushrodCallbackEvents for SimpleWindowEventHandler {
                 widget_store
                     .get_widget_for_name("LeftJustifiedText")
                     .borrow_mut()
-                    .set_point(CONFIG_ORIGIN, point.x + 16, point.y + 10);
+                    .set_point(CONFIG_ORIGIN, point[0] + 16, point[1] + 10);
 
                 widget_store
                     .get_widget_for_name("CenterJustifiedText")
                     .borrow_mut()
-                    .set_point(CONFIG_ORIGIN, point.x + 16, point.y + 100 - 24);
+                    .set_point(CONFIG_ORIGIN, point[0] + 16, point[1] + 100 - 24);
 
                 widget_store
                     .get_widget_for_name("RightJustifiedText")
                     .borrow_mut()
-                    .set_point(CONFIG_ORIGIN, point.x + 16, point.y + 200 - 54);
+                    .set_point(CONFIG_ORIGIN, point[0] + 16, point[1] + 200 - 54);
 
                 let layout_size2 = widget_store
                     .get_widget_for_name("BoxInLayoutWidget2")
@@ -236,15 +236,15 @@ impl PushrodCallbackEvents for SimpleWindowEventHandler {
                 widget_store
                     .get_widget_for_name("MiniBox1")
                     .borrow_mut()
-                    .set_point(CONFIG_ORIGIN, box2_point.x + 10, box2_point.y + 10);
+                    .set_point(CONFIG_ORIGIN, box2_point[0] + 10, box2_point[1] + 10);
 
                 widget_store
                     .get_widget_for_name("MiniBox2")
                     .borrow_mut()
                     .set_point(
                         CONFIG_ORIGIN,
-                        box2_point.x + (layout_size2.w / 2) + 4,
-                        box2_point.y + 10,
+                        box2_point[0] + (layout_size2.w / 2) + 4,
+                        box2_point[1] + 10,
                     );
 
                 widget_store
@@ -252,8 +252,8 @@ impl PushrodCallbackEvents for SimpleWindowEventHandler {
                     .borrow_mut()
                     .set_point(
                         CONFIG_ORIGIN,
-                        box2_point.x + 10,
-                        box2_point.y + (layout_size2.h / 2) + 4,
+                        box2_point[0] + 10,
+                        box2_point[1] + (layout_size2.h / 2) + 4,
                     );
 
                 widget_store
@@ -261,8 +261,8 @@ impl PushrodCallbackEvents for SimpleWindowEventHandler {
                     .borrow_mut()
                     .set_point(
                         CONFIG_ORIGIN,
-                        box2_point.x + (layout_size2.w / 2) + 4,
-                        box2_point.y + (layout_size2.h / 2) + 4,
+                        box2_point[0] + (layout_size2.w / 2) + 4,
+                        box2_point[1] + (layout_size2.h / 2) + 4,
                     );
             }
             _ => (),
