@@ -9,6 +9,7 @@
 - Ported `TextWidget` to new rendering system (#207)
 - Removed the `BoxWidget`, as this is effectively handled by the top level `BaseWidget`, and is not necessary
 - Added text demo to examples, which shows three text items with left, center, and right justification
+- Removed alert window from Quit event - simply closes the app; will turn this into a callback eventually
 
 ## 0.4.6
 

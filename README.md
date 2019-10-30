@@ -32,14 +32,14 @@ These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 Widgets - Porting from original Pushrod:
 
-- [ ] Checkbox Widget
-- [ ] Image Button Widget
+- [x] Text Widget
+  - [x] OpenSans Font Included
 - [ ] Image Widget
+- [ ] Image Button Widget
+- [ ] Checkbox Widget
 - [ ] Progress Bar Widget
 - [ ] Push Button Widget
 - [ ] Radio Button Widget (or Group Button Widget)
-- [x] Text Widget
-  - [x] OpenSans Font Included
 - [ ] Timer Widget
 - [ ] Toggle Button Widget
 
