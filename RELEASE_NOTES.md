@@ -1,5 +1,15 @@
 # Pushrod Releases
 
+## 0.4.7
+
+- Moved render and widget libraries into top-level for monorepo (#200)
+- Modified canvas so that it pulls the canvas from `software()`
+- Merged code from `rust-pushrod-widget` and `rust-pushrod-render` libraries
+- Ported `TextWidget` to new rendering system (#207)
+- Removed the `BoxWidget`, as this is effectively handled by the top level `BaseWidget`, and is not necessary
+- Added text demo to examples, which shows three text items with left, center, and right justification
+- Removed alert window from Quit event - simply closes the app; will turn this into a callback eventually
+
 ## 0.4.6
 
 - Added on_mouse_button callback (#184, #185)

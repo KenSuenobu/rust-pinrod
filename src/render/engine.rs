@@ -75,7 +75,7 @@ impl Engine {
 
     /// Main application run loop, controls interaction between the user and the application.
     pub fn run(&mut self, sdl: Sdl, window: Window) {
-        let mut canvas = window.into_canvas().build().unwrap();
+        let mut canvas = window.into_canvas().software().build().unwrap();
 
         canvas.clear();
         canvas.present();
@@ -126,34 +126,34 @@ impl Engine {
                     }
 
                     Event::Quit { .. } => {
-                        let buttons: Vec<_> = vec![
-                            ButtonData {
-                                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
-                                button_id: 1,
-                                text: "Yes",
-                            },
-                            ButtonData {
-                                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
-                                button_id: 2,
-                                text: "No",
-                            },
-                        ];
-
-                        let res = show_message_box(
-                            MessageBoxFlag::WARNING,
-                            buttons.as_slice(),
-                            "Quit",
-                            "Are you sure?",
-                            None,
-                            None,
-                        )
-                        .unwrap();
-
-                        if let ClickedButton::CustomButton(x) = res {
-                            if x.button_id == 1 {
-                                break 'running;
-                            }
-                        }
+                        //                        let buttons: Vec<_> = vec![
+                        //                            ButtonData {
+                        //                                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
+                        //                                button_id: 1,
+                        //                                text: "Yes",
+                        //                            },
+                        //                            ButtonData {
+                        //                                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
+                        //                                button_id: 2,
+                        //                                text: "No",
+                        //                            },
+                        //                        ];
+                        //
+                        //                        let res = show_message_box(
+                        //                            MessageBoxFlag::WARNING,
+                        //                            buttons.as_slice(),
+                        //                            "Quit",
+                        //                            "Are you sure?",
+                        //                            None,
+                        //                            None,
+                        //                        )
+                        //                        .unwrap();
+                        //
+                        //                        if let ClickedButton::CustomButton(x) = res {
+                        //                            if x.button_id == 1 {
+                        break 'running;
+                        //                            }
+                        //                        }
                     }
 
                     _ => {
@@ -164,7 +164,6 @@ impl Engine {
             }
 
             self.cache.tick();
-
             self.cache.draw_loop(&mut canvas);
 
             ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));

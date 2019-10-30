@@ -1,10 +1,15 @@
-extern crate pushrod_render;
+extern crate pushrod;
 extern crate sdl2;
 
-use pushrod_render::render::engine::Engine;
-use pushrod_render::render::widget::{BaseWidget, Widget};
-use pushrod_render::render::widget_config::{COLOR_BASE, COLOR_BORDER};
+use pushrod::render::engine::Engine;
+use pushrod::render::widget::{BaseWidget, Widget};
+use pushrod::render::widget_config::{COLOR_BASE, COLOR_BORDER};
 use sdl2::pixels::Color;
+
+/*
+ * This demo just tests the rendering functionality of the `BaseWidget`.  It only tests the
+ * render portion of the library, nothing else.
+ */
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();

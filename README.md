@@ -6,21 +6,65 @@
 [![](https://img.shields.io/crates/d/rust-pushrod.svg)](https://crates.io/crates/rust-pushrod)
 [![docs.rs for rust-pushrod](https://docs.rs/rust-pushrod/badge.svg)](https://docs.rs/rust-pushrod)
 
-**Cross Platform UI Widget Library for Rust that uses OpenGL as its rendering engine.**
+**Cross Platform UI Widget Library for Rust that uses SDL2.**
 
 Draws inspiration from lots of GUI libraries.
 
-If you like this library, please consider [donating to this project!](https://www.patreon.com/KenSuenobu)
+If you like this library, [please consider donating to this project!](https://www.patreon.com/KenSuenobu)
+
+## Philosophy
+
+The reason I created this library instead of extending another library was that
+I wanted to keep these specific design ideas in mind:
+
+- Maintainable with little effort
+- Easily extensible
+- Lightweight enough to run on minimalist hardware
+- **Easy to use and understand**
+
+These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 ## (Ever Evolving) Screenshot of Sample
 
 [![](docs/sample-0.3.7.png)](docs/sample-0.3.7.png)
 
-## Horizontal Layout Sample
-
-[![](docs/hlayout.png)](docs/hlayout.png)
-
 ## 0.4.x Status
+
+Widgets - Porting from original Pushrod:
+
+- [x] Text Widget
+  - [x] OpenSans Font Included
+- [ ] Image Widget
+- [ ] Image Button Widget
+- [ ] Checkbox Widget
+- [ ] Progress Bar Widget
+- [ ] Push Button Widget
+- [ ] Radio Button Widget (or Group Button Widget)
+- [ ] Timer Widget
+- [ ] Toggle Button Widget
+
+Soon to follow will be:
+
+- [ ] Support for Layouts
+  - [ ] Horizontal Layout
+  - [ ] Vertical Layout
+  - [ ] Dialog or Form Layout
+  - [ ] Grid Layout
+- [ ] Vertical Space Widget
+- [ ] Horizontal Space Widget
+- [ ] Menu Bar Widget
+- [ ] Simple Popup Menu Widget
+- [ ] Drop Down Menu Widget
+- [ ] Drop Down Menu Button Widget
+- [ ] Grid Widget
+- [ ] Toolbox Widget
+- [ ] Tab Widget
+- [ ] Group Box Widget
+- [ ] Split Container Widget
+- [ ] Slider Widget
+- [ ] Viewport Widget that adjusts a viewable area with scrolling
+
+## Additional Items
 
 - [x] Fix build so that it builds on TravisCI for both OSes properly
 - [x] New traits for optimization:
@@ -71,49 +115,10 @@ If you like this library, please consider [donating to this project!](https://ww
 
 Please [see here](https://github.com/KenSuenobu/rust-pushrod/milestone/5) for more details on issues.
 
-## Philosophy
-
-The reason I created this library instead of extending another library was that
-I wanted to keep these specific design ideas in mind:
-
-- Maintainable with little effort
-- Easily extensible
-- Lightweight enough to run on minimalist hardware
-- **Easy to use and understand**
-
-These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
-
 ## Prerequisites for Pushrod
 
-Pushrod requires the following minimum versions:
+Pushrod only requires:
 
 | Library | Version |
 | ------- | ------- |
-| piston_window | 0.89 |
-| piston2d-opengl_graphics | 0.59 |
-| piston2d-graphics | * |
-| pistoncore-glfw_window | 0.49 |
-| gl | * |
-
-## Optimization Note
-
-To see what the CPU usage looked like before and after switching between 2D and 3D rendering engines,
-[here is before](docs/cpu_before.png), and [this is after](docs/cpu_after.png).  These numbers represent the
-current version (0.3.x) before any rendering optimizations have been added.
-
-So, is it worth it to add OpenGL?  I'll let you decide.
-
-## Runnable Examples
-
-### Pre-Requisite for Mac OS X
-
-You should use `brew` on your system.  If you have Homebrew already installed, use `brew install glfw` to 
-install the `GLFW` formula.
-
-## After installing pre-requisites:
-
-```
-cargo run --example simple
-```
-
-This will run the simple application demo.  It's interactive, so have fun!
+| SDL2    | 0.32 |
