@@ -1,17 +1,17 @@
-extern crate pushrod_render;
+extern crate pushrod;
 extern crate sdl2;
 
-use pushrod_render::render::engine::Engine;
-use pushrod_render::render::widget::Widget;
-use pushrod_render::render::widget_config::COLOR_TEXT;
-use pushrod_widgets::widgets::text_widget::*;
+use pushrod::render::engine::Engine;
+use pushrod::render::widget::Widget;
+use pushrod::render::widget_config::COLOR_TEXT;
+use pushrod::widgets::text_widget::*;
 use sdl2::pixels::Color;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("pushrod-render demo", 500, 300)
+        .window("pushrod-render demo", 500, 200)
         .position_centered()
         .opengl()
         .build()
@@ -25,7 +25,7 @@ pub fn main() {
         20,
         16,
         460,
-        36,
+        40,
     );
 
     widget1
@@ -37,11 +37,11 @@ pub fn main() {
         "assets/OpenSans-Regular.ttf".to_string(),
         sdl2::ttf::FontStyle::NORMAL,
         28,
-        TextJustify::Left, "Center Justified".to_string(),
+        TextJustify::Center, "Center Justified".to_string(),
         20,
-        56,
+        80,
         460,
-        36,
+        40,
     );
 
     widget2
@@ -55,9 +55,9 @@ pub fn main() {
         28,
         TextJustify::Right, "Right Justified".to_string(),
         20,
-        110,
+        144,
         460,
-        36,
+        40,
     );
 
     widget3
@@ -65,7 +65,7 @@ pub fn main() {
         .colors
         .insert(COLOR_TEXT, Color::RGB(0, 0, 255));
 
-    engine.setup(500, 300);
+    engine.setup(500, 200);
 
     engine.add_widget(Box::new(widget1), "widget1".to_string());
     engine.add_widget(Box::new(widget2), "widget2".to_string());

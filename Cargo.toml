@@ -1,6 +1,6 @@
 [package]
 name = "rust-pushrod"
-version = "0.4.6"
+version = "0.4.7"
 authors = ["Ken Suenobu <ksuenobu@fastmail.com>"]
 edition = "2018"
 description = "Pushrod UI Library"
@@ -19,17 +19,6 @@ include = [
 name = "pushrod"
 path = "src/lib.rs"
 
-[workspace]
-members = [
-    "rust-pushrod-render",
-    "rust-pushrod-widgets",
-]
-
-[dependencies]
-piston = "^0.49"
-pistoncore-glfw_window = "^0.60"
-piston2d-opengl_graphics = "^0.68"
-piston2d-graphics = "^0.34"
-gl = "^0.11"
-rand = "0.7"
-find_folder = "^0.3"
+[dependencies.sdl2]
+version = "^0.32"
+features = ["ttf"]

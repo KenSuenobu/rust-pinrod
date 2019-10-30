@@ -13,10 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use pushrod_render::render::callbacks::CallbackRegistry;
-use pushrod_render::render::widget::*;
-use pushrod_render::render::widget_cache::WidgetContainer;
-use pushrod_render::render::widget_config::{WidgetConfig, COLOR_TEXT};
+use crate::render::callbacks::CallbackRegistry;
+use crate::render::widget::*;
+use crate::render::widget_cache::WidgetContainer;
+use crate::render::widget_config::{WidgetConfig, COLOR_TEXT};
 
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;
@@ -83,6 +83,9 @@ impl TextWidget {
     }
 }
 
+/// This is the `Widget` implementation of the `TextWidget`.  Text is rendered onto a 3D texture, then
+/// copied to the canvas after rendering.  It uses blended mode texture mapping, which may be slow (as
+/// described by the SDL2 documentation), so this might change later to use 8 bit color mapping.
 impl Widget for TextWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         let base_color = Color::RGB(255, 255, 255);
@@ -129,14 +132,9 @@ impl Widget for TextWidget {
         c.copy(&texture,
         None,
         Rect::new(texture_x, texture_y, width, height));
-
-//        c.copy(
-//            &texture,
-//            None,
-//            Some(Rect::new(texture_x, texture_y, width, height)),
-//        )
-//        .unwrap();
     }
+
+    // FIXME USE MACROS HERE -- They didn't work before!
 
     /// This function is a macro-created getter function that returns the `Widget`'s configuration
     /// object as a borrowed mutable reference.  This code is auto-generated using the

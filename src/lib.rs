@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//! `pushrod-widgets` is a core rendering library used by `Pushrod`.
-//!
-//! For reference, see the [rust-pushrod project at this link](https://www.github.com/KenSuenobu/rust-pushrod/).
+//! `pushrod` is a GUI library for Rust.
 //!
 //! # Dependencies
 //! Pushrod uses the following dependencies:
@@ -26,13 +24,18 @@
 //! To use the crate in your project, add the following dependencies:
 //! ```ignore
 //! [dependencies]
-//! rust-pushrod-render = "*"
+//! rust-pushrod = "^0.4"
 //! ```
 //! This will pull in the latest version.
 //!
 //! # Core Components
-//! `pushrod::render` is the _core_ rendering components, containing the widget config, and
+//! `pushrod::render` is the _core_ rendering components, containing the `Widget` base class, and
 //! drawing loop logic.
+//! `pushrod::widgets` is the extended `Widget` component library.
 
-/// The widgets library.
+/// `widgets` is a core rendering library used by `Pushrod`, containing the default set of `Widget`s.
 pub mod widgets;
+
+/// `render` is the core rendering/event loop portion of `Pushrod`.
+pub mod render;
+

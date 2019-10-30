@@ -3,7 +3,12 @@
 ## 0.4.7
 
 - Moved render and widget libraries into top-level for monorepo (#200)
-- Created `workspaces` section in `Cargo.toml` file so that the entire project can be built at a time.
+- Created `workspaces` section in `Cargo.toml` file so that the entire project can be built at a time
+- Modified canvas so that it pulls the canvas from `software()`
+- Merged code from `rust-pushrod-widget` and `rust-pushrod-render` libraries
+- Ported `TextWidget` to new rendering system (#207)
+- Removed the `BoxWidget`, as this is effectively handled by the top level `BaseWidget`, and is not necessary
+- Added text demo to examples, which shows three text items with left, center, and right justification
 
 ## 0.4.6
 
