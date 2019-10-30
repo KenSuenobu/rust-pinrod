@@ -15,10 +15,11 @@
 //! `pushrod` is a GUI library for Rust.
 //!
 //! # Dependencies
-//! Pushrod uses the following dependencies:
+//! Pushrod uses the following dependency:
 //! ```ignore
-//! [dependencies]
-//! sdl2 = "^0.32"
+//! [dependencies.sdl2]
+//! version = "^0.32"
+//! features = ["ttf"]
 //! ```
 //!
 //! To use the crate in your project, add the following dependencies:
