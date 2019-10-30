@@ -38,4 +38,3 @@ pub mod widgets;
 
 /// `render` is the core rendering/event loop portion of `Pushrod`.
 pub mod render;
-

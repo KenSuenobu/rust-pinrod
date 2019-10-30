@@ -126,34 +126,34 @@ impl Engine {
                     }
 
                     Event::Quit { .. } => {
-//                        let buttons: Vec<_> = vec![
-//                            ButtonData {
-//                                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
-//                                button_id: 1,
-//                                text: "Yes",
-//                            },
-//                            ButtonData {
-//                                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
-//                                button_id: 2,
-//                                text: "No",
-//                            },
-//                        ];
-//
-//                        let res = show_message_box(
-//                            MessageBoxFlag::WARNING,
-//                            buttons.as_slice(),
-//                            "Quit",
-//                            "Are you sure?",
-//                            None,
-//                            None,
-//                        )
-//                        .unwrap();
-//
-//                        if let ClickedButton::CustomButton(x) = res {
-//                            if x.button_id == 1 {
-                                break 'running;
-//                            }
-//                        }
+                        //                        let buttons: Vec<_> = vec![
+                        //                            ButtonData {
+                        //                                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
+                        //                                button_id: 1,
+                        //                                text: "Yes",
+                        //                            },
+                        //                            ButtonData {
+                        //                                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
+                        //                                button_id: 2,
+                        //                                text: "No",
+                        //                            },
+                        //                        ];
+                        //
+                        //                        let res = show_message_box(
+                        //                            MessageBoxFlag::WARNING,
+                        //                            buttons.as_slice(),
+                        //                            "Quit",
+                        //                            "Are you sure?",
+                        //                            None,
+                        //                            None,
+                        //                        )
+                        //                        .unwrap();
+                        //
+                        //                        if let ClickedButton::CustomButton(x) = res {
+                        //                            if x.button_id == 1 {
+                        break 'running;
+                        //                            }
+                        //                        }
                     }
 
                     _ => {

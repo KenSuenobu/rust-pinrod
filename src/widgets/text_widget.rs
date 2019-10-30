@@ -129,9 +129,11 @@ impl Widget for TextWidget {
             TextJustify::Center => self.get_config().to_x((widget_w - width as i32) / 2),
         };
 
-        c.copy(&texture,
-        None,
-        Rect::new(texture_x, texture_y, width, height));
+        c.copy(
+            &texture,
+            None,
+            Rect::new(texture_x, texture_y, width, height),
+        );
     }
 
     // FIXME USE MACROS HERE -- They didn't work before!

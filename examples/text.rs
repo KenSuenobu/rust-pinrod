@@ -21,7 +21,8 @@ pub fn main() {
         "assets/OpenSans-Regular.ttf".to_string(),
         sdl2::ttf::FontStyle::NORMAL,
         28,
-        TextJustify::Left, "Left Justified".to_string(),
+        TextJustify::Left,
+        "Left Justified".to_string(),
         20,
         16,
         460,
@@ -33,11 +34,12 @@ pub fn main() {
         .colors
         .insert(COLOR_TEXT, Color::RGB(255, 0, 0));
 
-    let mut widget2  = TextWidget::new(
+    let mut widget2 = TextWidget::new(
         "assets/OpenSans-Regular.ttf".to_string(),
         sdl2::ttf::FontStyle::NORMAL,
         28,
-        TextJustify::Center, "Center Justified".to_string(),
+        TextJustify::Center,
+        "Center Justified".to_string(),
         20,
         80,
         460,
@@ -49,11 +51,12 @@ pub fn main() {
         .colors
         .insert(COLOR_TEXT, Color::RGB(0, 255, 0));
 
-    let mut widget3  = TextWidget::new(
+    let mut widget3 = TextWidget::new(
         "assets/OpenSans-Regular.ttf".to_string(),
         sdl2::ttf::FontStyle::NORMAL,
         28,
-        TextJustify::Right, "Right Justified".to_string(),
+        TextJustify::Right,
+        "Right Justified".to_string(),
         20,
         144,
         460,
