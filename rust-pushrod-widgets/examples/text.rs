@@ -2,8 +2,9 @@ extern crate pushrod_render;
 extern crate sdl2;
 
 use pushrod_render::render::engine::Engine;
-use pushrod_render::render::widget::{BaseWidget, Widget};
-use pushrod_render::render::widget_config::{COLOR_BASE, COLOR_BORDER};
+use pushrod_render::render::widget::Widget;
+use pushrod_render::render::widget_config::COLOR_TEXT;
+use pushrod_widgets::widgets::text_widget::*;
 use sdl2::pixels::Color;
 
 pub fn main() {
@@ -16,64 +17,22 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new();
-    let mut new_base_widget = BaseWidget::new(100, 100, 600, 400);
+    let mut new_base_widget = TextWidget::new(
+        "assets/OpenSans-Regular.ttf".to_string(),
+        sdl2::ttf::FontStyle::NORMAL,
+        28,
+        TextJustify::Left,
+        "Welcome to Pushrod!".to_string(),
+        20,
+        16,
+        400,
+        32,
+    );
 
     new_base_widget
         .get_config()
         .colors
-        .insert(COLOR_BORDER, Color::RGB(0, 0, 0));
-    new_base_widget.get_config().border_width = 2;
-
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_entered(|x, _widgets| {
-            x.get_config()
-                .colors
-                .insert(COLOR_BASE, Color::RGB(255, 0, 0));
-            x.get_config().set_invalidate(true);
-            _widgets[0]
-                .widget
-                .borrow_mut()
-                .get_config()
-                .set_invalidate(true);
-            eprintln!("Mouse Entered");
-        });
-
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_exited(|x, _widgets| {
-            x.get_config()
-                .colors
-                .insert(COLOR_BASE, Color::RGB(255, 255, 255));
-            x.get_config().set_invalidate(true);
-            _widgets[0]
-                .widget
-                .borrow_mut()
-                .get_config()
-                .set_invalidate(true);
-            eprintln!("Mouse Exited");
-        });
-
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_moved(|_widget, _widgets, points| {
-            eprintln!("Mouse Moved: {:?}", points);
-        });
-
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_scrolled(|_widget, _widgets, points| {
-            eprintln!("Mouse Scrolled: {:?}", points);
-        });
-
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_clicked(|_widget, _widgets, button, clicks, state| {
-            eprintln!(
-                "Mouse Clicked: button={} clicks={} state={}",
-                button, clicks, state
-            );
-        });
+        .insert(COLOR_TEXT, Color::RGB(0, 0, 0));
 
     engine.setup(800, 600);
 

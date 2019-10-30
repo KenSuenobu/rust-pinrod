@@ -13,18 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use pushrod_render::render::widget::*;
-use pushrod_render::render::widget_config::WidgetConfig;
 use pushrod_render::render::callbacks::CallbackRegistry;
+use pushrod_render::render::widget::*;
+use pushrod_render::render::widget_cache::WidgetContainer;
+use pushrod_render::render::widget_config::{WidgetConfig, COLOR_TEXT};
 
+use sdl2::render::{Canvas, TextureQuery};
+use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
-use sdl2::render::Canvas;
-use sdl2::ttf::{FontStyle, Sdl2TtfContext, Font};
 
+use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::collections::HashMap;
 use std::path::Path;
-use pushrod_render::render::widget_cache::WidgetContainer;
 
+/// This enum is used by the `TextWidget`, which controls the justification of the text being
+/// rendered within the bounds of the `Widget`.
 pub enum TextJustify {
     /// Left-justified text.
     Left,
@@ -36,55 +40,100 @@ pub enum TextJustify {
     Right,
 }
 
+/// This is the storage object for the `TextWidget`.  It stores the config, properties, callback registry,
+/// the font name, style, size, justification, and text message.
 pub struct TextWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    font_name: String,
     font_style: FontStyle,
     font_size: i32,
+    justification: TextJustify,
     msg: String,
 }
 
+/// Creates a new `TextWidget`, which draws a unit of text on the screen, given the specified font,
+/// size, justification, and layout coordinates.
 impl TextWidget {
-    fn new(font_name: String, font_style: FontStyle, font_size: i32, msg: String, x: i32, y: i32, w: u32, h: u32) -> Self {
+    /// Creates a new `TextWidget` object.  Requires the name of the font (the path to the font file),
+    /// the style of font (`sdl2::ttf::FontStyle`), the size in pixels of the font, the `TextJustify`
+    /// layout of the font, the message to display, and the x, y, w, h coordinates of the text.
+    pub fn new(
+        font_name: String,
+        font_style: FontStyle,
+        font_size: i32,
+        justification: TextJustify,
+        msg: String,
+        x: i32,
+        y: i32,
+        w: u32,
+        h: u32,
+    ) -> Self {
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            font_name,
             font_style,
             font_size,
+            justification,
             msg: msg.clone(),
         }
     }
 }
 
 impl Widget for TextWidget {
-    fn draw(&mut self, mut _canvas: &mut Canvas<Window>) {
-//        let base_color = *self
-//            .config
-//            .colors
-//            .get(&COLOR_BASE)
-//            .unwrap_or(&Color::RGB(255, 255, 255));
-//        let border_color = *self.config.colors.get(&COLOR_BORDER).unwrap_or(&base_color);
-//
-//        _canvas.set_draw_color(base_color);
-//
-//        _canvas.fill_rect(self.get_drawing_area()).unwrap();
-//
-//        if self.get_config().border_width > 0 && base_color != border_color {
-//            _canvas.set_draw_color(border_color);
-//
-//            for border in 0..self.get_config().border_width {
-//                _canvas
-//                    .draw_rect(Rect::new(
-//                        self.config.to_x(i32::from(border)),
-//                        self.config.to_y(i32::from(border)),
-//                        self.get_config().size[0] - (u32::from(border) * 2),
-//                        self.get_config().size[1] - (u32::from(border) * 2),
-//                    ))
-//                    .unwrap();
-//            }
-//        }
+    fn draw(&mut self, c: &mut Canvas<Window>) {
+        let base_color = Color::RGB(255, 255, 255);
+
+        c.set_draw_color(base_color);
+        c.fill_rect(self.get_drawing_area()).unwrap();
+
+        let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
+        let texture_creator = c.texture_creator();
+        let mut font = ttf_context
+            .load_font(Path::new(&self.font_name), self.font_size as u16)
+            .unwrap();
+
+        font.set_style(self.font_style);
+
+        let surface = font
+            .render(&self.msg)
+            .blended(
+                *self
+                    .config
+                    .colors
+                    .get(&COLOR_TEXT)
+                    .unwrap_or(&Color::RGB(0, 0, 0)),
+            )
+            .map_err(|e| e.to_string())
+            .unwrap();
+        let texture = texture_creator
+            .create_texture_from_surface(&surface)
+            .map_err(|e| e.to_string())
+            .unwrap();
+
+        let TextureQuery { width, height, .. } = texture.query();
+
+        let texture_y = self.get_config().to_y(0);
+        let widget_w = self.get_config().size[0] as i32;
+        let texture_x = match self.justification {
+            TextJustify::Left => self.get_config().to_x(0),
+
+            TextJustify::Right => self.get_config().to_x(widget_w - width as i32),
+
+            TextJustify::Center => self.get_config().to_x((widget_w - width as i32) / 2),
+        };
+
+        c.copy(
+            &texture,
+            None,
+            Some(Rect::new(texture_x, texture_y, width, height)),
+        )
+        .unwrap();
+
+        c.present();
     }
 
     /// This function is a macro-created getter function that returns the `Widget`'s configuration
@@ -165,7 +214,13 @@ impl Widget for TextWidget {
 
     /// This function is a macro-created mouse scrolled callback override, created by the
     /// `default_widget_callbacks!()` macro.
-    fn button_clicked_callback(&mut self, _widgets: &[WidgetContainer], _button: u8, _clicks: u8, _state: bool) {
+    fn button_clicked_callback(
+        &mut self,
+        _widgets: &[WidgetContainer],
+        _button: u8,
+        _clicks: u8,
+        _state: bool,
+    ) {
         if self.get_callbacks().has_on_mouse_clicked() {
             if let Some(mut cb) = self.get_callbacks().on_mouse_clicked.take() {
                 cb(self, _widgets, _button, _clicks, _state);
