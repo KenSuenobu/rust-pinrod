@@ -126,14 +126,16 @@ impl Widget for TextWidget {
             TextJustify::Center => self.get_config().to_x((widget_w - width as i32) / 2),
         };
 
-        c.copy(
-            &texture,
-            None,
-            Some(Rect::new(texture_x, texture_y, width, height)),
-        )
-        .unwrap();
+        c.copy(&texture,
+        None,
+        Rect::new(texture_x, texture_y, width, height));
 
-        c.present();
+//        c.copy(
+//            &texture,
+//            None,
+//            Some(Rect::new(texture_x, texture_y, width, height)),
+//        )
+//        .unwrap();
     }
 
     /// This function is a macro-created getter function that returns the `Widget`'s configuration

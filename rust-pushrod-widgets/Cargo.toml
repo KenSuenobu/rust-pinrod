@@ -20,7 +20,7 @@ name = "pushrod_widgets"
 path = "src/lib.rs"
 
 [dependencies]
-rust-pushrod-render = "^0.1"
+rust-pushrod-render = "0.1.10"
 
 [dependencies.sdl2]
 version = "^0.32"

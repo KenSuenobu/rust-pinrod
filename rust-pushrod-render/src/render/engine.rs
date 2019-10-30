@@ -75,7 +75,7 @@ impl Engine {
 
     /// Main application run loop, controls interaction between the user and the application.
     pub fn run(&mut self, sdl: Sdl, window: Window) {
-        let mut canvas = window.into_canvas().build().unwrap();
+        let mut canvas = window.into_canvas().software().build().unwrap();
 
         canvas.clear();
         canvas.present();

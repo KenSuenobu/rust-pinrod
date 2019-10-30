@@ -3,6 +3,10 @@
 This documents the list of changes for each release.  Newest releases are listed
 first.
 
+## 0.1.10
+
+- Modified canvas so that it pulls the canvas from `software()`
+
 ## 0.1.9
 
 - Stored `widget_id` in the `WidgetContainer` object.
