@@ -1,5 +1,8 @@
 # Pushrod Change Log
 
+## 0.4.9
+
+
 ## 0.4.8
 
 - Moved `Widget` macros to top-level `lib.rs` so that it can be shared between modules.
