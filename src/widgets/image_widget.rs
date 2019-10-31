@@ -18,11 +18,11 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{WidgetConfig, COLOR_BASE};
 
-use sdl2::render::{Canvas, TextureQuery};
 use sdl2::image::LoadTexture;
-use sdl2::video::Window;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use sdl2::render::{Canvas, TextureQuery};
+use sdl2::video::Window;
 
 use std::collections::HashMap;
 use std::path::Path;
@@ -114,7 +114,9 @@ impl Widget for ImageWidget {
         c.fill_rect(self.get_drawing_area()).unwrap();
 
         let texture_creator = c.texture_creator();
-        let texture = texture_creator.load_texture(Path::new(&self.image_name)).unwrap();
+        let texture = texture_creator
+            .load_texture(Path::new(&self.image_name))
+            .unwrap();
         let widget_w = self.get_config().size[0] as i32;
         let widget_h = self.get_config().size[1] as i32;
         let TextureQuery { width, height, .. } = texture.query();
@@ -122,17 +124,25 @@ impl Widget for ImageWidget {
         let texture_x = match self.image_position {
             ImagePosition::NW | ImagePosition::W | ImagePosition::SW => self.get_config().to_x(0),
 
-            ImagePosition::N | ImagePosition::Center | ImagePosition::S => self.get_config().to_x((widget_w - width as i32) / 2),
+            ImagePosition::N | ImagePosition::Center | ImagePosition::S => {
+                self.get_config().to_x((widget_w - width as i32) / 2)
+            }
 
-            ImagePosition::NE | ImagePosition::E | ImagePosition::SE => self.get_config().to_x(widget_w - width as i32),
+            ImagePosition::NE | ImagePosition::E | ImagePosition::SE => {
+                self.get_config().to_x(widget_w - width as i32)
+            }
         };
 
         let texture_y = match self.image_position {
             ImagePosition::NW | ImagePosition::N | ImagePosition::NE => self.get_config().to_y(0),
 
-            ImagePosition::W | ImagePosition::Center | ImagePosition::E => self.get_config().to_y((widget_h - height as i32) / 2),
+            ImagePosition::W | ImagePosition::Center | ImagePosition::E => {
+                self.get_config().to_y((widget_h - height as i32) / 2)
+            }
 
-            ImagePosition::SW | ImagePosition::S | ImagePosition::SE => self.get_config().to_y(widget_h - height as i32),
+            ImagePosition::SW | ImagePosition::S | ImagePosition::SE => {
+                self.get_config().to_y(widget_h - height as i32)
+            }
         };
 
         if !self.scaled {
@@ -141,16 +151,19 @@ impl Widget for ImageWidget {
                 None,
                 Rect::new(texture_x, texture_y, width, height),
             )
-                .unwrap();
+            .unwrap();
         } else {
-            c.copy(&texture,
+            c.copy(
+                &texture,
                 None,
-                Rect::new(self.get_config().to_x(0),
-                self.get_config().to_y(0),
-                widget_w as u32,
-                widget_h as u32)
+                Rect::new(
+                    self.get_config().to_x(0),
+                    self.get_config().to_y(0),
+                    widget_w as u32,
+                    widget_h as u32,
+                ),
             )
-                .unwrap();
+            .unwrap();
         }
     }
 

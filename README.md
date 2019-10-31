@@ -37,7 +37,7 @@ Widgets - Porting from original Pushrod:
 - [x] Image Widget
 - [ ] Image Button Widget
 - [ ] Checkbox Widget
-- [ ] Progress Bar Widget
+- [x] Progress Bar Widget
 - [ ] Push Button Widget
 - [ ] Radio Button Widget (or Group Button Widget)
 - [ ] Timer Widget

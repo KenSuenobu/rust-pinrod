@@ -20,3 +20,6 @@ pub mod text_widget;
 
 /// This is an `ImageWidget`, which draws an Image in a clipped area.
 pub mod image_widget;
+
+/// This is a `ProgressWidget`, which draws a progress bar.
+pub mod progress_widget;

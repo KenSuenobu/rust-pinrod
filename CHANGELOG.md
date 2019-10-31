@@ -8,6 +8,8 @@
 - Added `ImagePosition` to specify the position of the image inside the `Widget`.
 - Added `image` example to show all coordinates for the image and scaling examples.
 - Removed old text and image widgets.
+- Ported `ProgressWidget` (#204)
+- Added `progress` demo to show progress widgets.
 
 ## 0.4.7
 
