@@ -34,7 +34,7 @@ Widgets - Porting from original Pushrod:
 
 - [x] Text Widget
   - [x] OpenSans Font Included
-- [ ] Image Widget
+- [x] Image Widget
 - [ ] Image Button Widget
 - [ ] Checkbox Widget
 - [ ] Progress Bar Widget
