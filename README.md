@@ -34,10 +34,10 @@ Widgets - Porting from original Pushrod:
 
 - [x] Text Widget
   - [x] OpenSans Font Included
-- [ ] Image Widget
+- [x] Image Widget
 - [ ] Image Button Widget
 - [ ] Checkbox Widget
-- [ ] Progress Bar Widget
+- [x] Progress Bar Widget
 - [ ] Push Button Widget
 - [ ] Radio Button Widget (or Group Button Widget)
 - [ ] Timer Widget
