@@ -19,7 +19,7 @@
 //! ```ignore
 //! [dependencies.sdl2]
 //! version = "^0.32"
-//! features = ["ttf"]
+//! features = ["ttf", "image"]
 //! ```
 //!
 //! To use the crate in your project, add the following dependencies:

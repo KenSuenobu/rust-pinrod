@@ -4,6 +4,9 @@
 
 - Moved `Widget` macros to top-level `lib.rs` so that it can be shared between modules.
 - Modified `TextWidget` to use both macros.
+- Added `ImageWidget`.
+- Added `ImagePosition` to specify the position of the image inside the `Widget`.
+- Added `image` example to show all coordinates for the image and scaling examples.
 
 ## 0.4.7
 

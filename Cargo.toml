@@ -21,4 +21,4 @@ path = "src/lib.rs"
 
 [dependencies.sdl2]
 version = "^0.32"
-features = ["ttf"]
+features = ["ttf", "image"]
