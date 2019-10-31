@@ -96,7 +96,7 @@ impl Widget for ProgressWidget {
             .get(&COLOR_SECONDARY)
             .unwrap_or(&Color::RGB(0, 0, 0));
         let progress =
-            (self.get_config().size[0] as f64 * (self.progress as f64 / 100.0) as f64) as u32;
+            (f64::from(self.get_config().size[0]) * (f64::from(self.progress) / 100.0)) as u32;
 
         c.set_draw_color(base_color);
         c.fill_rect(Rect::new(
