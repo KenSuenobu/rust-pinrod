@@ -37,12 +37,10 @@ pub struct ProgressWidget {
 
 /// Creates a new `ProgressWidget`, which draws a progress bar inside a `BaseWidget`.
 impl ProgressWidget {
-    /// Creates a new instance of the `ImageWidget` object.  Requires an image name (full path of the file),
-    /// image position (defined in `ImagePosition`), the `xywh` bounds of the `Widget`, and a scale flag.
-    /// If `scaled` is set to `true`, the image will be scaled within the `Widget` bounds, and the
-    /// `ImagePosition` will be ignored.  Likewise, if set to `false`, the image will be displayed for
-    /// the size of the image, and will be placed in the bounds of the `Widget` based on the position
-    /// specified in the `ImagePosition`.
+    /// Creates a new instance of the `ProgressWidget` object.  It draws a progress bar-style
+    /// `Widget` given the `xywh` coordinates, and the `percentage` of fill from 0-100.  The
+    /// base color and border colors are set to white and black, respectively.  Use the
+    /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
     pub fn new(x: i32, y: i32, w: u32, h: u32, progress: u16) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
 
@@ -86,8 +84,8 @@ impl ProgressWidget {
     }
 }
 
-/// This is the `Widget` implementation of the `ImageWidget`.  Image is rendered onto a 3D texture, then
-/// copied to the canvas after rendering.
+/// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
+/// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         self.base_widget.draw(c);
