@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use sdl2::event::Event;
-use sdl2::messagebox::*;
+//use sdl2::messagebox::*;
 use sdl2::video::Window;
 use sdl2::Sdl;
 
