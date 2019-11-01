@@ -23,3 +23,7 @@ pub mod image_widget;
 
 /// This is a `ProgressWidget`, which draws a progress bar.
 pub mod progress_widget;
+
+/// This is a `TimerWidget`, which times out after a specified duration, triggering a callback
+/// after the timeout is exceeded.
+pub mod timer_widget;

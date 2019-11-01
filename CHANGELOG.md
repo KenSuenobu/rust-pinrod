@@ -2,6 +2,7 @@
 
 ## 0.4.9
 
+- Added `TimerWidget` (#208)
 
 ## 0.4.8
 

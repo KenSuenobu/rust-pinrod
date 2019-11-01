@@ -40,7 +40,7 @@ Widgets - Porting from original Pushrod:
 - [x] Progress Bar Widget
 - [ ] Push Button Widget
 - [ ] Radio Button Widget (or Group Button Widget)
-- [ ] Timer Widget
+- [x] Timer Widget
 - [ ] Toggle Button Widget
 
 Soon to follow will be:
