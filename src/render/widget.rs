@@ -21,6 +21,7 @@ use sdl2::video::Window;
 use crate::render::callbacks::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
+use crate::render::Points;
 use std::collections::HashMap;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
@@ -63,7 +64,7 @@ pub trait Widget {
     /// When a mouse moves within the bounds of the `Widget`, this function is triggered.  It
     /// contains the `X` and `Y` coordinates relative to the bounds of the `Widget`.  The
     /// points start at `0x0`.  This function implementation is **optional**.
-    fn mouse_moved(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {
+    fn mouse_moved(&mut self, _widgets: &[WidgetContainer], _points: Points) {
         self.mouse_moved_callback(_widgets, _points);
     }
 
@@ -72,7 +73,7 @@ pub trait Widget {
     /// indicates vertical movement.  Positive movement means to the right or down, respectively.
     /// Negative movement means to the left or up, respectively.  This function implementation
     /// is **optional**.
-    fn mouse_scrolled(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {
+    fn mouse_scrolled(&mut self, _widgets: &[WidgetContainer], _points: Points) {
         self.mouse_scrolled_callback(_widgets, _points);
     }
 
@@ -118,12 +119,12 @@ pub trait Widget {
     /// This calls the `on_mouse_moved` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_moved` callback.
-    fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {}
+    fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {}
 
     /// This calls the `on_mouse_scrolled` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_scrolled` callback.
-    fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {}
+    fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {}
 
     /// This calls the `on_button_clicked` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
@@ -140,7 +141,7 @@ pub trait Widget {
     /// Sets the origin of the `Widget`, adjusting the X and Y coordinates.  Automatically sets the
     /// `invalidate` flag to `true` when adjusted, but only if the new origin is not the same as
     /// the previous origin.
-    fn set_origin(&mut self, _origin: Vec<i32>) {
+    fn set_origin(&mut self, _origin: Points) {
         let old_origin = self.get_config().origin.clone();
 
         if _origin[0] != old_origin[0] || _origin[1] != old_origin[1] {

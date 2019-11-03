@@ -13,7 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[macro_use]
+/// This is a type that defines two points: X and Y coordinates.
+pub type Points = Vec<i32>;
 
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.
@@ -32,7 +33,3 @@ pub mod widget_config;
 
 /// This is the caching object that stores a list of `Widget`s that the Pushrod engine manages.
 pub mod widget_cache;
-
-/// This is a store object that stores a `Widget` of each type to avoid having to use complicated
-/// code to downcast or upcast a class when stored in the `WidgetContainer` object.
-pub mod widget_store;

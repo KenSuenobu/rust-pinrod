@@ -17,6 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{WidgetConfig, COLOR_TEXT};
+use crate::render::Points;
 
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;

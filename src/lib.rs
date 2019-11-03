@@ -108,7 +108,7 @@ mod macros {
 
             /// This function is a macro-created mouse moved callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {
+            fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {
                 if self.get_callbacks().has_on_mouse_moved() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_moved.take() {
                         cb(self, _widgets, _points);
@@ -119,7 +119,7 @@ mod macros {
 
             /// This function is a macro-created mouse scrolled callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Vec<i32>) {
+            fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {
                 if self.get_callbacks().has_on_mouse_scrolled() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_scrolled.take() {
                         cb(self, _widgets, _points);

@@ -6,6 +6,7 @@
 - Created `TimerCallbackType` for the `TimerWidget` callback definition.
 - Added `get_widget_id` to `WidgetContainer` to retrieve the `Widget` auto-assigned ID.
 - Added `WidgetStore` so that callbacks can be guaranteed object types on retrieval.
+- Added `Points` type instead of `Vec<32>`
 
 ## 0.4.8
 
