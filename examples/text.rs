@@ -18,11 +18,11 @@ pub fn main() {
         .unwrap();
     let mut engine = Engine::new();
     let mut widget1 = TextWidget::new(
-        "assets/OpenSans-Regular.ttf".to_string(),
+        String::from("assets/OpenSans-Regular.ttf"),
         sdl2::ttf::FontStyle::NORMAL,
         28,
         TextJustify::Left,
-        "Left Justified".to_string(),
+        String::from("Left Justified"),
         20,
         16,
         460,
@@ -35,11 +35,11 @@ pub fn main() {
         .insert(COLOR_TEXT, Color::RGB(255, 0, 0));
 
     let mut widget2 = TextWidget::new(
-        "assets/OpenSans-Regular.ttf".to_string(),
+        String::from("assets/OpenSans-Regular.ttf"),
         sdl2::ttf::FontStyle::NORMAL,
         28,
         TextJustify::Center,
-        "Center Justified".to_string(),
+        String::from("Center Justified"),
         20,
         80,
         460,
@@ -52,11 +52,11 @@ pub fn main() {
         .insert(COLOR_TEXT, Color::RGB(0, 255, 0));
 
     let mut widget3 = TextWidget::new(
-        "assets/OpenSans-Regular.ttf".to_string(),
+        String::from("assets/OpenSans-Regular.ttf"),
         sdl2::ttf::FontStyle::NORMAL,
         28,
         TextJustify::Right,
-        "Right Justified".to_string(),
+        String::from("Right Justified"),
         20,
         144,
         460,
@@ -70,9 +70,9 @@ pub fn main() {
 
     engine.setup(500, 200);
 
-    engine.add_widget(Box::new(widget1), "widget1".to_string());
-    engine.add_widget(Box::new(widget2), "widget2".to_string());
-    engine.add_widget(Box::new(widget3), "widget3".to_string());
+    engine.add_widget(Box::new(widget1), String::from("widget1"));
+    engine.add_widget(Box::new(widget2), String::from("widget2"));
+    engine.add_widget(Box::new(widget3), String::from("widget3"));
 
     engine.run(sdl_context, window);
 }

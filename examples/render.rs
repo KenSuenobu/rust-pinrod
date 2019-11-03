@@ -82,7 +82,7 @@ pub fn main() {
 
     engine.setup(800, 600);
 
-    engine.add_widget(Box::new(new_base_widget), "widget1".to_string());
+    engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 
     engine.run(sdl_context, window);
 }

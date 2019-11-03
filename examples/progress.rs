@@ -40,9 +40,9 @@ pub fn main() {
 
     engine.setup(500, 180);
 
-    engine.add_widget(Box::new(widget1), "widget1".to_string());
-    engine.add_widget(Box::new(widget2), "widget2".to_string());
-    engine.add_widget(Box::new(widget3), "widget3".to_string());
+    engine.add_widget(Box::new(widget1), String::from("widget1"));
+    engine.add_widget(Box::new(widget2), String::from("widget2"));
+    engine.add_widget(Box::new(widget3), String::from("widget3"));
 
     engine.run(sdl_context, window);
 }

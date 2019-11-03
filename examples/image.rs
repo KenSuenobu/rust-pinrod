@@ -21,7 +21,7 @@ pub fn main() {
         .unwrap();
     let mut engine = Engine::new();
     let mut widget1 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::NW,
         20,
         16,
@@ -36,7 +36,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget2 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::N,
         90,
         16,
@@ -51,7 +51,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget3 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::NE,
         160,
         16,
@@ -66,7 +66,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget4 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::W,
         20,
         86,
@@ -81,7 +81,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget5 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::Center,
         90,
         86,
@@ -96,7 +96,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget6 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::E,
         160,
         86,
@@ -111,7 +111,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget7 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::SW,
         20,
         156,
@@ -126,7 +126,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget8 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::S,
         90,
         156,
@@ -141,7 +141,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget9 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::SE,
         160,
         156,
@@ -156,7 +156,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget10 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::NW,
         230,
         16,
@@ -171,7 +171,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget11 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::NW,
         260,
         46,
@@ -186,7 +186,7 @@ pub fn main() {
         .insert(COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget12 = ImageWidget::new(
-        "assets/rust-48x48.jpg".to_string(),
+        String::from("assets/rust-48x48.jpg"),
         ImagePosition::NW,
         320,
         86,
@@ -202,18 +202,18 @@ pub fn main() {
 
     engine.setup(WIDTH, HEIGHT);
 
-    engine.add_widget(Box::new(widget1), "widget1".to_string());
-    engine.add_widget(Box::new(widget2), "widget2".to_string());
-    engine.add_widget(Box::new(widget3), "widget3".to_string());
-    engine.add_widget(Box::new(widget4), "widget4".to_string());
-    engine.add_widget(Box::new(widget5), "widget5".to_string());
-    engine.add_widget(Box::new(widget6), "widget6".to_string());
-    engine.add_widget(Box::new(widget7), "widget7".to_string());
-    engine.add_widget(Box::new(widget8), "widget8".to_string());
-    engine.add_widget(Box::new(widget9), "widget9".to_string());
-    engine.add_widget(Box::new(widget10), "widget10".to_string());
-    engine.add_widget(Box::new(widget11), "widget11".to_string());
-    engine.add_widget(Box::new(widget12), "widget12".to_string());
+    engine.add_widget(Box::new(widget1), String::from("widget1"));
+    engine.add_widget(Box::new(widget2), String::from("widget2"));
+    engine.add_widget(Box::new(widget3), String::from("widget3"));
+    engine.add_widget(Box::new(widget4), String::from("widget4"));
+    engine.add_widget(Box::new(widget5), String::from("widget5"));
+    engine.add_widget(Box::new(widget6), String::from("widget6"));
+    engine.add_widget(Box::new(widget7), String::from("widget7"));
+    engine.add_widget(Box::new(widget8), String::from("widget8"));
+    engine.add_widget(Box::new(widget9), String::from("widget9"));
+    engine.add_widget(Box::new(widget10), String::from("widget10"));
+    engine.add_widget(Box::new(widget11), String::from("widget11"));
+    engine.add_widget(Box::new(widget12), String::from("widget12"));
 
     engine.run(sdl_context, window);
 }
