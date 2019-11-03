@@ -3,6 +3,8 @@
 ## 0.4.9
 
 - Added `TimerWidget` (#208)
+- Created `TimerCallbackType` for the `TimerWidget` callback definition.
+- Added `get_widget_id` to `WidgetContainer` to retrieve the `Widget` auto-assigned ID
 
 ## 0.4.8
 

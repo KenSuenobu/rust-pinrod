@@ -57,6 +57,11 @@ impl WidgetContainer {
         self.widget_name.clone()
     }
 
+    /// Retrieves the numeric ID of this `Widget`.
+    pub fn get_widget_id(&self) -> i32 {
+        self.widget_id
+    }
+
     /// Retrieves the numeric ID of the parent that this `Widget` refers to.  A `0` indicates
     /// no parent is assigned.
     pub fn get_parent_id(&self) -> i32 {

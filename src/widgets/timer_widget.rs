@@ -24,6 +24,8 @@ use sdl2::video::Window;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+pub type TimerCallbackType = Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer])>>;
+
 fn time_ms() -> u64 {
     let since_the_epoch = SystemTime::now().duration_since(UNIX_EPOCH).unwrap();
 
@@ -39,7 +41,7 @@ pub struct TimerWidget {
     enabled: bool,
     timeout: u64,
     initiated: u64,
-    on_timeout: Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer])>>,
+    on_timeout: TimerCallbackType,
 }
 
 /// Creates a new `TimerWidget`.  This `Widget` will call a function defined in `on_timeout` when
