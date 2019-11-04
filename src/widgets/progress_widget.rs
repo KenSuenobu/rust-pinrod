@@ -41,7 +41,7 @@ impl ProgressWidget {
     /// `Widget` given the `xywh` coordinates, and the `percentage` of fill from 0-100.  The
     /// base color and border colors are set to white and black, respectively.  Use the
     /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, progress: u16) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
 
         base_widget
@@ -69,17 +69,16 @@ impl Widget for ProgressWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         self.base_widget.draw(c);
 
-        let base_color = self.get_config().get_color(CONFIG_COLOR_SECONDARY);
-        let progress = (f64::from(self.get_config().get_size(CONFIG_SIZE)[0])
-            * (f64::from(self.get_config().get_numeric(CONFIG_PROGRESS)) / 100.0))
-            as u32;
+        let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
+        let progress = (f64::from(self.get_size(CONFIG_SIZE)[0])
+            * (f64::from(self.get_numeric(CONFIG_PROGRESS)) / 100.0)) as u32;
 
         c.set_draw_color(base_color);
         c.fill_rect(Rect::new(
             self.config.to_x(1),
             self.config.to_y(1),
             progress,
-            self.get_config().get_size(CONFIG_SIZE)[1] - 2,
+            self.get_size(CONFIG_SIZE)[1] - 2,
         ))
         .unwrap();
     }

@@ -20,8 +20,13 @@ use sdl2::video::Window;
 use crate::render::callbacks::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, Size};
+use sdl2::pixels::Color;
 use std::collections::HashMap;
+
+pub trait ConfigConvenience {
+
+}
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -135,6 +140,61 @@ pub trait Widget {
         _clicks: u8,
         _state: bool,
     ) {
+    }
+
+    /// Sets a point for a configuration key.
+    fn set_point(&mut self, config: u8, x: i32, y: i32) {
+        self.get_config().set_point(config, x, y);
+    }
+
+    /// Sets a color for a configuration key.
+    fn set_color(&mut self, config: u8, color: Color) {
+        self.get_config().set_color(config, color);
+    }
+
+    /// Sets a numeric value for a configuration key.
+    fn set_numeric(&mut self, config: u8, value: i32) {
+        self.get_config().set_numeric(config, value);
+    }
+
+    /// Sets a text value for a configuration key.
+    fn set_text(&mut self, config: u8, text: String) {
+        self.get_config().set_text(config, text);
+    }
+
+    /// Sets a toggle for a configuration key.
+    fn set_toggle(&mut self, config: u8, flag: bool) {
+        self.get_config().set_toggle(config, flag);
+    }
+
+    /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
+    fn get_point(&mut self, k: u8) -> Points {
+        self.get_config().get_point(k)
+    }
+
+    /// Retrieves a `Size` for a configuration key.  Returns a `Size::default` if not set.
+    fn get_size(&mut self, k: u8) -> Size {
+        self.get_config().get_size(k)
+    }
+
+    /// Retrieves a `Color` for a configuration key.  Returns white if not set.
+    fn get_color(&mut self, k: u8) -> Color {
+        self.get_config().get_color(k)
+    }
+
+    /// Retrieves a numeric value for a configuration key.  Returns 0 if not set.
+    fn get_numeric(&mut self, k: u8) -> i32 {
+        self.get_config().get_numeric(k)
+    }
+
+    /// Retrieves text for a configuration key.  Returns a blank string if not set.
+    fn get_text(&mut self, k: u8) -> String {
+        self.get_config().get_text(k)
+    }
+
+    /// Retrieves a boolean toggle for a configuration key.  Returns `false` if not set.
+    fn get_toggle(&mut self, k: u8) -> bool {
+        self.get_config().get_toggle(k)
     }
 
     /// Sets the origin of the `Widget`, adjusting the X and Y coordinates.  Automatically sets the

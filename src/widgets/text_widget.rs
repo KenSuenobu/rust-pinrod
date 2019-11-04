@@ -99,7 +99,7 @@ impl Widget for TextWidget {
         let mut font = ttf_context
             .load_font(Path::new(&self.font_name), self.font_size as u16)
             .unwrap();
-        let font_color = self.get_config().get_color(CONFIG_COLOR_TEXT);
+        let font_color = self.get_color(CONFIG_COLOR_TEXT);
 
         font.set_style(self.font_style);
 
@@ -116,7 +116,7 @@ impl Widget for TextWidget {
         let TextureQuery { width, height, .. } = texture.query();
 
         let texture_y = self.get_config().to_y(0);
-        let widget_w = self.get_config().get_size(CONFIG_SIZE)[0] as i32;
+        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
         let texture_x = match self.justification {
             TextJustify::Left => self.get_config().to_x(0),
 

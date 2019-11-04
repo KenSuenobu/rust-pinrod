@@ -104,7 +104,7 @@ impl ImageWidget {
 /// copied to the canvas after rendering.
 impl Widget for ImageWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
-        let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
+        let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);
         c.fill_rect(self.get_drawing_area()).unwrap();
@@ -113,8 +113,8 @@ impl Widget for ImageWidget {
         let texture = texture_creator
             .load_texture(Path::new(&self.image_name))
             .unwrap();
-        let widget_w = self.get_config().get_size(CONFIG_SIZE)[0] as i32;
-        let widget_h = self.get_config().get_size(CONFIG_SIZE)[1] as i32;
+        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
+        let widget_h = self.get_size(CONFIG_SIZE)[1] as i32;
         let TextureQuery { width, height, .. } = texture.query();
 
         let texture_x = match self.image_position {
