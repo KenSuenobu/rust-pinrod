@@ -1,13 +1,13 @@
 extern crate pushrod;
 extern crate sdl2;
 
+use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_COLOR_SECONDARY, CONFIG_PROGRESS};
 use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::timer_widget::*;
 use sdl2::pixels::Color;
-use pushrod::render::callbacks::widget_id_for_name;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -39,17 +39,52 @@ pub fn main() {
         let widget1_id = widget_id_for_name(_widgets, String::from("widget1"));
         let widget2_id = widget_id_for_name(_widgets, String::from("widget2"));
         let widget3_id = widget_id_for_name(_widgets, String::from("widget3"));
-        let timer1_pos = (_widgets[widget1_id].widget.borrow_mut().get_numeric(CONFIG_PROGRESS) + 1) % 100;
-        let timer2_pos = (_widgets[widget2_id].widget.borrow_mut().get_numeric(CONFIG_PROGRESS) + 1) % 100;
-        let timer3_pos = (_widgets[widget3_id].widget.borrow_mut().get_numeric(CONFIG_PROGRESS) + 1) % 100;
+        let timer1_pos = (_widgets[widget1_id]
+            .widget
+            .borrow_mut()
+            .get_numeric(CONFIG_PROGRESS)
+            + 1)
+            % 100;
+        let timer2_pos = (_widgets[widget2_id]
+            .widget
+            .borrow_mut()
+            .get_numeric(CONFIG_PROGRESS)
+            + 1)
+            % 100;
+        let timer3_pos = (_widgets[widget3_id]
+            .widget
+            .borrow_mut()
+            .get_numeric(CONFIG_PROGRESS)
+            + 1)
+            % 100;
 
-        _widgets[widget1_id].widget.borrow_mut().set_numeric(CONFIG_PROGRESS, timer1_pos);
-        _widgets[widget2_id].widget.borrow_mut().set_numeric(CONFIG_PROGRESS, timer2_pos);
-        _widgets[widget3_id].widget.borrow_mut().set_numeric(CONFIG_PROGRESS, timer3_pos);
-        _widgets[widget1_id].widget.borrow_mut().get_config().set_invalidate(true);
-        _widgets[widget2_id].widget.borrow_mut().get_config().set_invalidate(true);
-        _widgets[widget3_id].widget.borrow_mut().get_config().set_invalidate(true);
-
+        _widgets[widget1_id]
+            .widget
+            .borrow_mut()
+            .set_numeric(CONFIG_PROGRESS, timer1_pos);
+        _widgets[widget2_id]
+            .widget
+            .borrow_mut()
+            .set_numeric(CONFIG_PROGRESS, timer2_pos);
+        _widgets[widget3_id]
+            .widget
+            .borrow_mut()
+            .set_numeric(CONFIG_PROGRESS, timer3_pos);
+        _widgets[widget1_id]
+            .widget
+            .borrow_mut()
+            .get_config()
+            .set_invalidate(true);
+        _widgets[widget2_id]
+            .widget
+            .borrow_mut()
+            .get_config()
+            .set_invalidate(true);
+        _widgets[widget3_id]
+            .widget
+            .borrow_mut()
+            .get_config()
+            .set_invalidate(true);
     });
 
     engine.setup(500, 180);

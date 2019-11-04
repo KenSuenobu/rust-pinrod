@@ -24,9 +24,7 @@ use crate::render::{Points, Size};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
 
-pub trait ConfigConvenience {
-
-}
+pub trait ConfigConvenience {}
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
