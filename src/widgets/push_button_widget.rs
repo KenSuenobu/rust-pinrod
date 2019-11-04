@@ -35,12 +35,7 @@ pub struct PushButtonWidget {
 }
 
 impl PushButtonWidget {
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-    ) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
@@ -51,8 +46,7 @@ impl PushButtonWidget {
 
 /// This is the `Widget` implementation of the `PushButtonWidget`.
 impl Widget for PushButtonWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
-    }
+    fn draw(&mut self, c: &mut Canvas<Window>) {}
 
     default_widget_properties!();
     default_widget_callbacks!();

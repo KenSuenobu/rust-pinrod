@@ -319,5 +319,4 @@ impl WidgetConfig {
             _ => CompassPosition::W,
         }
     }
-
 }

@@ -16,7 +16,9 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_BASE, CONFIG_SIZE, CONFIG_IMAGE_POSITION, CompassPosition, Config};
+use crate::render::widget_config::{
+    CompassPosition, Config, WidgetConfig, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION, CONFIG_SIZE,
+};
 use crate::render::Points;
 
 use sdl2::image::LoadTexture;
@@ -79,14 +81,7 @@ impl ImageWidget {
     /// `ImagePosition` will be ignored.  Likewise, if set to `false`, the image will be displayed for
     /// the size of the image, and will be placed in the bounds of the `Widget` based on the position
     /// specified in the `ImagePosition`.
-    pub fn new(
-        image_name: String,
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        scaled: bool,
-    ) -> Self {
+    pub fn new(image_name: String, x: i32, y: i32, w: u32, h: u32, scaled: bool) -> Self {
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
@@ -115,7 +110,9 @@ impl Widget for ImageWidget {
         let TextureQuery { width, height, .. } = texture.query();
 
         let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
-            CompassPosition::NW | CompassPosition::W | CompassPosition::SW => self.get_config().to_x(0),
+            CompassPosition::NW | CompassPosition::W | CompassPosition::SW => {
+                self.get_config().to_x(0)
+            }
 
             CompassPosition::N | CompassPosition::Center | CompassPosition::S => {
                 self.get_config().to_x((widget_w - width as i32) / 2)
@@ -127,7 +124,9 @@ impl Widget for ImageWidget {
         };
 
         let texture_y = match self.get_compass(CONFIG_IMAGE_POSITION) {
-            CompassPosition::NW | CompassPosition::N | CompassPosition::NE => self.get_config().to_y(0),
+            CompassPosition::NW | CompassPosition::N | CompassPosition::NE => {
+                self.get_config().to_y(0)
+            }
 
             CompassPosition::W | CompassPosition::Center | CompassPosition::E => {
                 self.get_config().to_y((widget_h - height as i32) / 2)
