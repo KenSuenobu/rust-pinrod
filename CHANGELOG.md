@@ -9,6 +9,7 @@
 - Ported useful bits from existing `Config` to current library (#213)
 - Added getters/setters to `Widget` so that configs can be pulled easily (#216)
 - Added `timer` example that uses the progress bars as its animation example.
+- Added `widget_id_for_name` to callbacks to obtain the ID for the widget by name in a `WidgetContainer` slice.
 
 ## 0.4.8
 
