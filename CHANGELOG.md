@@ -6,6 +6,7 @@
 - Created `TimerCallbackType` for the `TimerWidget` callback definition.
 - Added `get_widget_id` to `WidgetContainer` to retrieve the `Widget` auto-assigned ID.
 - Added `Points` type instead of `Vec<32>` (#214)
+- Added `on_config_changed` callback for `Widget` when a config is changed (#215)
 
 ## 0.4.8
 

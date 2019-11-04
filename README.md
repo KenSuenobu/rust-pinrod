@@ -35,12 +35,12 @@ Widgets - Porting from original Pushrod:
 - [x] Text Widget
   - [x] OpenSans Font Included
 - [x] Image Widget
+- [x] Progress Bar Widget
+- [x] Timer Widget
 - [ ] Image Button Widget
 - [ ] Checkbox Widget
-- [x] Progress Bar Widget
 - [ ] Push Button Widget
 - [ ] Radio Button Widget (or Group Button Widget)
-- [x] Timer Widget
 - [ ] Toggle Button Widget
 
 Soon to follow will be:
