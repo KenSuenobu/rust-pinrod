@@ -99,7 +99,7 @@ impl Widget for TextWidget {
         let mut font = ttf_context
             .load_font(Path::new(&self.font_name), self.font_size as u16)
             .unwrap();
-        let font_color = self.get_config().get_color(CONFIG_COLOR_TEXT).clone();
+        let font_color = self.get_config().get_color(CONFIG_COLOR_TEXT);
 
         font.set_style(self.font_style);
 

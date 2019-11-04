@@ -211,8 +211,8 @@ impl Widget for BaseWidget {
             for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
                 _canvas
                     .draw_rect(Rect::new(
-                        self.config.to_x(i32::from(border)),
-                        self.config.to_y(i32::from(border)),
+                        self.config.to_x(border),
+                        self.config.to_y(border),
                         self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
                         self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
                     ))
