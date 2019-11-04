@@ -192,7 +192,7 @@ impl CallbackRegistry {
 pub fn widget_id_for_name(widgets: &[WidgetContainer], name: String) -> usize {
     match widgets
         .iter()
-        .find(|x| x.get_widget_name() == String::from(name.clone()))
+        .find(|x| x.get_widget_name() == name.clone())
         {
             Some(x) => x.get_widget_id() as usize,
             None => 0 as usize,
