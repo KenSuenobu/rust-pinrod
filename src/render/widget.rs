@@ -144,7 +144,8 @@ pub trait Widget {
         let old_origin = self.get_config().get_point(CONFIG_ORIGIN);
 
         if _origin[0] != old_origin[0] || _origin[1] != old_origin[1] {
-            self.get_config().set_point(CONFIG_ORIGIN, _origin[0], _origin[1]);
+            self.get_config()
+                .set_point(CONFIG_ORIGIN, _origin[0], _origin[1]);
             self.get_config().set_invalidate(true);
         }
     }

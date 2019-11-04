@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use crate::render::{Points, Size};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
-use crate::render::{Points, Size};
 
 /// `Widget` Base `Color` key for `colors` `HashMap`.  This is the base fill color of a `Widget`
 /// that is in an unselected state.  This stored as a `Config::Color`.
@@ -110,11 +110,15 @@ impl WidgetConfig {
     /// main `Canvas`.
     pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         Self {
-            config: [(CONFIG_ORIGIN, Config::Points(vec![x, y])),
-                     (CONFIG_SIZE, Config::Size(vec![w, h])),
-                     (CONFIG_COLOR_BASE, Config::Color(Color::RGB(255, 255, 255))),
-                     (CONFIG_BORDER_WIDTH, Config::Numeric(0))]
-                    .iter().cloned().collect(),
+            config: [
+                (CONFIG_ORIGIN, Config::Points(vec![x, y])),
+                (CONFIG_SIZE, Config::Size(vec![w, h])),
+                (CONFIG_COLOR_BASE, Config::Color(Color::RGB(255, 255, 255))),
+                (CONFIG_BORDER_WIDTH, Config::Numeric(0)),
+            ]
+            .iter()
+            .cloned()
+            .collect(),
             hidden: false,
             enabled: true,
             invalidated: true,
@@ -263,5 +267,4 @@ impl WidgetConfig {
             _ => false,
         }
     }
-
 }

@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::{BaseWidget, Widget};
-use pushrod::render::widget_config::{CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_BORDER_WIDTH};
+use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER};
 use sdl2::pixels::Color;
 
 /*
@@ -26,7 +26,9 @@ pub fn main() {
     new_base_widget
         .get_config()
         .set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
-    new_base_widget.get_config().set_numeric(CONFIG_BORDER_WIDTH, 2);
+    new_base_widget
+        .get_config()
+        .set_numeric(CONFIG_BORDER_WIDTH, 2);
 
     new_base_widget
         .get_callbacks()
