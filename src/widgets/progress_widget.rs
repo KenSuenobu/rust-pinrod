@@ -83,6 +83,12 @@ impl Widget for ProgressWidget {
         .unwrap();
     }
 
+    /// Sets a numeric value for a configuration key.
+    fn set_numeric(&mut self, config: u8, value: i32) {
+        self.get_config().set_numeric(config, value);
+        self.get_config().set_invalidate(true);
+    }
+
     default_widget_properties!();
     default_widget_callbacks!();
 }

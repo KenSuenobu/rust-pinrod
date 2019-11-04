@@ -1,5 +1,14 @@
 # Pushrod Change Log
 
+## 0.4.10
+
+- Updated code so that config for numeric also triggers an invalidation.
+- Changed timer code so that it no longer triggers invalidation.
+- Moved `ImagePosition` to `CompassPosition` to `WidgetConfig`.
+- Added `get_compass` and `set_compass` to get and set `CompassPosition`.
+- Moved `draw` function to an empty default function.
+- Updated documentation in Timer.
+
 ## 0.4.9
 
 - Added `TimerWidget` (#208)

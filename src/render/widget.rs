@@ -40,7 +40,7 @@ pub trait Widget {
     /// your implementation (ie `fn draw(&mut self, mut canvas: Canvas<Window>)`).  The `_canvas`
     /// is the currently active drawing canvas at the time this function is called.  This called
     /// during the draw loop of the `Engine`.
-    fn draw(&mut self, _canvas: &mut Canvas<Window>);
+    fn draw(&mut self, _c: &mut Canvas<Window>) {}
 
     /// Retrieves the `WidgetConfig` object for this `Widget`.
     fn get_config(&mut self) -> &mut WidgetConfig;
@@ -165,6 +165,11 @@ pub trait Widget {
         self.get_config().set_toggle(config, flag);
     }
 
+    /// Sets a compass position for a configuration key.
+    fn set_compass(&mut self, config: u8, value: CompassPosition) {
+        self.get_config().set_compass(config, value);
+    }
+
     /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
     fn get_point(&mut self, k: u8) -> Points {
         self.get_config().get_point(k)
@@ -193,6 +198,11 @@ pub trait Widget {
     /// Retrieves a boolean toggle for a configuration key.  Returns `false` if not set.
     fn get_toggle(&mut self, k: u8) -> bool {
         self.get_config().get_toggle(k)
+    }
+
+    /// Retrieves a `CompassPosition` toggle for a configuration key.  Returns `CompassPosition::W` if not set.
+    fn get_compass(&mut self, k: u8) -> CompassPosition {
+        self.get_config().get_compass(k)
     }
 
     /// Sets the origin of the `Widget`, adjusting the X and Y coordinates.  Automatically sets the

@@ -16,7 +16,7 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_BASE, CONFIG_SIZE};
+use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_BASE, CONFIG_SIZE, CONFIG_IMAGE_POSITION, CompassPosition, Config};
 use crate::render::Points;
 
 use sdl2::image::LoadTexture;
@@ -65,7 +65,6 @@ pub struct ImageWidget {
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
     image_name: String,
-    image_position: ImagePosition,
     scaled: bool,
 }
 
@@ -82,7 +81,6 @@ impl ImageWidget {
     /// specified in the `ImagePosition`.
     pub fn new(
         image_name: String,
-        image_position: ImagePosition,
         x: i32,
         y: i32,
         w: u32,
@@ -94,7 +92,6 @@ impl ImageWidget {
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             image_name,
-            image_position,
             scaled,
         }
     }
@@ -117,26 +114,26 @@ impl Widget for ImageWidget {
         let widget_h = self.get_size(CONFIG_SIZE)[1] as i32;
         let TextureQuery { width, height, .. } = texture.query();
 
-        let texture_x = match self.image_position {
-            ImagePosition::NW | ImagePosition::W | ImagePosition::SW => self.get_config().to_x(0),
+        let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
+            CompassPosition::NW | CompassPosition::W | CompassPosition::SW => self.get_config().to_x(0),
 
-            ImagePosition::N | ImagePosition::Center | ImagePosition::S => {
+            CompassPosition::N | CompassPosition::Center | CompassPosition::S => {
                 self.get_config().to_x((widget_w - width as i32) / 2)
             }
 
-            ImagePosition::NE | ImagePosition::E | ImagePosition::SE => {
+            CompassPosition::NE | CompassPosition::E | CompassPosition::SE => {
                 self.get_config().to_x(widget_w - width as i32)
             }
         };
 
-        let texture_y = match self.image_position {
-            ImagePosition::NW | ImagePosition::N | ImagePosition::NE => self.get_config().to_y(0),
+        let texture_y = match self.get_compass(CONFIG_IMAGE_POSITION) {
+            CompassPosition::NW | CompassPosition::N | CompassPosition::NE => self.get_config().to_y(0),
 
-            ImagePosition::W | ImagePosition::Center | ImagePosition::E => {
+            CompassPosition::W | CompassPosition::Center | CompassPosition::E => {
                 self.get_config().to_y((widget_h - height as i32) / 2)
             }
 
-            ImagePosition::SW | ImagePosition::S | ImagePosition::SE => {
+            CompassPosition::SW | CompassPosition::S | CompassPosition::SE => {
                 self.get_config().to_y(widget_h - height as i32)
             }
         };
@@ -161,6 +158,12 @@ impl Widget for ImageWidget {
             )
             .unwrap();
         }
+    }
+
+    /// Sets a compass position for a configuration key.
+    fn set_compass(&mut self, config: u8, value: CompassPosition) {
+        self.get_config().set_compass(config, value);
+        self.get_config().set_invalidate(true);
     }
 
     default_widget_properties!();
