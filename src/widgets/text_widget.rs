@@ -16,7 +16,8 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, COLOR_TEXT};
+use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_TEXT, CONFIG_SIZE};
+use crate::render::Points;
 
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;
@@ -98,18 +99,13 @@ impl Widget for TextWidget {
         let mut font = ttf_context
             .load_font(Path::new(&self.font_name), self.font_size as u16)
             .unwrap();
+        let font_color = self.get_color(CONFIG_COLOR_TEXT);
 
         font.set_style(self.font_style);
 
         let surface = font
             .render(&self.msg)
-            .blended(
-                *self
-                    .config
-                    .colors
-                    .get(&COLOR_TEXT)
-                    .unwrap_or(&Color::RGB(0, 0, 0)),
-            )
+            .blended(font_color)
             .map_err(|e| e.to_string())
             .unwrap();
         let texture = texture_creator
@@ -120,7 +116,7 @@ impl Widget for TextWidget {
         let TextureQuery { width, height, .. } = texture.query();
 
         let texture_y = self.get_config().to_y(0);
-        let widget_w = self.get_config().size[0] as i32;
+        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
         let texture_x = match self.justification {
             TextJustify::Left => self.get_config().to_x(0),
 

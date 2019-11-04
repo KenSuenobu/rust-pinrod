@@ -1,5 +1,16 @@
 # Pushrod Change Log
 
+## 0.4.9
+
+- Added `TimerWidget` (#208)
+- Created `TimerCallbackType` for the `TimerWidget` callback definition.
+- Added `get_widget_id` to `WidgetContainer` to retrieve the `Widget` auto-assigned ID.
+- Added `Points` type instead of `Vec<32>` (#214)
+- Ported useful bits from existing `Config` to current library (#213)
+- Added getters/setters to `Widget` so that configs can be pulled easily (#216)
+- Added `timer` example that uses the progress bars as its animation example.
+- Added `widget_id_for_name` to callbacks to obtain the ID for the widget by name in a `WidgetContainer` slice.
+
 ## 0.4.8
 
 - Moved `Widget` macros to top-level `lib.rs` so that it can be shared between modules.

@@ -13,7 +13,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[macro_use]
+/// This is a type that defines two points: X and Y coordinates.
+pub type Points = Vec<i32>;
+
+/// This is a type that defines two size: width and height.
+pub type Size = Vec<u32>;
 
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.

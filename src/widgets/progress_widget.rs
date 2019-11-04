@@ -16,7 +16,8 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, COLOR_BASE, COLOR_BORDER, COLOR_SECONDARY};
+use crate::render::widget_config::*;
+use crate::render::Points;
 
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -32,7 +33,6 @@ pub struct ProgressWidget {
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
     base_widget: BaseWidget,
-    progress: u16,
 }
 
 /// Creates a new `ProgressWidget`, which draws a progress bar inside a `BaseWidget`.
@@ -41,46 +41,25 @@ impl ProgressWidget {
     /// `Widget` given the `xywh` coordinates, and the `percentage` of fill from 0-100.  The
     /// base color and border colors are set to white and black, respectively.  Use the
     /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, progress: u16) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
 
         base_widget
             .get_config()
-            .colors
-            .insert(COLOR_BASE, Color::RGB(255, 255, 255));
+            .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
 
         base_widget
             .get_config()
-            .colors
-            .insert(COLOR_BORDER, Color::RGB(0, 0, 0));
+            .set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
 
-        base_widget.get_config().border_width = 1;
+        base_widget.get_config().set_numeric(CONFIG_BORDER_WIDTH, 1);
 
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,
-            progress,
         }
-    }
-
-    /// Sets the progress of this `ProgressWidget`, redrawing after setting.  Anything larger than a
-    /// value of 100 will be locked at 100.
-    pub fn set_progress(&mut self, progress: u16) {
-        if progress > 100 {
-            self.progress = 100;
-        }
-
-        if progress != self.progress {
-            self.progress = progress;
-            self.get_config().set_invalidate(true);
-        }
-    }
-
-    /// Retrieves the progress setting for this `ProgressWidget`.
-    pub fn get_progress(&self) -> u16 {
-        self.progress
     }
 }
 
@@ -90,20 +69,16 @@ impl Widget for ProgressWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         self.base_widget.draw(c);
 
-        let base_color = *self
-            .config
-            .colors
-            .get(&COLOR_SECONDARY)
-            .unwrap_or(&Color::RGB(0, 0, 0));
-        let progress =
-            (f64::from(self.get_config().size[0]) * (f64::from(self.progress) / 100.0)) as u32;
+        let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
+        let progress = (f64::from(self.get_size(CONFIG_SIZE)[0])
+            * (f64::from(self.get_numeric(CONFIG_PROGRESS)) / 100.0)) as u32;
 
         c.set_draw_color(base_color);
         c.fill_rect(Rect::new(
             self.config.to_x(1),
             self.config.to_y(1),
             progress,
-            self.get_config().size[1] - 2,
+            self.get_size(CONFIG_SIZE)[1] - 2,
         ))
         .unwrap();
     }
