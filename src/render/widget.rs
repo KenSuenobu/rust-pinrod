@@ -138,13 +138,6 @@ pub trait Widget {
     ) {
     }
 
-    /// This function is called when a `Config` item has changed for this `Widget`.  It serves as a way
-    /// for the `Widget` to intercept changed values, and act on them as required (ie. changing a
-    /// paint item, modifying positions of objects based on border width changes, etc.)  It includes
-    /// the key that was set, and the value associated with the change.  Overriding this function
-    /// is **optional**.
-    fn on_config_changed(&mut self, _k: u8, _v: String) {}
-
     /// Sets the origin of the `Widget`, adjusting the X and Y coordinates.  Automatically sets the
     /// `invalidate` flag to `true` when adjusted, but only if the new origin is not the same as
     /// the previous origin.
