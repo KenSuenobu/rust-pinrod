@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::COLOR_SECONDARY;
+use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
 use pushrod::widgets::progress_widget::*;
 use sdl2::pixels::Color;
 
@@ -21,22 +21,19 @@ pub fn main() {
 
     widget1
         .get_config()
-        .colors
-        .insert(COLOR_SECONDARY, Color::RGB(255, 0, 0));
+        .set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
     let mut widget2 = ProgressWidget::new(20, 70, 360, 40, 50);
 
     widget2
         .get_config()
-        .colors
-        .insert(COLOR_SECONDARY, Color::RGB(255, 0, 0));
+        .set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
     let mut widget3 = ProgressWidget::new(20, 120, 360, 40, 75);
 
     widget3
         .get_config()
-        .colors
-        .insert(COLOR_SECONDARY, Color::RGB(255, 0, 0));
+        .set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
     engine.setup(500, 180);
 

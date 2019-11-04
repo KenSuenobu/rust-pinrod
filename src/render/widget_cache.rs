@@ -20,6 +20,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use crate::render::widget_config::{CONFIG_SIZE, CONFIG_ORIGIN};
 
 /// This is a container that stores information about a `Widget` that will be drawn on the screen.
 /// It stores the `Widget` object, the actual point of origin inside the `Window` (as a `Vec<i32>`
@@ -92,7 +93,7 @@ impl WidgetCache {
     /// `origin` (extracted from the `Widget`'s position at creation time) is its physical location
     /// inside the `Window`.
     pub fn add_widget(&mut self, mut widget: Box<dyn Widget>, widget_name: String) -> i32 {
-        let origin = widget.get_config().origin.clone();
+        let origin = widget.get_config().get_point(CONFIG_ORIGIN);
         let widget_id = self.cache.len();
 
         self.cache.push(WidgetContainer::new(
@@ -114,12 +115,12 @@ impl WidgetCache {
 
         for i in 0..self.cache.len() {
             if !self.is_hidden(i as i32) {
-                let start_x: i32 = self.cache[i].origin.clone()[0];
-                let start_y: i32 = self.cache[i].origin.clone()[1];
+                let start_x: i32 = self.cache[i].widget.borrow_mut().get_config().get_point(CONFIG_ORIGIN)[0];
+                let start_y: i32 = self.cache[i].widget.borrow_mut().get_config().get_point(CONFIG_ORIGIN)[1];
                 let end_x: i32 =
-                    start_x + (self.cache[i].widget.borrow_mut().get_config().size[0] as i32);
+                    start_x + (self.cache[i].widget.borrow_mut().get_config().get_size(CONFIG_SIZE)[0] as i32);
                 let end_y: i32 =
-                    start_y + (self.cache[i].widget.borrow_mut().get_config().size[1] as i32);
+                    start_y + (self.cache[i].widget.borrow_mut().get_config().get_size(CONFIG_SIZE)[1] as i32);
 
                 if x >= start_x && x <= end_x && y >= start_y && y <= end_y {
                     found_widget_id = i as i32;
@@ -259,8 +260,8 @@ impl WidgetCache {
             let is_invalidated = paint_widget.widget.borrow_mut().get_config().invalidated();
             let widget_x = paint_widget.widget.borrow_mut().get_config().to_x(0);
             let widget_y = paint_widget.widget.borrow_mut().get_config().to_y(0);
-            let widget_w = paint_widget.widget.borrow_mut().get_config().size[0];
-            let widget_h = paint_widget.widget.borrow_mut().get_config().size[1];
+            let widget_w = paint_widget.widget.borrow_mut().get_config().get_size(CONFIG_SIZE)[0];
+            let widget_h = paint_widget.widget.borrow_mut().get_config().get_size(CONFIG_SIZE)[1];
 
             eprintln!(
                 "Widget redraw: id={:?} hidden={} invalidated={}",

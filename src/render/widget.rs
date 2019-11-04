@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -142,10 +141,10 @@ pub trait Widget {
     /// `invalidate` flag to `true` when adjusted, but only if the new origin is not the same as
     /// the previous origin.
     fn set_origin(&mut self, _origin: Points) {
-        let old_origin = self.get_config().origin.clone();
+        let old_origin = self.get_config().get_point(CONFIG_ORIGIN);
 
         if _origin[0] != old_origin[0] || _origin[1] != old_origin[1] {
-            self.get_config().origin = _origin.clone();
+            self.get_config().set_point(CONFIG_ORIGIN, _origin[0], _origin[1]);
             self.get_config().set_invalidate(true);
         }
     }
@@ -154,10 +153,10 @@ pub trait Widget {
     /// sets the `invalidate` flag to `true` when adjusted, but only if the new size is not the
     /// same as the previous size.
     fn set_size(&mut self, _size: Vec<u32>) {
-        let old_size = self.get_config().size.clone();
+        let old_size = self.get_config().get_size(CONFIG_SIZE);
 
         if _size[0] != old_size[0] || _size[1] != old_size[1] {
-            self.get_config().size = _size.clone();
+            self.get_config().set_size(CONFIG_SIZE, _size[0], _size[1]);
             self.get_config().set_invalidate(true);
         }
     }
@@ -167,8 +166,8 @@ pub trait Widget {
         Rect::new(
             self.get_config().to_x(0),
             self.get_config().to_y(0),
-            self.get_config().size[0],
-            self.get_config().size[1],
+            self.get_config().get_size(CONFIG_SIZE)[0],
+            self.get_config().get_size(CONFIG_SIZE)[1],
         )
     }
 }
@@ -198,27 +197,23 @@ impl BaseWidget {
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
     fn draw(&mut self, mut _canvas: &mut Canvas<Window>) {
-        let base_color = *self
-            .config
-            .colors
-            .get(&COLOR_BASE)
-            .unwrap_or(&Color::RGB(255, 255, 255));
-        let border_color = *self.config.colors.get(&COLOR_BORDER).unwrap_or(&base_color);
+        let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
+        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
 
         _canvas.set_draw_color(base_color);
 
         _canvas.fill_rect(self.get_drawing_area()).unwrap();
 
-        if self.get_config().border_width > 0 && base_color != border_color {
+        if self.get_config().get_numeric(CONFIG_BORDER_WIDTH) > 0 && base_color != border_color {
             _canvas.set_draw_color(border_color);
 
-            for border in 0..self.get_config().border_width {
+            for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
                 _canvas
                     .draw_rect(Rect::new(
                         self.config.to_x(i32::from(border)),
                         self.config.to_y(i32::from(border)),
-                        self.get_config().size[0] - (u32::from(border) * 2),
-                        self.get_config().size[1] - (u32::from(border) * 2),
+                        self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
+                        self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
                     ))
                     .unwrap();
             }

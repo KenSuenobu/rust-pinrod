@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::{BaseWidget, Widget};
-use pushrod::render::widget_config::{COLOR_BASE, COLOR_BORDER};
+use pushrod::render::widget_config::{CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_BORDER_WIDTH};
 use sdl2::pixels::Color;
 
 /*
@@ -25,16 +25,14 @@ pub fn main() {
 
     new_base_widget
         .get_config()
-        .colors
-        .insert(COLOR_BORDER, Color::RGB(0, 0, 0));
-    new_base_widget.get_config().border_width = 2;
+        .set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
+    new_base_widget.get_config().set_numeric(CONFIG_BORDER_WIDTH, 2);
 
     new_base_widget
         .get_callbacks()
         .on_mouse_entered(|x, _widgets| {
             x.get_config()
-                .colors
-                .insert(COLOR_BASE, Color::RGB(255, 0, 0));
+                .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 0, 0));
             x.get_config().set_invalidate(true);
             _widgets[0]
                 .widget
@@ -48,8 +46,7 @@ pub fn main() {
         .get_callbacks()
         .on_mouse_exited(|x, _widgets| {
             x.get_config()
-                .colors
-                .insert(COLOR_BASE, Color::RGB(255, 255, 255));
+                .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
             x.get_config().set_invalidate(true);
             _widgets[0]
                 .widget

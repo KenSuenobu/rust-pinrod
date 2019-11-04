@@ -16,6 +16,9 @@
 /// This is a type that defines two points: X and Y coordinates.
 pub type Points = Vec<i32>;
 
+/// This is a type that defines two size: width and height.
+pub type Size = Vec<u32>;
+
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.
 pub mod engine;

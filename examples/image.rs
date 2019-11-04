@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::COLOR_BASE;
+use pushrod::render::widget_config::{CONFIG_COLOR_BASE};
 use pushrod::widgets::image_widget::*;
 use sdl2::pixels::Color;
 
@@ -32,8 +32,7 @@ pub fn main() {
 
     widget1
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget2 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -47,8 +46,7 @@ pub fn main() {
 
     widget2
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget3 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -62,8 +60,7 @@ pub fn main() {
 
     widget3
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget4 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -77,8 +74,7 @@ pub fn main() {
 
     widget4
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget5 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -92,8 +88,7 @@ pub fn main() {
 
     widget5
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget6 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -107,8 +102,7 @@ pub fn main() {
 
     widget6
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget7 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -122,8 +116,7 @@ pub fn main() {
 
     widget7
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget8 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -137,8 +130,7 @@ pub fn main() {
 
     widget8
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget9 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -152,8 +144,7 @@ pub fn main() {
 
     widget9
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget10 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -167,8 +158,7 @@ pub fn main() {
 
     widget10
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget11 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -182,8 +172,7 @@ pub fn main() {
 
     widget11
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     let mut widget12 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
@@ -197,8 +186,7 @@ pub fn main() {
 
     widget12
         .get_config()
-        .colors
-        .insert(COLOR_BASE, Color::RGB(0, 0, 0));
+        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
 
     engine.setup(WIDTH, HEIGHT);
 

@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::COLOR_TEXT;
+use pushrod::render::widget_config::{CONFIG_COLOR_TEXT};
 use pushrod::widgets::text_widget::*;
 use sdl2::pixels::Color;
 
@@ -31,8 +31,7 @@ pub fn main() {
 
     widget1
         .get_config()
-        .colors
-        .insert(COLOR_TEXT, Color::RGB(255, 0, 0));
+        .set_color(CONFIG_COLOR_TEXT, Color::RGB(255, 0, 0));
 
     let mut widget2 = TextWidget::new(
         String::from("assets/OpenSans-Regular.ttf"),
@@ -48,8 +47,7 @@ pub fn main() {
 
     widget2
         .get_config()
-        .colors
-        .insert(COLOR_TEXT, Color::RGB(0, 255, 0));
+        .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 255, 0));
 
     let mut widget3 = TextWidget::new(
         String::from("assets/OpenSans-Regular.ttf"),
@@ -65,8 +63,7 @@ pub fn main() {
 
     widget3
         .get_config()
-        .colors
-        .insert(COLOR_TEXT, Color::RGB(0, 0, 255));
+        .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 255));
 
     engine.setup(500, 200);
 

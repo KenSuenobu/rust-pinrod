@@ -15,50 +15,83 @@
 
 use sdl2::pixels::Color;
 use std::collections::HashMap;
+use crate::render::{Points, Size};
 
 /// `Widget` Base `Color` key for `colors` `HashMap`.  This is the base fill color of a `Widget`
-/// that is in an unselected state.
-pub const COLOR_BASE: u8 = 0;
+/// that is in an unselected state.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_BASE: u8 = 0;
 
 /// `Widget` Hover `Color` key for `colors` `HashMap`.  This is the base fill color of a `Widget`
 /// that has a mouse hovering over the top of the `Widget`, or when a `mouse_entered` event is
 /// triggered.  This is optional; the `Widget` does not need to honor this color if it does not
-/// support a hover state.
-pub const COLOR_HOVER: u8 = 1;
+/// support a hover state.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_HOVER: u8 = 1;
 
 /// `Widget` Border `Color` key for `colors` `HashMap`.  This should be used for the color of the
-/// border, if the `Widget` draws a border.
-pub const COLOR_BORDER: u8 = 2;
+/// border, if the `Widget` draws a border.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_BORDER: u8 = 2;
 
 /// `Widget` Text `Color` key for `colors` `HashMap`.  This should be the color for the text being
-/// displayed inside the `Widget`.
-pub const COLOR_TEXT: u8 = 3;
+/// displayed inside the `Widget`.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_TEXT: u8 = 3;
 
 /// `Widget` Selected `Color` key for `colors` `HashMap`.  This is the color the `Widget` should
-/// display when in selected state.
-pub const COLOR_SELECTED: u8 = 4;
+/// display when in selected state.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_SELECTED: u8 = 4;
 
 /// `Widget` Secondary `Color` key for `colors` `HashMap`.  This is the color the `Widget` should
 /// display for any secondary properties, such as a fill color for a progress widget, a spinner,
-/// etc.
-pub const COLOR_SECONDARY: u8 = 5;
+/// etc.  This stored as a `Config::Color`.
+pub const CONFIG_COLOR_SECONDARY: u8 = 5;
+
+/// `Widget` configuration to store its origin on the screen.  This is a `Config::Points` object in the
+/// config.
+pub const CONFIG_ORIGIN: u8 = 6;
+
+/// `Widget` configuration that stores the size of the `Widget`.  This is a `Config::Size` object
+/// in the config.
+pub const CONFIG_SIZE: u8 = 7;
+
+/// `Widget` configuration that stores the display border in pixels.  This is stored as a
+/// `Config::Numeric` value.
+pub const CONFIG_BORDER_WIDTH: u8 = 8;
+
+/// `Widget` text store, used to display text on the screen.  This is stored as a `Config::Text`
+/// value.
+pub const CONFIG_TEXT: u8 = 9;
+
+/// `Widget` progress value store.  This is stored as a `Config::Numeric` value.
+pub const CONFIG_PROGRESS: u8 = 10;
+
+/// Configuration object type - allows configurations to be set using `Piston`, `Pushrod`, or
+/// native types.
+#[derive(Clone, Debug)]
+pub enum Config {
+    /// This stores a `Points` type.
+    Points(Points),
+
+    /// This stores a `Size` type.
+    Size(Size),
+
+    /// This stores a `Color`.
+    Color(Color),
+
+    /// This stores a numeric value in the form of an `i32` value.
+    Numeric(i32),
+
+    /// This stores a `String` of text.
+    Text(String),
+
+    /// This stores a `true`/`false` boolean flag.
+    Toggle(bool),
+}
 
 /// This is the store for the `WidgetConfig`, which each `Widget` object needs.  This stores
 /// information about the `Widget`.  It currently contains the point of origin, size, a `HashMap` of
 /// different `Color`s, a border width, and an invalidation flag.
 pub struct WidgetConfig {
-    /// This `Vec` contains two points of origin: the physical X and Y coordinates in the
-    /// `Canvas`.
-    pub origin: Vec<i32>,
-
-    /// This `Vec` contains the width and height of the object.
-    pub size: Vec<u32>,
-
-    /// This `HashMap` contains a key/value pair containing colors for the `Widget`.
-    pub colors: HashMap<u8, Color>,
-
-    /// This is the border width in pixels.
-    pub border_width: u8,
+    /// The `HashMap` store for configuration objects.
+    pub config: HashMap<u8, Config>,
 
     /// `Widget`'s hidden flag - any children that refer to this object as a `parent_id` will not
     /// be drawn, and their events will not be received.
@@ -77,13 +110,11 @@ impl WidgetConfig {
     /// main `Canvas`.
     pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         Self {
-            origin: vec![x, y],
-            size: vec![w, h],
-            colors: [(COLOR_BASE, Color::RGB(255, 255, 255))]
-                .iter()
-                .cloned()
-                .collect(),
-            border_width: 0,
+            config: [(CONFIG_ORIGIN, Config::Points(vec![x, y])),
+                     (CONFIG_SIZE, Config::Size(vec![w, h])),
+                     (CONFIG_COLOR_BASE, Config::Color(Color::RGB(255, 255, 255))),
+                     (CONFIG_BORDER_WIDTH, Config::Numeric(0))]
+                    .iter().cloned().collect(),
             hidden: false,
             enabled: true,
             invalidated: true,
@@ -94,14 +125,14 @@ impl WidgetConfig {
     /// Returns `i32` containing the modified X coordinate.  This is a convenience method for the
     /// `Widget` to draw based on a 0x0 point of origin.
     pub fn to_x(&self, x: i32) -> i32 {
-        self.origin[0] + x
+        self.get_point(CONFIG_ORIGIN)[0] + x
     }
 
     /// Converts a Y point to the physical Y point on the `Canvas` plus the point of origin.
     /// Returns `i32` containing the modified Y coordinate.  This is a convenience method for the
     /// `Widget` to draw based on a 0x0 point of origin.
     pub fn to_y(&self, y: i32) -> i32 {
-        self.origin[1] + y
+        self.get_point(CONFIG_ORIGIN)[1] + y
     }
 
     /// Sets the invalidation state of the `Widget`, telling the `Engine` that the `Widget`
@@ -154,4 +185,83 @@ impl WidgetConfig {
     pub fn is_hidden(&self) -> bool {
         self.hidden
     }
+
+    /// Sets a point for a configuration key.
+    pub fn set_point(&mut self, config: u8, x: i32, y: i32) {
+        self.config.insert(config, Config::Points(vec![x, y]));
+    }
+
+    /// Sets a size for a configuration key.
+    pub fn set_size(&mut self, config: u8, w: u32, h: u32) {
+        self.config.insert(config, Config::Size(vec![w, h]));
+    }
+
+    /// Sets a color for a configuration key.
+    pub fn set_color(&mut self, config: u8, color: Color) {
+        self.config.insert(config, Config::Color(color));
+    }
+
+    /// Sets a numeric value for a configuration key.
+    pub fn set_numeric(&mut self, config: u8, value: i32) {
+        self.config.insert(config, Config::Numeric(value));
+    }
+
+    /// Sets a text value for a configuration key.
+    pub fn set_text(&mut self, config: u8, text: String) {
+        self.config.insert(config, Config::Text(text.clone()));
+    }
+
+    /// Sets a toggle for a configuration key.
+    pub fn set_toggle(&mut self, config: u8, flag: bool) {
+        self.config.insert(config, Config::Toggle(flag));
+    }
+
+    /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
+    pub fn get_point(&self, k: u8) -> Points {
+        match self.config.get(&k) {
+            Some(Config::Points(point)) => point.clone(),
+            _ => Points::default(),
+        }
+    }
+
+    /// Retrieves a `Size` for a configuration key.  Returns a `Size::default` if not set.
+    pub fn get_size(&self, k: u8) -> Size {
+        match self.config.get(&k) {
+            Some(Config::Size(size)) => size.clone(),
+            _ => Size::default(),
+        }
+    }
+
+    /// Retrieves a `Color` for a configuration key.  Returns white if not set.
+    pub fn get_color(&self, k: u8) -> Color {
+        match self.config.get(&k) {
+            Some(Config::Color(color)) => *color,
+            _ => Color::RGB(255, 255, 255),
+        }
+    }
+
+    /// Retrieves a numeric value for a configuration key.  Returns 0 if not set.
+    pub fn get_numeric(&self, k: u8) -> i32 {
+        match self.config.get(&k) {
+            Some(Config::Numeric(numeric)) => *numeric,
+            _ => 0,
+        }
+    }
+
+    /// Retrieves text for a configuration key.  Returns a blank string if not set.
+    pub fn get_text(&self, k: u8) -> String {
+        match self.config.get(&k) {
+            Some(Config::Text(text)) => text.clone(),
+            _ => String::from(""),
+        }
+    }
+
+    /// Retrieves a boolean toggle for a configuration key.  Returns `false` if not set.
+    pub fn get_toggle(&self, k: u8) -> bool {
+        match self.config.get(&k) {
+            Some(Config::Toggle(toggle)) => *toggle,
+            _ => false,
+        }
+    }
+
 }
