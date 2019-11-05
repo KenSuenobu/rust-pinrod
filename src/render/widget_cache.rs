@@ -171,12 +171,27 @@ impl WidgetCache {
     }
 
     /// This function calls the `button_clicked` callback for the `Widget` specified by `widget_id`.
+    /// When state is set to `true`, this indicates that a mouse button down was detected.  When set
+    /// to `false`, it indicates that the mouse button was released.  When setting the button state
+    /// to `widget_id == -1`, the button click message will be sent to _all_ `Widget`s, so use
+    /// `widget_id == -1` with care.
     pub fn button_clicked(&mut self, widget_id: i32, button: u8, clicks: u8, state: bool) {
-        if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
-            self.cache[widget_id as usize]
-                .widget
-                .borrow_mut()
-                .button_clicked(&self.cache, button, clicks, state);
+        if widget_id == -1 {
+            for i in 0..self.cache.len() {
+                if !self.is_hidden(i as i32) && self.is_enabled(i as i32) {
+                    self.cache[i as usize]
+                        .widget
+                        .borrow_mut()
+                        .button_clicked(&self.cache, button, clicks, state);
+                }
+            }
+        } else {
+            if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
+                self.cache[widget_id as usize]
+                    .widget
+                    .borrow_mut()
+                    .button_clicked(&self.cache, button, clicks, state);
+            }
         }
     }
 

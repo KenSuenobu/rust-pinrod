@@ -8,6 +8,8 @@
 - Added `get_compass` and `set_compass` to get and set `CompassPosition`.
 - Moved `draw` function to an empty default function.
 - Updated documentation in Timer.
+- Modified `button_clicked` function in `engine` so that when a mouse is released, it is sent to all `Widget`s.
+- Modified `button_clicked` function in `WidgetCache` so that a `widget_id == -1` sends a message to all `Widget`s.
 
 ## 0.4.9
 

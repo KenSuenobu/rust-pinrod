@@ -100,7 +100,7 @@ impl Engine {
                         mouse_btn, clicks, ..
                     } => {
                         self.cache.button_clicked(
-                            self.current_widget_id,
+                            -1,
                             mouse_btn as u8,
                             clicks,
                             false,
