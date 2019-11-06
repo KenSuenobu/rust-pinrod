@@ -187,13 +187,11 @@ impl WidgetCache {
                     );
                 }
             }
-        } else {
-            if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
-                self.cache[widget_id as usize]
-                    .widget
-                    .borrow_mut()
-                    .button_clicked(&self.cache, button, clicks, state);
-            }
+        } else if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
+            self.cache[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .button_clicked(&self.cache, button, clicks, state);
         }
     }
 

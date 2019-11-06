@@ -18,9 +18,6 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
-use sdl2::render::Canvas;
-use sdl2::video::Window;
-
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 

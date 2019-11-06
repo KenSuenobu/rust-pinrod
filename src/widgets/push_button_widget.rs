@@ -18,19 +18,15 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{
     WidgetConfig, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
-    CONFIG_SIZE,
 };
 use crate::render::Points;
 
-use sdl2::image::LoadTexture;
-use sdl2::rect::Rect;
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
-use std::path::Path;
 
 pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut PushButtonWidget, &[WidgetContainer])>>;
 
