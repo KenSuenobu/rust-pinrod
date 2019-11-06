@@ -16,18 +16,21 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("pushrod-render demo", 800, 600)
+        .window("pushrod-render demo", 400, 100)
         .position_centered()
         .opengl()
         .build()
         .unwrap();
     let mut engine = Engine::new();
-    let mut button1 = PushButtonWidget::new(16, 16, 200, 48, String::from("Click me"));
+    let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me"));
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
+    button1.on_click(|x, _widgets| {
+        eprintln!("Click me clicked!");
+    });
 
-    engine.setup(800, 600);
+    engine.setup(400, 100);
 
     engine.add_widget(Box::new(button1), String::from("button1"));
 

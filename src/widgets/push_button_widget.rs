@@ -29,6 +29,8 @@ use std::path::Path;
 use sdl2::pixels::Color;
 use crate::widgets::text_widget::{TextWidget, TextJustify};
 
+pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut PushButtonWidget, &[WidgetContainer])>>;
+
 /// This is the storage object for the `PushButtonWidget`.  It stores the config, properties, callback registry.
 pub struct PushButtonWidget {
     config: WidgetConfig,
@@ -38,6 +40,7 @@ pub struct PushButtonWidget {
     text_widget: TextWidget,
     active: bool,
     in_bounds: bool,
+    on_click: OnClickCallbackType,
 }
 
 impl PushButtonWidget {
@@ -69,6 +72,7 @@ impl PushButtonWidget {
             text_widget,
             active: false,
             in_bounds: false,
+            on_click: None,
         }
     }
 
@@ -84,6 +88,22 @@ impl PushButtonWidget {
         self.text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         self.text_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         self.get_config().set_invalidate(true);
+    }
+
+    /// Assigns the callback closure that will be used when a button click is triggered.
+    pub fn on_click<F>(&mut self, callback: F)
+        where
+            F: FnMut(&mut PushButtonWidget, &[WidgetContainer]) + 'static,
+    {
+        self.on_click = Some(Box::new(callback));
+    }
+
+    /// Internal function that triggers the `on_click` callback.
+    fn call_click_callback(&mut self, widgets: &[WidgetContainer]) {
+        if let Some(mut cb) = self.on_click.take() {
+            cb(self, widgets);
+            self.on_click = Some(cb);
+        }
     }
 }
 
@@ -146,6 +166,7 @@ impl Widget for PushButtonWidget {
                 if self.in_bounds && had_bounds {
                     // Callback here
                     eprintln!("Call callback here: clicks={}", _clicks);
+                    self.call_click_callback(_widgets);
                 }
             }
         }
