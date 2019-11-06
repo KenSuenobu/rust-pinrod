@@ -28,6 +28,8 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
 
+/// This is the callback type that is used when an `on_click` callback is triggered from this
+/// `Widget`.
 pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut PushButtonWidget, &[WidgetContainer])>>;
 
 /// This is the storage object for the `PushButtonWidget`.  It stores the config, properties, callback registry.
