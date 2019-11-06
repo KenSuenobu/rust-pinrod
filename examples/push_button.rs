@@ -22,7 +22,7 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new();
-    let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me"));
+    let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me!"), 40);
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);

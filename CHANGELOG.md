@@ -2,6 +2,11 @@
 
 ## 0.4.11
 
+- Added text wrapping to `TextWidget`
+- `TextWidget` background color is now drawn properly (#218)
+- Added `CONFIG_FONT_SIZE` to change the size of a font.
+- Modified `TextWidget` so that it redraws when changing the base color, text color, font size, or text.
+- Modified `push_button` example to change the size of the font.
 
 ## 0.4.10
 

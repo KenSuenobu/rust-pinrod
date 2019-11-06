@@ -16,10 +16,10 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_TEXT, CONFIG_SIZE};
+use crate::render::widget_config::*;
 use crate::render::Points;
 
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::{BlendMode, Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
@@ -89,10 +89,9 @@ impl TextWidget {
 /// described by the SDL2 documentation), so this might change later to use 8 bit color mapping.
 impl Widget for TextWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
-        let base_color = Color::RGB(255, 255, 255);
-
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+        let base_color = self.get_color(CONFIG_COLOR_BASE);
+        let text_max_width =
+            self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
 
         let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
         let texture_creator = c.texture_creator();
@@ -105,7 +104,7 @@ impl Widget for TextWidget {
 
         let surface = font
             .render(&self.msg)
-            .blended(font_color)
+            .blended_wrapped(font_color, text_max_width)
             .map_err(|e| e.to_string())
             .unwrap();
         let texture = texture_creator
@@ -125,12 +124,39 @@ impl Widget for TextWidget {
             TextJustify::Center => self.get_config().to_x((widget_w - width as i32) / 2),
         };
 
+        c.set_draw_color(base_color);
+        c.fill_rect(self.get_drawing_area()).unwrap();
+
         c.copy(
             &texture,
             None,
             Rect::new(texture_x, texture_y, width, height),
         )
         .unwrap();
+    }
+
+    /// Monitors for changes in the text, color changes, or font sizes.
+    fn on_config_changed(&mut self, _k: u8, _v: Config) {
+        match _k {
+            CONFIG_COLOR_TEXT => self.get_config().set_invalidate(true),
+            CONFIG_COLOR_BASE => self.get_config().set_invalidate(true),
+            CONFIG_FONT_SIZE => match _v {
+                Config::Numeric(size) => {
+                    self.font_size = size;
+                    self.get_config().set_invalidate(true);
+                }
+                _ => (),
+            },
+            CONFIG_TEXT => match _v {
+                Config::Text(text) => {
+                    self.msg = text.clone();
+                    self.get_config().set_invalidate(true);
+                }
+                _ => (),
+            },
+
+            _ => (),
+        };
     }
 
     default_widget_properties!();
