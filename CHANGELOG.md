@@ -12,6 +12,7 @@
 - Modified `button_clicked` function in `WidgetCache` so that a `widget_id == -1` sends a message to all `Widget`s.
 - Added `on_config_changed` so that it is called when a config option changes (#215)
 - Modified `ProgressWidget` and `ImageWidget` to use `on_config_changed` to handle better redraw.
+- Added `PushButtonWidget` ported code from previous effort. (#205)
 
 ## 0.4.9
 
