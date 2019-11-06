@@ -1,5 +1,8 @@
 # Pushrod Change Log
 
+## 0.4.11
+
+
 ## 0.4.10
 
 - Updated code so that config for numeric also triggers an invalidation.
