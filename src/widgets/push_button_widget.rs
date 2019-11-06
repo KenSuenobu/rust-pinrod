@@ -16,7 +16,10 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_BASE, CONFIG_SIZE, CONFIG_COLOR_BORDER, CONFIG_BORDER_WIDTH, CONFIG_COLOR_TEXT};
+use crate::render::widget_config::{
+    WidgetConfig, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
+    CONFIG_SIZE,
+};
 use crate::render::Points;
 
 use sdl2::image::LoadTexture;
@@ -24,10 +27,10 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
+use crate::widgets::text_widget::{TextJustify, TextWidget};
+use sdl2::pixels::Color;
 use std::collections::HashMap;
 use std::path::Path;
-use sdl2::pixels::Color;
-use crate::widgets::text_widget::{TextWidget, TextJustify};
 
 pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut PushButtonWidget, &[WidgetContainer])>>;
 
@@ -77,23 +80,29 @@ impl PushButtonWidget {
     }
 
     fn draw_hovered(&mut self) {
-        self.base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
-        self.text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(255, 255, 255));
-        self.text_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+        self.base_widget
+            .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+        self.text_widget
+            .set_color(CONFIG_COLOR_TEXT, Color::RGB(255, 255, 255));
+        self.text_widget
+            .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
         self.get_config().set_invalidate(true);
     }
 
     fn draw_unhovered(&mut self) {
-        self.base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-        self.text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
-        self.text_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+        self.base_widget
+            .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+        self.text_widget
+            .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
+        self.text_widget
+            .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         self.get_config().set_invalidate(true);
     }
 
     /// Assigns the callback closure that will be used when a button click is triggered.
     pub fn on_click<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut PushButtonWidget, &[WidgetContainer]) + 'static,
+    where
+        F: FnMut(&mut PushButtonWidget, &[WidgetContainer]) + 'static,
     {
         self.on_click = Some(Box::new(callback));
     }
