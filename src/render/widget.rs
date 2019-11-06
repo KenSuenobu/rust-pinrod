@@ -40,7 +40,7 @@ pub trait Widget {
     /// your implementation (ie `fn draw(&mut self, mut canvas: Canvas<Window>)`).  The `_canvas`
     /// is the currently active drawing canvas at the time this function is called.  This called
     /// during the draw loop of the `Engine`.
-    fn draw(&mut self, _canvas: &mut Canvas<Window>);
+    fn draw(&mut self, _c: &mut Canvas<Window>) {}
 
     /// Retrieves the `WidgetConfig` object for this `Widget`.
     fn get_config(&mut self) -> &mut WidgetConfig;
@@ -140,29 +140,46 @@ pub trait Widget {
     ) {
     }
 
+    /// This callback is called when a setter is used to configure a value.  It is _not_ called when a
+    /// call to `get_config()` using the setter is called, so it is best to use the top-level setters
+    /// and getters for the configuration values - at least, until the `get_config()` call can be made
+    /// private.
+    fn on_config_changed(&mut self, _k: u8, _v: Config) {}
+
     /// Sets a point for a configuration key.
     fn set_point(&mut self, config: u8, x: i32, y: i32) {
         self.get_config().set_point(config, x, y);
+        self.on_config_changed(config, Config::Points(vec![x, y]));
     }
 
     /// Sets a color for a configuration key.
     fn set_color(&mut self, config: u8, color: Color) {
         self.get_config().set_color(config, color);
+        self.on_config_changed(config, Config::Color(color));
     }
 
     /// Sets a numeric value for a configuration key.
     fn set_numeric(&mut self, config: u8, value: i32) {
         self.get_config().set_numeric(config, value);
+        self.on_config_changed(config, Config::Numeric(value));
     }
 
     /// Sets a text value for a configuration key.
     fn set_text(&mut self, config: u8, text: String) {
-        self.get_config().set_text(config, text);
+        self.get_config().set_text(config, text.clone());
+        self.on_config_changed(config, Config::Text(text.clone()));
     }
 
     /// Sets a toggle for a configuration key.
     fn set_toggle(&mut self, config: u8, flag: bool) {
         self.get_config().set_toggle(config, flag);
+        self.on_config_changed(config, Config::Toggle(flag));
+    }
+
+    /// Sets a compass position for a configuration key.
+    fn set_compass(&mut self, config: u8, value: CompassPosition) {
+        self.get_config().set_compass(config, value.clone());
+        self.on_config_changed(config, Config::CompassPosition(value.clone()));
     }
 
     /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
@@ -193,6 +210,11 @@ pub trait Widget {
     /// Retrieves a boolean toggle for a configuration key.  Returns `false` if not set.
     fn get_toggle(&mut self, k: u8) -> bool {
         self.get_config().get_toggle(k)
+    }
+
+    /// Retrieves a `CompassPosition` toggle for a configuration key.  Returns `CompassPosition::W` if not set.
+    fn get_compass(&mut self, k: u8) -> CompassPosition {
+        self.get_config().get_compass(k)
     }
 
     /// Sets the origin of the `Widget`, adjusting the X and Y coordinates.  Automatically sets the

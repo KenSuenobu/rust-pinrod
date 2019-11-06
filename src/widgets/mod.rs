@@ -27,3 +27,6 @@ pub mod progress_widget;
 /// This is a `TimerWidget`, which times out after a specified duration, triggering a callback
 /// after the timeout is exceeded.
 pub mod timer_widget;
+
+/// This is a `PushButtonWidget`, which draws text in a `Widget` that can be clicked.
+pub mod push_button_widget;

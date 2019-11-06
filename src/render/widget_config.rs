@@ -63,6 +63,42 @@ pub const CONFIG_TEXT: u8 = 9;
 /// `Widget` progress value store.  This is stored as a `Config::Numeric` value.
 pub const CONFIG_PROGRESS: u8 = 10;
 
+/// `Widget` image position direction, controls the position of an `Image` within the bounds of a
+/// `Widget`.  This is stored as a `Config::CompassPosition` value.
+pub const CONFIG_IMAGE_POSITION: u8 = 11;
+
+/// This enum is used by the `ImageWidget`, which controls the positioning of the image being
+/// rendered within the bounds of the `Widget`.
+#[derive(Clone, Debug)]
+pub enum CompassPosition {
+    /// Upper left-hand corner of the bounds.
+    NW,
+
+    /// Centered top of the bounds.
+    N,
+
+    /// Upper right-hand corner of the bounds.
+    NE,
+
+    /// Centered left side of the bounds.
+    W,
+
+    /// Center of the bounds.
+    Center,
+
+    /// Centered right side of the bounds.
+    E,
+
+    /// Lower left-hand corner of the bounds.
+    SW,
+
+    /// Bottom center of the bounds.
+    S,
+
+    /// Lower right-hand corner of the bounds.
+    SE,
+}
+
 /// Configuration object type - allows configurations to be set using `Piston`, `Pushrod`, or
 /// native types.
 #[derive(Clone, Debug)]
@@ -84,6 +120,9 @@ pub enum Config {
 
     /// This stores a `true`/`false` boolean flag.
     Toggle(bool),
+
+    /// This stores a `ComapssPosition`.
+    CompassPosition(CompassPosition),
 }
 
 /// This is the store for the `WidgetConfig`, which each `Widget` object needs.  This stores
@@ -220,6 +259,11 @@ impl WidgetConfig {
         self.config.insert(config, Config::Toggle(flag));
     }
 
+    /// Sets a compass position for a configuration key.
+    pub fn set_compass(&mut self, config: u8, value: CompassPosition) {
+        self.config.insert(config, Config::CompassPosition(value));
+    }
+
     /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
     pub fn get_point(&self, k: u8) -> Points {
         match self.config.get(&k) {
@@ -265,6 +309,14 @@ impl WidgetConfig {
         match self.config.get(&k) {
             Some(Config::Toggle(toggle)) => *toggle,
             _ => false,
+        }
+    }
+
+    /// Retrieves a `CompassPosition` toggle for a configuration key.  Returns `CompassPosition::W` if not set.
+    pub fn get_compass(&self, k: u8) -> CompassPosition {
+        match self.config.get(&k) {
+            Some(Config::CompassPosition(position)) => position.clone(),
+            _ => CompassPosition::W,
         }
     }
 }

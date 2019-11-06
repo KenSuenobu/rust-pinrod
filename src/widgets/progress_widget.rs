@@ -83,6 +83,13 @@ impl Widget for ProgressWidget {
         .unwrap();
     }
 
+    /// Responds to a screen redraw only if the `CONFIG_PROGRESS` key was changed.
+    fn on_config_changed(&mut self, _k: u8, _v: Config) {
+        if _k == CONFIG_PROGRESS {
+            self.get_config().set_invalidate(true);
+        }
+    }
+
     default_widget_properties!();
     default_widget_callbacks!();
 }

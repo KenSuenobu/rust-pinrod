@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::CONFIG_COLOR_BASE;
+use pushrod::render::widget_config::{CompassPosition, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION};
 use pushrod::widgets::image_widget::*;
 use sdl2::pixels::Color;
 
@@ -20,37 +20,20 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new();
-    let mut widget1 = ImageWidget::new(
-        String::from("assets/rust-48x48.jpg"),
-        ImagePosition::NW,
-        20,
-        16,
-        60,
-        60,
-        false,
-    );
+    let mut widget1 =
+        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 16, 60, 60, false);
 
-    widget1
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget1.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget1.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
-    let mut widget2 = ImageWidget::new(
-        String::from("assets/rust-48x48.jpg"),
-        ImagePosition::N,
-        90,
-        16,
-        60,
-        60,
-        false,
-    );
+    let mut widget2 =
+        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 90, 16, 60, 60, false);
 
-    widget2
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget2.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget2.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::N);
 
     let mut widget3 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::NE,
         160,
         16,
         60,
@@ -58,41 +41,23 @@ pub fn main() {
         false,
     );
 
-    widget3
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget3.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget3.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NE);
 
-    let mut widget4 = ImageWidget::new(
-        String::from("assets/rust-48x48.jpg"),
-        ImagePosition::W,
-        20,
-        86,
-        60,
-        60,
-        false,
-    );
+    let mut widget4 =
+        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 86, 60, 60, false);
 
-    widget4
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget4.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget4.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::W);
 
-    let mut widget5 = ImageWidget::new(
-        String::from("assets/rust-48x48.jpg"),
-        ImagePosition::Center,
-        90,
-        86,
-        60,
-        60,
-        false,
-    );
+    let mut widget5 =
+        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 90, 86, 60, 60, false);
 
-    widget5
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget5.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget5.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::Center);
 
     let mut widget6 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::E,
         160,
         86,
         60,
@@ -100,13 +65,11 @@ pub fn main() {
         false,
     );
 
-    widget6
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget6.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget6.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::E);
 
     let mut widget7 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::SW,
         20,
         156,
         60,
@@ -114,13 +77,11 @@ pub fn main() {
         false,
     );
 
-    widget7
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget7.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget7.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::SW);
 
     let mut widget8 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::S,
         90,
         156,
         60,
@@ -128,13 +89,11 @@ pub fn main() {
         false,
     );
 
-    widget8
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget8.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget8.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::S);
 
     let mut widget9 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::SE,
         160,
         156,
         60,
@@ -142,27 +101,17 @@ pub fn main() {
         false,
     );
 
-    widget9
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget9.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget9.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::SE);
 
-    let mut widget10 = ImageWidget::new(
-        String::from("assets/rust-48x48.jpg"),
-        ImagePosition::NW,
-        230,
-        16,
-        80,
-        80,
-        true,
-    );
+    let mut widget10 =
+        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 230, 16, 80, 80, true);
 
-    widget10
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget10.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget10.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
     let mut widget11 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::NW,
         260,
         46,
         120,
@@ -170,13 +119,11 @@ pub fn main() {
         true,
     );
 
-    widget11
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget11.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget11.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
     let mut widget12 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        ImagePosition::NW,
         320,
         86,
         160,
@@ -184,9 +131,8 @@ pub fn main() {
         true,
     );
 
-    widget12
-        .get_config()
-        .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget12.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
+    widget12.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
     engine.setup(WIDTH, HEIGHT);
 

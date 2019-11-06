@@ -70,21 +70,6 @@ pub fn main() {
             .widget
             .borrow_mut()
             .set_numeric(CONFIG_PROGRESS, timer3_pos);
-        _widgets[widget1_id]
-            .widget
-            .borrow_mut()
-            .get_config()
-            .set_invalidate(true);
-        _widgets[widget2_id]
-            .widget
-            .borrow_mut()
-            .get_config()
-            .set_invalidate(true);
-        _widgets[widget3_id]
-            .widget
-            .borrow_mut()
-            .get_config()
-            .set_invalidate(true);
     });
 
     engine.setup(500, 180);

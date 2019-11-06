@@ -18,9 +18,6 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
-use sdl2::render::Canvas;
-use sdl2::video::Window;
-
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -97,10 +94,9 @@ impl TimerWidget {
 
 /// This is the `Widget` implementation of the `TimerWidget`.
 impl Widget for TimerWidget {
-    fn draw(&mut self, _c: &mut Canvas<Window>) {}
-
-    /// When a timer tick goes by (ie. a frame is displayed on the screen), this function is
-    /// called.  This function implementation is **optional**.
+    /// The `TimerWidget` responds to the `tick` callback, which is used to determine the timer
+    /// display ticks.  This function is _only_ called when the timer tick occurs, so if there is a
+    /// function inside the drawing loop that drops frames, this timer may not get called reliably.
     fn tick(&mut self, _widgets: &[WidgetContainer]) {
         if !self.enabled {
             return;

@@ -1,5 +1,19 @@
 # Pushrod Change Log
 
+## 0.4.10
+
+- Updated code so that config for numeric also triggers an invalidation.
+- Changed timer code so that it no longer triggers invalidation.
+- Moved `ImagePosition` to `CompassPosition` to `WidgetConfig`.
+- Added `get_compass` and `set_compass` to get and set `CompassPosition`.
+- Moved `draw` function to an empty default function.
+- Updated documentation in Timer.
+- Modified `button_clicked` function in `engine` so that when a mouse is released, it is sent to all `Widget`s.
+- Modified `button_clicked` function in `WidgetCache` so that a `widget_id == -1` sends a message to all `Widget`s.
+- Added `on_config_changed` so that it is called when a config option changes (#215)
+- Modified `ProgressWidget` and `ImageWidget` to use `on_config_changed` to handle better redraw.
+- Added `PushButtonWidget` ported code from previous effort. (#205)
+
 ## 0.4.9
 
 - Added `TimerWidget` (#208)
