@@ -159,10 +159,11 @@ impl Widget for ImageWidget {
         }
     }
 
-    /// Sets a compass position for a configuration key.
-    fn set_compass(&mut self, config: u8, value: CompassPosition) {
-        self.get_config().set_compass(config, value);
-        self.get_config().set_invalidate(true);
+    /// Responds to a screen redraw only if the `CONFIG_IMAGE_POSITION` key was changed.
+    fn on_config_changed(&mut self, _k: u8, _v: Config) {
+        if _k == CONFIG_IMAGE_POSITION {
+            self.get_config().set_invalidate(true);
+        }
     }
 
     default_widget_properties!();

@@ -179,10 +179,12 @@ impl WidgetCache {
         if widget_id == -1 {
             for i in 0..self.cache.len() {
                 if !self.is_hidden(i as i32) && self.is_enabled(i as i32) {
-                    self.cache[i as usize]
-                        .widget
-                        .borrow_mut()
-                        .button_clicked(&self.cache, button, clicks, state);
+                    self.cache[i as usize].widget.borrow_mut().button_clicked(
+                        &self.cache,
+                        button,
+                        clicks,
+                        state,
+                    );
                 }
             }
         } else {

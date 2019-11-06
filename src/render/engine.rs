@@ -99,12 +99,8 @@ impl Engine {
                     Event::MouseButtonUp {
                         mouse_btn, clicks, ..
                     } => {
-                        self.cache.button_clicked(
-                            -1,
-                            mouse_btn as u8,
-                            clicks,
-                            false,
-                        );
+                        self.cache
+                            .button_clicked(-1, mouse_btn as u8, clicks, false);
                     }
 
                     Event::MouseMotion { x, y, .. } => {
