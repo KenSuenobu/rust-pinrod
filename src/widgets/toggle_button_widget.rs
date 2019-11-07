@@ -28,7 +28,8 @@ use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
-pub type OnToggleCallbackType = Option<Box<dyn FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool)>>;
+pub type OnToggleCallbackType =
+    Option<Box<dyn FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool)>>;
 
 /// This is the storage object for the `ToggleButtonWidget`.  It stores the config, properties, callback registry.
 pub struct ToggleButtonWidget {
@@ -49,7 +50,15 @@ impl ToggleButtonWidget {
     /// Creates a new `ToggleButtonWidget` given the `x, y, w, h` coordinates, the `text` to display
     /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
     /// being selected, `false` otherwise.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, text: String, font_size: i32, selected: bool) -> Self {
+    pub fn new(
+        x: i32,
+        y: i32,
+        w: u32,
+        h: u32,
+        text: String,
+        font_size: i32,
+        selected: bool,
+    ) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
@@ -63,8 +72,16 @@ impl ToggleButtonWidget {
             h - 4,
         );
 
-        let base_color = if selected { Color::RGB(0, 0, 0) } else { Color::RGB(255, 255, 255) };
-        let text_color = if selected { Color::RGB(255, 255, 255) } else { Color::RGB(0, 0, 0) };
+        let base_color = if selected {
+            Color::RGB(0, 0, 0)
+        } else {
+            Color::RGB(255, 255, 255)
+        };
+        let text_color = if selected {
+            Color::RGB(255, 255, 255)
+        } else {
+            Color::RGB(0, 0, 0)
+        };
 
         base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
@@ -88,8 +105,16 @@ impl ToggleButtonWidget {
 
     /// Draws the state when the mouse is over the top of the `Widget`.
     fn draw_hovered(&mut self) {
-        let base_color = if self.selected { Color::RGB(255, 255, 255) } else { Color::RGB(0, 0, 0) };
-        let text_color = if self.selected { Color::RGB(0, 0, 0) } else { Color::RGB(255, 255, 255) };
+        let base_color = if self.selected {
+            Color::RGB(255, 255, 255)
+        } else {
+            Color::RGB(0, 0, 0)
+        };
+        let text_color = if self.selected {
+            Color::RGB(0, 0, 0)
+        } else {
+            Color::RGB(255, 255, 255)
+        };
 
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
@@ -99,8 +124,16 @@ impl ToggleButtonWidget {
 
     /// Draws the state when the mouse leaves the scope of the `Widget`.
     fn draw_unhovered(&mut self) {
-        let base_color = if self.selected { Color::RGB(0, 0, 0) } else { Color::RGB(255, 255, 255) };
-        let text_color = if self.selected { Color::RGB(255, 255, 255) } else { Color::RGB(0, 0, 0) };
+        let base_color = if self.selected {
+            Color::RGB(0, 0, 0)
+        } else {
+            Color::RGB(255, 255, 255)
+        };
+        let text_color = if self.selected {
+            Color::RGB(255, 255, 255)
+        } else {
+            Color::RGB(0, 0, 0)
+        };
 
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
@@ -110,8 +143,8 @@ impl ToggleButtonWidget {
 
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
     pub fn on_toggle<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool) + 'static,
+    where
+        F: FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool) + 'static,
     {
         self.on_toggle = Some(Box::new(callback));
     }
