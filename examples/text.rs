@@ -11,7 +11,7 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("pushrod-render demo", 500, 200)
+        .window("pushrod text widget demo", 500, 200)
         .position_centered()
         .opengl()
         .build()
