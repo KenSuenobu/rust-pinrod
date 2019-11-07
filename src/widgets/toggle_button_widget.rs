@@ -83,6 +83,8 @@ impl ToggleButtonWidget {
             Color::RGB(0, 0, 0)
         };
 
+        let mut config = WidgetConfig::new(x, y, w, h);
+
         base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
         base_widget.set_numeric(CONFIG_BORDER_WIDTH, 2);
@@ -90,8 +92,10 @@ impl ToggleButtonWidget {
         text_widget.set_color(CONFIG_COLOR_BASE, base_color);
         text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
 
+        config.set_toggle(CONFIG_SELECTED_STATE, selected);
+
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,
@@ -204,8 +208,8 @@ impl Widget for ToggleButtonWidget {
                 self.active = false;
 
                 if self.in_bounds {
-                    eprintln!("In bounds.");
                     self.selected = !self.selected;
+                    self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
                     self.call_toggle_callback(_widgets);
                 }
             }

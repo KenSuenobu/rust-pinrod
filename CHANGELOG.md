@@ -10,6 +10,7 @@
 - Removed unused imports from `TextWidget`.
 - Ported `ToggleButtonWidget`, greatly simplified code. (#209)
 - Created `toggle_button` test application.
+- Added `CONFIG_SELECTED_STATE` to config to get the selected state of a `ToggleButtonWidget`.
 
 ## 0.4.10
 
