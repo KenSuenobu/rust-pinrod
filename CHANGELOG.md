@@ -1,5 +1,17 @@
 # Pushrod Change Log
 
+## 0.4.11
+
+- Added text wrapping to `TextWidget`
+- `TextWidget` background color is now drawn properly (#218)
+- Added `CONFIG_FONT_SIZE` to change the size of a font.
+- Modified `TextWidget` so that it redraws when changing the base color, text color, font size, or text.
+- Modified `push_button` example to change the size of the font.
+- Removed unused imports from `TextWidget`.
+- Ported `ToggleButtonWidget`, greatly simplified code. (#209)
+- Created `toggle_button` test application.
+- Added `CONFIG_SELECTED_STATE` to config to get the selected state of a `ToggleButtonWidget`.
+
 ## 0.4.10
 
 - Updated code so that config for numeric also triggers an invalidation.

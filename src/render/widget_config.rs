@@ -67,6 +67,12 @@ pub const CONFIG_PROGRESS: u8 = 10;
 /// `Widget`.  This is stored as a `Config::CompassPosition` value.
 pub const CONFIG_IMAGE_POSITION: u8 = 11;
 
+/// `TextWidget` font size control.  This is stored as a `Config::Numeric` value.
+pub const CONFIG_FONT_SIZE: u8 = 12;
+
+/// `PushButtonWidget` selected state.  This is stored as a `Config::Toggle` value.
+pub const CONFIG_SELECTED_STATE: u8 = 13;
+
 /// This enum is used by the `ImageWidget`, which controls the positioning of the image being
 /// rendered within the bounds of the `Widget`.
 #[derive(Clone, Debug)]

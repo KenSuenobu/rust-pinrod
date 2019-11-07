@@ -45,12 +45,12 @@ pub struct PushButtonWidget {
 }
 
 impl PushButtonWidget {
-    pub fn new(x: i32, y: i32, w: u32, h: u32, text: String) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32, text: String, font_size: i32) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
-            h as i32 / 2,
+            font_size,
             TextJustify::Center,
             text.clone(),
             x + 2,
