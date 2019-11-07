@@ -35,7 +35,7 @@ use std::collections::HashMap;
 /// `Widget`.
 pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer])>>;
 
-/// This is the storage object for the `PushButtonWidget`.  It stores the config, properties, callback registry.
+/// This is the storage object for the `ImageButtonWidget`.  It stores the config, properties, callback registry.
 pub struct ImageButtonWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
@@ -126,7 +126,7 @@ impl ImageButtonWidget {
     }
 }
 
-/// This is the `Widget` implementation of the `PushButtonWidget`.
+/// This is the `Widget` implementation of the `ImageButtonWidget`.
 impl Widget for ImageButtonWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
