@@ -28,5 +28,10 @@ pub mod progress_widget;
 /// after the timeout is exceeded.
 pub mod timer_widget;
 
-/// This is a `PushButtonWidget`, which draws text in a `Widget` that can be clicked.
+/// This is a `PushButtonWidget`, which draws text in a `Widget` that can be clicked.  It triggers an
+/// `on_click` callback when the button is clicked.
 pub mod push_button_widget;
+
+/// This is a `ToggleButtonWidget`, which acts similar to a `PushButtonWidget` except that it triggers
+/// `on_toggle` callbacks when the state changes.
+pub mod toggle_button_widget;

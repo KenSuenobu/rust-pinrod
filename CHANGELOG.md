@@ -7,6 +7,9 @@
 - Added `CONFIG_FONT_SIZE` to change the size of a font.
 - Modified `TextWidget` so that it redraws when changing the base color, text color, font size, or text.
 - Modified `push_button` example to change the size of the font.
+- Removed unused imports from `TextWidget`.
+- Ported `ToggleButtonWidget`, greatly simplified code. (#209)
+- Created `toggle_button` test application.
 
 ## 0.4.10
 

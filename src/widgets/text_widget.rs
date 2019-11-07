@@ -19,11 +19,10 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::Points;
 
-use sdl2::render::{BlendMode, Canvas, TextureQuery};
+use sdl2::render::{Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
-use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use std::collections::HashMap;
 use std::path::Path;
