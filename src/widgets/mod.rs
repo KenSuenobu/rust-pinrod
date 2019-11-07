@@ -39,3 +39,8 @@ pub mod toggle_button_widget;
 /// This is an `ImageButtonWidget`, which acts like a `PushButonWidget`, drawing an image on the left-hand
 /// side of the bounds of the `Widget`, then the text next to it, justified left.
 pub mod image_button_widget;
+
+/// This is a `CheckboxWidget`, which acts similar to a `ToggleButtonWidget`, but does not fill the
+/// box with a black/white color on select.  Rather, it enables/disables a checkbox to indicate a
+/// selected option.
+pub mod checkbox_widget;
