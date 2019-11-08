@@ -7,6 +7,7 @@
 - Added `image_button` test application.
 - Added `CheckboxWidget` (#201)
 - Added `checkbox_button` test application
+- Cleaned up old code.
 
 ## 0.4.11
 
