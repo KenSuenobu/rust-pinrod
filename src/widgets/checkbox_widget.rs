@@ -22,16 +22,16 @@ use crate::render::Points;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::widget_config::CompassPosition::Center;
+use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
-use crate::widgets::image_widget::ImageWidget;
-use crate::render::widget_config::CompassPosition::Center;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
 pub type OnToggleCallbackType =
-Option<Box<dyn FnMut(&mut CheckboxWidget, &[WidgetContainer], bool)>>;
+    Option<Box<dyn FnMut(&mut CheckboxWidget, &[WidgetContainer], bool)>>;
 
 /// This is the storage object for the `ToggleButtonWidget`.  It stores the config, properties, callback registry.
 pub struct CheckboxWidget {
@@ -81,8 +81,22 @@ impl CheckboxWidget {
         };
 
         let mut config = WidgetConfig::new(x, y, w, h);
-        let mut unchecked_widget = ImageWidget::new(String::from("assets/checkbox_unselected.png"), x + 2, y + 2, h - 4, h - 4, true);
-        let mut checked_widget = ImageWidget::new(String::from("assets/checkbox_selected.png"), x + 2, y + 2, h - 4, h - 4, true);
+        let mut unchecked_widget = ImageWidget::new(
+            String::from("assets/checkbox_unselected.png"),
+            x + 2,
+            y + 2,
+            h - 4,
+            h - 4,
+            true,
+        );
+        let mut checked_widget = ImageWidget::new(
+            String::from("assets/checkbox_selected.png"),
+            x + 2,
+            y + 2,
+            h - 4,
+            h - 4,
+            true,
+        );
 
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         unchecked_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
@@ -106,8 +120,8 @@ impl CheckboxWidget {
 
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
     pub fn on_toggle<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut CheckboxWidget, &[WidgetContainer], bool) + 'static,
+    where
+        F: FnMut(&mut CheckboxWidget, &[WidgetContainer], bool) + 'static,
     {
         self.on_toggle = Some(Box::new(callback));
     }

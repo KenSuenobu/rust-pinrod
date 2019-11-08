@@ -17,24 +17,8 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new();
-    let widget1 = CheckboxWidget::new(
-        20,
-        20,
-        360,
-        30,
-        String::from(" Checkbox Item 1"),
-        22,
-        false,
-    );
-    let widget2 = CheckboxWidget::new(
-        20,
-        70,
-        360,
-        30,
-        String::from(" Checked Checkbox"),
-        22,
-        true,
-    );
+    let widget1 = CheckboxWidget::new(20, 20, 360, 30, String::from(" Checkbox Item 1"), 22, false);
+    let widget2 = CheckboxWidget::new(20, 70, 360, 30, String::from(" Checked Checkbox"), 22, true);
     let widget3 = CheckboxWidget::new(
         20,
         120,
