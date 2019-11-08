@@ -5,6 +5,8 @@
 - Removed ImagePosition from `ImageWidget`
 - Added `ImageButtonWidget`, ported from original code (#202)
 - Added `image_button` test application.
+- Added `CheckboxWidget` (#201)
+- Added `checkbox_button` test application
 
 ## 0.4.11
 

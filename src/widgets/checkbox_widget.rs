@@ -25,6 +25,8 @@ use sdl2::video::Window;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
+use crate::widgets::image_widget::ImageWidget;
+use crate::render::widget_config::CompassPosition::Center;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -36,8 +38,9 @@ pub struct CheckboxWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    base_widget: BaseWidget,
     text_widget: TextWidget,
+    unchecked_widget: ImageWidget,
+    checked_widget: ImageWidget,
     active: bool,
     selected: bool,
     in_bounds: bool,
@@ -59,24 +62,18 @@ impl CheckboxWidget {
         font_size: i32,
         selected: bool,
     ) -> Self {
-        let mut base_widget = BaseWidget::new(x, y, w, h);
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
-            TextJustify::Center,
+            TextJustify::Left,
             text.clone(),
-            x + 2,
+            x + h as i32 + 6,
             y + 2,
-            w - 4,
+            w - h - 10,
             h - 4,
         );
 
-        let base_color = if selected {
-            Color::RGB(0, 0, 0)
-        } else {
-            Color::RGB(255, 255, 255)
-        };
         let text_color = if selected {
             Color::RGB(255, 255, 255)
         } else {
@@ -84,13 +81,12 @@ impl CheckboxWidget {
         };
 
         let mut config = WidgetConfig::new(x, y, w, h);
+        let mut unchecked_widget = ImageWidget::new(String::from("assets/checkbox_unselected.png"), x + 2, y + 2, h - 4, h - 4, true);
+        let mut checked_widget = ImageWidget::new(String::from("assets/checkbox_selected.png"), x + 2, y + 2, h - 4, h - 4, true);
 
-        base_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
-        base_widget.set_numeric(CONFIG_BORDER_WIDTH, 2);
-
-        text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
+        text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
+        unchecked_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
+        checked_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         config.set_toggle(CONFIG_SELECTED_STATE, selected);
 
@@ -98,51 +94,14 @@ impl CheckboxWidget {
             config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            base_widget,
             text_widget,
+            unchecked_widget,
+            checked_widget,
             active: false,
             selected,
             in_bounds: false,
             on_toggle: None,
         }
-    }
-
-    /// Draws the state when the mouse is over the top of the `Widget`.
-    fn draw_hovered(&mut self) {
-        let base_color = if self.selected {
-            Color::RGB(255, 255, 255)
-        } else {
-            Color::RGB(0, 0, 0)
-        };
-        let text_color = if self.selected {
-            Color::RGB(0, 0, 0)
-        } else {
-            Color::RGB(255, 255, 255)
-        };
-
-        self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
-        self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
-    }
-
-    /// Draws the state when the mouse leaves the scope of the `Widget`.
-    fn draw_unhovered(&mut self) {
-        let base_color = if self.selected {
-            Color::RGB(0, 0, 0)
-        } else {
-            Color::RGB(255, 255, 255)
-        };
-        let text_color = if self.selected {
-            Color::RGB(255, 255, 255)
-        } else {
-            Color::RGB(0, 0, 0)
-        };
-
-        self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
-        self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
     }
 
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
@@ -168,28 +127,43 @@ impl Widget for CheckboxWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
-        self.base_widget.draw(c);
+        if self.active {
+            if self.in_bounds {
+                if self.selected {
+                    self.unchecked_widget.draw(c);
+                } else {
+                    self.checked_widget.draw(c);
+                }
+            } else {
+                if self.selected {
+                    self.checked_widget.draw(c);
+                } else {
+                    self.unchecked_widget.draw(c);
+                }
+            }
+        } else {
+            if self.selected {
+                self.checked_widget.draw(c);
+            } else {
+                self.unchecked_widget.draw(c);
+            }
+        }
+
         self.text_widget.draw(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
     fn mouse_entered(&mut self, _widgets: &[WidgetContainer]) {
-        if self.active {
-            self.draw_hovered();
-        }
-
         self.in_bounds = true;
         self.mouse_entered_callback(_widgets);
+        self.get_config().set_invalidate(true);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer]) {
-        if self.active {
-            self.draw_unhovered();
-        }
-
         self.in_bounds = false;
         self.mouse_exited_callback(_widgets);
+        self.get_config().set_invalidate(true);
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
@@ -202,7 +176,6 @@ impl Widget for CheckboxWidget {
     ) {
         if _button == 1 {
             if _state {
-                self.draw_hovered();
                 self.active = true;
             } else {
                 self.active = false;
@@ -213,6 +186,8 @@ impl Widget for CheckboxWidget {
                     self.call_toggle_callback(_widgets);
                 }
             }
+
+            self.get_config().set_invalidate(true);
         }
 
         self.button_clicked_callback(_widgets, _button, _clicks, _state);
