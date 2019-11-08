@@ -3,6 +3,7 @@
 ## 0.4.13
 
 - Documentation improvements
+- Clippy code improvements
 
 ## 0.4.12
 

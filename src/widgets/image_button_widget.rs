@@ -16,10 +16,7 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{
-    WidgetConfig, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
-    CONFIG_IMAGE_POSITION,
-};
+use crate::render::widget_config::*;
 use crate::render::Points;
 
 use sdl2::render::Canvas;

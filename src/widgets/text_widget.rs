@@ -139,20 +139,18 @@ impl Widget for TextWidget {
         match _k {
             CONFIG_COLOR_TEXT => self.get_config().set_invalidate(true),
             CONFIG_COLOR_BASE => self.get_config().set_invalidate(true),
-            CONFIG_FONT_SIZE => match _v {
-                Config::Numeric(size) => {
+            CONFIG_FONT_SIZE => {
+                if let Config::Numeric(size) = _v {
                     self.font_size = size;
                     self.get_config().set_invalidate(true);
                 }
-                _ => (),
-            },
-            CONFIG_TEXT => match _v {
-                Config::Text(text) => {
+            }
+            CONFIG_TEXT => {
+                if let Config::Text(text) = _v {
                     self.msg = text.clone();
                     self.get_config().set_invalidate(true);
                 }
-                _ => (),
-            },
+            }
 
             _ => (),
         };

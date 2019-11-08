@@ -74,12 +74,6 @@ impl CheckboxWidget {
             h - 4,
         );
 
-        let text_color = if selected {
-            Color::RGB(255, 255, 255)
-        } else {
-            Color::RGB(0, 0, 0)
-        };
-
         let mut config = WidgetConfig::new(x, y, w, h);
         let mut unchecked_widget = ImageWidget::new(
             String::from("assets/checkbox_unselected.png"),
@@ -148,14 +142,14 @@ impl Widget for CheckboxWidget {
                 } else {
                     self.checked_widget.draw(c);
                 }
-            } else {
+            } else if !self.in_bounds {
                 if self.selected {
                     self.checked_widget.draw(c);
                 } else {
                     self.unchecked_widget.draw(c);
                 }
             }
-        } else {
+        } else if !self.active {
             if self.selected {
                 self.checked_widget.draw(c);
             } else {
