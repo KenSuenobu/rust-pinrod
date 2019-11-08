@@ -30,19 +30,6 @@ These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 ## 0.4.x Status
 
-Widgets - Porting from original Pushrod:
-
-- [x] Text Widget
-  - [x] OpenSans Font Included
-- [x] Image Widget
-- [x] Progress Bar Widget
-- [x] Timer Widget
-- [x] Push Button Widget
-- [x] Image Button Widget
-- [x] Toggle Button Widget
-- [ ] Checkbox Widget
-- [ ] Radio Button Widget (or Group Button Widget)
-
 Soon to follow will be:
 
 - [ ] Support for Layouts
@@ -66,6 +53,16 @@ Soon to follow will be:
 
 ## Additional Items
 
+- [x] Port engine from Piston to SDL2
+- [x] Text Widget
+  - [x] OpenSans Font Included
+- [x] Image Widget
+- [x] Progress Bar Widget
+- [x] Timer Widget
+- [x] Push Button Widget
+- [x] Image Button Widget
+- [x] Toggle Button Widget
+- [x] Checkbox Widget
 - [x] Fix build so that it builds on TravisCI for both OSes properly
 - [x] New traits for optimization:
   - [x] `Drawable`
