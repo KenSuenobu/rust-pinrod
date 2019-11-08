@@ -1,5 +1,9 @@
 # Pushrod Change Log
 
+## 0.4.13
+
+- Documentation improvements
+
 ## 0.4.12
 
 - Removed ImagePosition from `ImageWidget`

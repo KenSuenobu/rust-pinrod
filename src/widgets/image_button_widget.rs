@@ -48,7 +48,10 @@ pub struct ImageButtonWidget {
     on_click: OnClickCallbackType,
 }
 
+/// This is the implementation of the `ImageButtonWidget`, which displays an image next to some text.
 impl ImageButtonWidget {
+    /// Creates a new `ImageButtonWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
+    /// `font_size` to use, and the `image_name` to load and display.
     pub fn new(
         x: i32,
         y: i32,
