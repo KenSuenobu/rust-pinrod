@@ -1,5 +1,14 @@
 # Pushrod Change Log
 
+## 0.4.12
+
+- Removed ImagePosition from `ImageWidget`
+- Added `ImageButtonWidget`, ported from original code (#202)
+- Added `image_button` test application.
+- Added `CheckboxWidget` (#201)
+- Added `checkbox_button` test application
+- Cleaned up old code.
+
 ## 0.4.11
 
 - Added text wrapping to `TextWidget`

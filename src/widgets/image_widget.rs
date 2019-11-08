@@ -29,37 +29,6 @@ use sdl2::video::Window;
 use std::collections::HashMap;
 use std::path::Path;
 
-/// This enum is used by the `ImageWidget`, which controls the positioning of the image being
-/// rendered within the bounds of the `Widget`.
-pub enum ImagePosition {
-    /// Upper left-hand corner of the bounds.
-    NW,
-
-    /// Centered top of the bounds.
-    N,
-
-    /// Upper right-hand corner of the bounds.
-    NE,
-
-    /// Centered left side of the bounds.
-    W,
-
-    /// Center of the bounds.
-    Center,
-
-    /// Centered right side of the bounds.
-    E,
-
-    /// Lower left-hand corner of the bounds.
-    SW,
-
-    /// Bottom center of the bounds.
-    S,
-
-    /// Lower right-hand corner of the bounds.
-    SE,
-}
-
 /// This is the storage object for the `TextWidget`.  It stores the config, properties, callback registry,
 /// the font name, style, size, justification, and text message.
 pub struct ImageWidget {
