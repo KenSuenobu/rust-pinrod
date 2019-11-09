@@ -4,6 +4,7 @@
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "Special build rules for OS X here"
+  brew install sdl2
 fi
 
 if [ "$TRAVIS_OS_NAME" = "linux" ]; then

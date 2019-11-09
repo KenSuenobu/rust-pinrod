@@ -4,6 +4,8 @@
 
 - Documentation improvements
 - Clippy code improvements
+- Changed build process to load in Ubuntu libraries for SDL2 build
+- Updated Ubuntu documentation thanks to @alexislozano
 
 ## 0.4.12
 
