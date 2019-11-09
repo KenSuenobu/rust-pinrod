@@ -119,3 +119,9 @@ Pushrod only requires:
 | Library | Version |
 | ------- | ------- |
 | SDL2    | 0.32 |
+
+### Ubuntu
+
+```bash
+sudo apt install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev
+```
