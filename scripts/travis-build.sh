@@ -7,7 +7,7 @@ if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   brew update
   brew upgrade
   brew install ruby
-  brew install sdl2
+  brew install sdl2 sdl2_image sdl2_ttf
 fi
 
 if [ "$TRAVIS_OS_NAME" = "linux" ]; then
