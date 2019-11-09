@@ -4,6 +4,9 @@
 
 if [ "$TRAVIS_OS_NAME" = "osx" ]; then
   echo "Special build rules for OS X here"
+  brew update
+  brew upgrade
+  brew install ruby
   brew install sdl2
 fi
 
