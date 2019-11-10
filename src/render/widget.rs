@@ -21,6 +21,7 @@ use crate::render::callbacks::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
+use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::collections::HashMap;
 
@@ -102,6 +103,11 @@ pub trait Widget {
     fn tick(&mut self, _widgets: &[WidgetContainer]) {
         self.tick_callback(_widgets);
     }
+
+    /// When an `Event` is sent to the application that is not handled by the `Engine::run` loop, this
+    /// method is called, sending the unhandled `Event` to the currently active `Widget`.  **This behavior
+    /// is subject to change** as the `Engine::run` loop is modified to handle more `Event`s.
+    fn other_event(&mut self, _widgets: &[WidgetContainer], _event: Event) {}
 
     /// This calls the `on_tick` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish

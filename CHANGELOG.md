@@ -6,6 +6,7 @@
 - Clippy code improvements
 - Changed build process to load in Ubuntu libraries for SDL2 build
 - Updated Ubuntu documentation thanks to @alexislozano
+- Added handler for all other events in a catch-all function for `Widget`s (#227)
 
 ## 0.4.12
 

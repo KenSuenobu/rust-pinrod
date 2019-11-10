@@ -152,9 +152,9 @@ impl Engine {
                         //                        }
                     }
 
-                    _ => {
-                        // Send event through to widget.
-                        eprintln!("Event: {:?}", event);
+                    remaining_event => {
+                        self.cache
+                            .other_event(self.current_widget_id, remaining_event);
                     }
                 }
             }
