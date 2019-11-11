@@ -147,3 +147,6 @@ pub mod widgets;
 
 /// `render` is the core rendering/event loop portion of `Pushrod`.
 pub mod render;
+
+/// `layouts` is the core layout managers included with `Pushrod`.
+pub mod layouts;
