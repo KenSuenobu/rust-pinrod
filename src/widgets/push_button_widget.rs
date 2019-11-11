@@ -44,7 +44,12 @@ pub struct PushButtonWidget {
     on_click: OnClickCallbackType,
 }
 
+/// This is the `PushButtonWidget` implementation, which displays a block of text inside a clickable
+/// box.  Clicking the box will cause an `on_click` callback to be triggered, which will call a block
+/// of text, if the callback has been configured.
 impl PushButtonWidget {
+    /// Creates a new `PushButtonWidget`, given `x, y, w, h` coordinates, some `text` to display,
+    /// and the `font_size` to use.
     pub fn new(x: i32, y: i32, w: u32, h: u32, text: String, font_size: i32) -> Self {
         let mut base_widget = BaseWidget::new(x, y, w, h);
         let mut text_widget = TextWidget::new(

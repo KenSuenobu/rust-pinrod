@@ -1,6 +1,6 @@
 [package]
 name = "rust-pushrod"
-version = "0.4.12"
+version = "0.4.13"
 authors = ["Ken Suenobu <ksuenobu@fastmail.com>"]
 edition = "2018"
 description = "Pushrod UI Library"
@@ -8,7 +8,7 @@ license = "Apache-2.0"
 readme = "README.md"
 repository = "https://www.github.com/KenSuenobu/rust-pushrod/"
 documentation = "http://docs.rs/crate/rust-pushrod/"
-keywords = ["piston", "opengl", "ui", "gui", "conrod"]
+keywords = ["sdl", "sdl2", "opengl", "ui", "gui"]
 categories = ["gui", "graphics", "visualization"]
 include = [
     "**/*.rs",

@@ -33,7 +33,7 @@ use std::collections::HashMap;
 pub type OnToggleCallbackType =
     Option<Box<dyn FnMut(&mut CheckboxWidget, &[WidgetContainer], bool)>>;
 
-/// This is the storage object for the `ToggleButtonWidget`.  It stores the config, properties, callback registry.
+/// This is the storage object for the `CheckboxWidget`.  It stores the config, properties, callback registry.
 pub struct CheckboxWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
@@ -47,12 +47,12 @@ pub struct CheckboxWidget {
     on_toggle: OnToggleCallbackType,
 }
 
-/// This is the implementation of the `ToggleButtonWidget` that draws a button on the screen that can be
+/// This is the implementation of the `CheckboxWidget` that draws a button on the screen that can be
 /// toggled on or off.
 impl CheckboxWidget {
-    /// Creates a new `ToggleButtonWidget` given the `x, y, w, h` coordinates, the `text` to display
+    /// Creates a new `CheckboxWidget` given the `x, y, w, h` coordinates, the `text` to display
     /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
-    /// being selected, `false` otherwise.
+    /// being checked, `false` otherwise.
     pub fn new(
         x: i32,
         y: i32,
@@ -73,12 +73,6 @@ impl CheckboxWidget {
             w - h - 10,
             h - 4,
         );
-
-        let text_color = if selected {
-            Color::RGB(255, 255, 255)
-        } else {
-            Color::RGB(0, 0, 0)
-        };
 
         let mut config = WidgetConfig::new(x, y, w, h);
         let mut unchecked_widget = ImageWidget::new(
@@ -135,7 +129,7 @@ impl CheckboxWidget {
     }
 }
 
-/// This is the `Widget` implementation of the `ToggleButtonWidget`.
+/// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>) {
@@ -148,14 +142,14 @@ impl Widget for CheckboxWidget {
                 } else {
                     self.checked_widget.draw(c);
                 }
-            } else {
+            } else if !self.in_bounds {
                 if self.selected {
                     self.checked_widget.draw(c);
                 } else {
                     self.unchecked_widget.draw(c);
                 }
             }
-        } else {
+        } else if !self.active {
             if self.selected {
                 self.checked_widget.draw(c);
             } else {

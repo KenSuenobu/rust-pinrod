@@ -16,10 +16,7 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{
-    WidgetConfig, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
-    CONFIG_IMAGE_POSITION,
-};
+use crate::render::widget_config::*;
 use crate::render::Points;
 
 use sdl2::render::Canvas;
@@ -48,7 +45,10 @@ pub struct ImageButtonWidget {
     on_click: OnClickCallbackType,
 }
 
+/// This is the implementation of the `ImageButtonWidget`, which displays an image next to some text.
 impl ImageButtonWidget {
+    /// Creates a new `ImageButtonWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
+    /// `font_size` to use, and the `image_name` to load and display.
     pub fn new(
         x: i32,
         y: i32,

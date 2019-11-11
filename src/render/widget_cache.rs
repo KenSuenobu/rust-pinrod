@@ -17,6 +17,7 @@ use std::cell::RefCell;
 
 use crate::render::widget::Widget;
 use crate::render::widget_config::{CONFIG_ORIGIN, CONFIG_SIZE};
+use sdl2::event::Event;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
@@ -174,7 +175,7 @@ impl WidgetCache {
     /// When state is set to `true`, this indicates that a mouse button down was detected.  When set
     /// to `false`, it indicates that the mouse button was released.  When setting the button state
     /// to `widget_id == -1`, the button click message will be sent to _all_ `Widget`s, so use
-    /// `widget_id == -1` with care.
+    /// `widget_id == - 1` with care.
     pub fn button_clicked(&mut self, widget_id: i32, button: u8, clicks: u8, state: bool) {
         if widget_id == -1 {
             for i in 0..self.cache.len() {
@@ -245,6 +246,17 @@ impl WidgetCache {
             if !self.is_hidden(i as i32) {
                 self.cache[i].widget.borrow_mut().tick(&self.cache);
             }
+        }
+    }
+
+    /// This function sends all other un-handled events from SDL2 to the currently highlighted
+    /// `Widget`.
+    pub fn other_event(&mut self, widget_id: i32, event: Event) {
+        if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
+            self.cache[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .other_event(&self.cache, event);
         }
     }
 

@@ -1,5 +1,16 @@
 # Pushrod Change Log
 
+## 0.4.13
+
+- Documentation improvements
+- Clippy code improvements
+- Changed build process to load in Ubuntu libraries for SDL2 build
+- Updated Ubuntu documentation thanks to @alexislozano
+- Added handler for all other events in a catch-all function for `Widget`s (#227)
+- Fixed travis-ci build for OS X builds
+- Modified `Widget`s so that they display the events sent to them that are unhandled.
+- Added `Layout` class, back ported from the original class, greatly simplified. (#230)
+
 ## 0.4.12
 
 - Removed ImagePosition from `ImageWidget`

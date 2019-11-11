@@ -21,10 +21,9 @@ use crate::render::callbacks::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
+use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::collections::HashMap;
-
-pub trait ConfigConvenience {}
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -101,6 +100,13 @@ pub trait Widget {
     /// called.  This function implementation is **optional**.
     fn tick(&mut self, _widgets: &[WidgetContainer]) {
         self.tick_callback(_widgets);
+    }
+
+    /// When an `Event` is sent to the application that is not handled by the `Engine::run` loop, this
+    /// method is called, sending the unhandled `Event` to the currently active `Widget`.  **This behavior
+    /// is subject to change** as the `Engine::run` loop is modified to handle more `Event`s.
+    fn other_event(&mut self, _widgets: &[WidgetContainer], _event: Event) {
+        eprintln!("Other event: {:?}", _event);
     }
 
     /// This calls the `on_tick` callback.  This is implemented by the `default_widget_callbacks!` macro,

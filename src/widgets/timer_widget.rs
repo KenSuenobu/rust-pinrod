@@ -21,8 +21,11 @@ use crate::render::widget_config::WidgetConfig;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+/// This is the callback type that is used when an `on_timeout` callback is triggered from this
+/// `Widget`.
 pub type TimerCallbackType = Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer])>>;
 
+/// Private function used to return the current time in milliseconds.
 fn time_ms() -> u64 {
     let since_the_epoch = SystemTime::now().duration_since(UNIX_EPOCH).unwrap();
 
