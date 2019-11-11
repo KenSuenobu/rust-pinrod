@@ -107,7 +107,9 @@ pub trait Widget {
     /// When an `Event` is sent to the application that is not handled by the `Engine::run` loop, this
     /// method is called, sending the unhandled `Event` to the currently active `Widget`.  **This behavior
     /// is subject to change** as the `Engine::run` loop is modified to handle more `Event`s.
-    fn other_event(&mut self, _widgets: &[WidgetContainer], _event: Event) {}
+    fn other_event(&mut self, _widgets: &[WidgetContainer], _event: Event) {
+        eprintln!("Other event: {:?}", _event);
+    }
 
     /// This calls the `on_tick` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish

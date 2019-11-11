@@ -8,6 +8,7 @@
 - Updated Ubuntu documentation thanks to @alexislozano
 - Added handler for all other events in a catch-all function for `Widget`s (#227)
 - Fixed travis-ci build for OS X builds
+- Modified `Widget`s so that they display the events sent to them that are unhandled.
 
 ## 0.4.12
 
