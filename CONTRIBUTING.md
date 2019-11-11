@@ -29,10 +29,23 @@ Please make sure to label as many labels as you can so that it helps categorize 
 that needs to be done.  Any new ideas should be in the "Backlog" milestone, as the
 developers will determine which milestone to include the change to.
 
+## What will get your pull request rejected
+
+Just running a `cargo format` or `cargo clippy`.  While I understand your intentions are
+in the right place, this isn't enough to constitute a valid pull request, as this is
+part of the rules in the next section.
+
+Undocumented code will get a swift rejection.  Please comment your code so that others
+can understand what you're doing: especially if it's complicated!
+
+Any `unsafe { }` blocks unless there is a **damned** good reason as to why it's being
+used.
+
 ## Pull requests
 
 Great!  Thank you for your contribution, you magnificent developer, you!
 
+* Please make sure to refer to the [issue](https://github.com/KenSuenobu/rust-pushrod/issues) that this PR references.
 * Please format your code using `cargo fmt`
 * Make sure your tests pass using `cargo test`
 * Make sure you **document your code**; this is extremely important.  Use `sh scripts/docs.sh` to build top-level docs.
