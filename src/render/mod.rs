@@ -16,8 +16,20 @@
 /// This is a type that defines two points: X and Y coordinates.
 pub type Points = Vec<i32>;
 
+/// Quick reference in `Points` `Vec` for X position.
+pub const POINT_X: usize = 0;
+
+/// Quick reference in `Points` `Vec` for Y position.
+pub const POINT_Y: usize = 1;
+
 /// This is a type that defines two size: width and height.
 pub type Size = Vec<u32>;
+
+/// Quick reference in `Size` `Vec` for width.
+pub const SIZE_WIDTH: usize = 0;
+
+/// Quick reference in `Size` `Vec` for height.
+pub const SIZE_HEIGHT: usize = 1;
 
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.

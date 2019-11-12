@@ -13,9 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::layout::{LayoutPosition, Layout};
-use crate::render::{Points, Size};
+use crate::render::widget_config::CONFIG_SIZE;
+use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.
 pub struct HorizontalLayout {
@@ -54,21 +55,48 @@ impl Layout for HorizontalLayout {
         }
 
         let num_widgets = self.widget_ids.len() as u32;
-        let widget_width = self.size[0] / num_widgets as u32;
+        let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
         let subtractor_right = self.spacing / 2;
         let subtractor_left = subtractor_right - 1;
 
+        eprintln!(
+            "HorizontalLayout: rightside={} leftside={}",
+            subtractor_right, subtractor_left
+        );
+
         for i in 0..num_widgets {
+            let set_x: i32;
+            let mut set_width: u32 = widget_width;
+            let widget_id = self.widget_ids[i as usize];
+
             if i == 0 {
-                // skip subtractor left
-                // apply only subtractor right
+                set_x = (i * set_width) as i32;
+                set_width = widget_width - subtractor_right;
             } else if i == num_widgets - 1 {
-                // skip subtractor right
-                // apply only subtractor left
+                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_width = widget_width - subtractor_left;
             } else {
-                // apply subtractor left
-                // apply subtractor right
+                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_width = widget_width - subtractor_left - subtractor_right;
             }
+
+            _widgets[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .get_config()
+                .to_x(set_x);
+
+            let widget_size = _widgets[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .get_config()
+                .get_size(CONFIG_SIZE);
+
+            _widgets[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .get_config()
+                .set_size(CONFIG_SIZE, set_width, self.size[SIZE_HEIGHT]);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 ## 0.4.14
 
+- Added `HorizontalLayout` manager (#228)
+- Added `POINT_X, POINT_Y` and `SIZE_WIDTH, SIZE_HEIGHT` `usize` constants for `Points` and `Size` types.
 
 ## 0.4.13
 
