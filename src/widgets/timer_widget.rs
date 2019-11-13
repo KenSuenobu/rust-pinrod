@@ -18,9 +18,9 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
+use std::any::Any;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
-use std::any::Any;
 
 /// This is the callback type that is used when an `on_timeout` callback is triggered from this
 /// `Widget`.

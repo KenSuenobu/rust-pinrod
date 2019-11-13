@@ -23,8 +23,8 @@ use crate::render::widget_config::*;
 use crate::render::{Points, Size};
 use sdl2::event::Event;
 use sdl2::pixels::Color;
-use std::collections::HashMap;
 use std::any::Any;
+use std::collections::HashMap;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -312,9 +312,9 @@ impl Widget for BaseWidget {
         }
     }
 
-//    fn as_any(&mut self) -> &dyn Any {
-//        self
-//    }
+    //    fn as_any(&mut self) -> &dyn Any {
+    //        self
+    //    }
 
     default_widget_functions!();
     default_widget_properties!();

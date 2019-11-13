@@ -26,9 +26,9 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
+use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use std::any::Any;
 
 /// This is the storage object for the `TextWidget`.  It stores the config, properties, callback registry,
 /// the font name, style, size, justification, and text message.

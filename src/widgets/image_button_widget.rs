@@ -26,8 +26,8 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use std::collections::HashMap;
 use std::any::Any;
+use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.

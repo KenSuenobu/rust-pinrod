@@ -6,10 +6,10 @@ use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_COLOR_SECONDARY, CONFIG_PROGRESS};
 use pushrod::widgets::progress_widget::*;
+use pushrod::widgets::text_widget::TextWidget;
 use pushrod::widgets::timer_widget::*;
 use sdl2::pixels::Color;
 use std::any::Any;
-use pushrod::widgets::text_widget::TextWidget;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -60,7 +60,14 @@ pub fn main() {
             + 1)
             % 100;
 
-        eprintln!("{}", _widgets[widget1_id].widget.borrow_mut().as_any().is::<ProgressWidget>());
+        eprintln!(
+            "{}",
+            _widgets[widget1_id]
+                .widget
+                .borrow_mut()
+                .as_any()
+                .is::<ProgressWidget>()
+        );
 
         _widgets[widget1_id]
             .widget

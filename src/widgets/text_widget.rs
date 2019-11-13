@@ -24,9 +24,9 @@ use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
 use sdl2::rect::Rect;
+use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use std::any::Any;
 
 /// This enum is used by the `TextWidget`, which controls the justification of the text being
 /// rendered within the bounds of the `Widget`.

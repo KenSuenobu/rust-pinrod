@@ -24,8 +24,8 @@ use sdl2::video::Window;
 
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use std::collections::HashMap;
 use std::any::Any;
+use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
