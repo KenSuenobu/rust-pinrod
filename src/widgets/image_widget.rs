@@ -136,10 +136,7 @@ impl Widget for ImageWidget {
         }
     }
 
-    fn as_any(&mut self) -> &dyn Any {
-        self
-    }
-
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }

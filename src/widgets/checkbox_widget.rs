@@ -202,10 +202,7 @@ impl Widget for CheckboxWidget {
         self.button_clicked_callback(_widgets, _button, _clicks, _state);
     }
 
-    fn as_any(&mut self) -> &dyn Any {
-        self
-    }
-
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }

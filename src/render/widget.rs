@@ -36,6 +36,8 @@ use std::any::Any;
 /// these automatically generated implementation details could change in future releases of this
 /// library, so it is best to use the default implementation if possible.
 pub trait Widget {
+    /// Retrieves this `Widget` as an `Any` object so that it can be downcast using `downcast_ref`
+    /// to a `struct` that implements the `Widget` trait.
     fn as_any(&mut self) -> &dyn Any;
 
     /// Draws the widget.  If you wish to modify the canvas object, you must declare it as `mut` in
@@ -310,10 +312,11 @@ impl Widget for BaseWidget {
         }
     }
 
-    fn as_any(&mut self) -> &dyn Any {
-        self
-    }
+//    fn as_any(&mut self) -> &dyn Any {
+//        self
+//    }
 
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }

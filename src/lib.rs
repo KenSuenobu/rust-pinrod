@@ -140,6 +140,17 @@ mod macros {
             }
         }
     }
+
+    macro_rules! default_widget_functions {
+        () => {
+            /// This function is a macro-created getter function that returns the `Widget`'s configuration
+            /// object as a borrowed mutable reference.  This code is auto-generated using the
+            /// `default_widget_properties!()` macro.
+            fn as_any(&mut self) -> &dyn Any {
+                self
+            }
+        }
+    }
 }
 
 /// `widgets` is a core rendering library used by `Pushrod`, containing the default set of `Widget`s.

@@ -114,9 +114,6 @@ impl Widget for TimerWidget {
         }
     }
 
-    fn as_any(&mut self) -> &dyn Any {
-        self
-    }
-
+    default_widget_functions!();
     default_widget_properties!();
 }
