@@ -28,6 +28,7 @@ use sdl2::video::Window;
 
 use std::collections::HashMap;
 use std::path::Path;
+use std::any::Any;
 
 /// This is the storage object for the `TextWidget`.  It stores the config, properties, callback registry,
 /// the font name, style, size, justification, and text message.
@@ -133,6 +134,10 @@ impl Widget for ImageWidget {
         if _k == CONFIG_IMAGE_POSITION {
             self.get_config().set_invalidate(true);
         }
+    }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
     }
 
     default_widget_properties!();

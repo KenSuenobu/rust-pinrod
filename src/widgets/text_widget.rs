@@ -26,6 +26,7 @@ use sdl2::video::Window;
 use sdl2::rect::Rect;
 use std::collections::HashMap;
 use std::path::Path;
+use std::any::Any;
 
 /// This enum is used by the `TextWidget`, which controls the justification of the text being
 /// rendered within the bounds of the `Widget`.
@@ -154,6 +155,10 @@ impl Widget for TextWidget {
 
             _ => (),
         };
+    }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
     }
 
     default_widget_properties!();

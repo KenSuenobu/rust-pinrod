@@ -6,6 +6,7 @@
 - Added `POINT_X, POINT_Y` and `SIZE_WIDTH, SIZE_HEIGHT` `usize` constants for `Points` and `Size` types.
 - Added `PaddingConstraint` struct.
 - Added `CONFIG_PADDING` option to `WidgetConfig` class.
+- Added `as_any` to `Widget` classes so that they can be `downcast_ref`-applied.
 
 ## 0.4.13
 

@@ -27,6 +27,7 @@ use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::collections::HashMap;
+use std::any::Any;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -199,6 +200,10 @@ impl Widget for CheckboxWidget {
         }
 
         self.button_clicked_callback(_widgets, _button, _clicks, _state);
+    }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
     }
 
     default_widget_properties!();

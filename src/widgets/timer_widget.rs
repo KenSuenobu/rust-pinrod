@@ -20,6 +20,7 @@ use crate::render::widget_config::WidgetConfig;
 
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
+use std::any::Any;
 
 /// This is the callback type that is used when an `on_timeout` callback is triggered from this
 /// `Widget`.
@@ -111,6 +112,10 @@ impl Widget for TimerWidget {
             self.initiated = time_ms();
             self.call_timeout_callback(_widgets);
         }
+    }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
     }
 
     default_widget_properties!();

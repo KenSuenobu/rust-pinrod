@@ -17,6 +17,7 @@ use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::CONFIG_SIZE;
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
+use std::any::Any;
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.
 pub struct HorizontalLayout {

@@ -24,6 +24,7 @@ use crate::render::{Points, Size};
 use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::collections::HashMap;
+use std::any::Any;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -35,6 +36,8 @@ use std::collections::HashMap;
 /// these automatically generated implementation details could change in future releases of this
 /// library, so it is best to use the default implementation if possible.
 pub trait Widget {
+    fn as_any(&mut self) -> &dyn Any;
+
     /// Draws the widget.  If you wish to modify the canvas object, you must declare it as `mut` in
     /// your implementation (ie `fn draw(&mut self, mut canvas: Canvas<Window>)`).  The `_canvas`
     /// is the currently active drawing canvas at the time this function is called.  This called
@@ -305,6 +308,10 @@ impl Widget for BaseWidget {
                     .unwrap();
             }
         }
+    }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
     }
 
     default_widget_properties!();

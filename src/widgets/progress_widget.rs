@@ -25,6 +25,7 @@ use sdl2::video::Window;
 
 use sdl2::render::Canvas;
 use std::collections::HashMap;
+use std::any::Any;
 
 /// This is the storage object for the `ProgressWidget`.  It stores the config, properties, callback registry,
 /// the base widget, and progress from 0 to 100.
@@ -89,6 +90,11 @@ impl Widget for ProgressWidget {
             self.get_config().set_invalidate(true);
         }
     }
+
+    fn as_any(&mut self) -> &dyn Any {
+        self
+    }
+
 
     default_widget_properties!();
     default_widget_callbacks!();
