@@ -141,11 +141,14 @@ mod macros {
         }
     }
 
+    /// This macro implements extra functions for the `Widget` automatically.  This is a list of functions
+    /// that are not optional, and must be implemented in some form or fashion.  If you choose not to
+    /// implement your own version of the functions, use this macro to apply the functions automatically.
     macro_rules! default_widget_functions {
         () => {
-            /// This function is a macro-created getter function that returns the `Widget`'s configuration
-            /// object as a borrowed mutable reference.  This code is auto-generated using the
-            /// `default_widget_properties!()` macro.
+            /// This function is a macro-created getter function that returns the `Widget` as an `Any`
+            /// type.  This allows the `Widget` trait to be downcast into a `struct` that implements
+            /// the `Widget` trait.
             fn as_any(&mut self) -> &dyn Any {
                 self
             }
