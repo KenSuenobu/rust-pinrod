@@ -76,6 +76,11 @@ impl ProgressWidget {
 
         self.get_config().set_invalidate(true);
     }
+
+    /// Retrieves the current progress value as a `u8` value.
+    pub fn get_progress(&mut self) -> u8 {
+        self.progress
+    }
 }
 
 /// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
@@ -85,8 +90,8 @@ impl Widget for ProgressWidget {
         self.base_widget.draw(c);
 
         let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
-        let progress_width = (f64::from(self.get_size(CONFIG_SIZE)[0])
-            * (f64::from(self.progress)) / 100.0) as u32;
+        let progress_width =
+            (f64::from(self.get_size(CONFIG_SIZE)[0]) * (f64::from(self.progress)) / 100.0) as u32;
 
         eprintln!("{:?}", progress_width);
 
