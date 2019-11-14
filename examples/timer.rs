@@ -38,46 +38,55 @@ pub fn main() {
         let widget1_id = widget_id_for_name(_widgets, String::from("widget1"));
         let widget2_id = widget_id_for_name(_widgets, String::from("widget2"));
         let widget3_id = widget_id_for_name(_widgets, String::from("widget3"));
-        //        let timer1_pos = (_widgets[widget1_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .get_numeric(CONFIG_PROGRESS)
-        //            + 1)
-        //            % 100;
-        //        let timer2_pos = (_widgets[widget2_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .get_numeric(CONFIG_PROGRESS)
-        //            + 1)
-        //            % 100;
-        //        let timer3_pos = (_widgets[widget3_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .get_numeric(CONFIG_PROGRESS)
-        //            + 1)
-        //            % 100;
+        let progress1_value: u8 = (_widgets[widget1_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .get_progress()
+            + 1)
+            % 100;
+        let progress2_value: u8 = (_widgets[widget2_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .get_progress()
+            + 1)
+            % 100;
+        let progress3_value: u8 = (_widgets[widget3_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .get_progress()
+            + 1)
+            % 100;
 
-        eprintln!(
-            "{}",
-            _widgets[widget1_id]
-                .widget
-                .borrow_mut()
-                .as_any()
-                .is::<ProgressWidget>()
-        );
-
-        //        _widgets[widget1_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .set_numeric(CONFIG_PROGRESS, timer1_pos);
-        //        _widgets[widget2_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .set_numeric(CONFIG_PROGRESS, timer2_pos);
-        //        _widgets[widget3_id]
-        //            .widget
-        //            .borrow_mut()
-        //            .set_numeric(CONFIG_PROGRESS, timer3_pos);
+        _widgets[widget1_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .set_progress(progress1_value);
+        _widgets[widget2_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .set_progress(progress2_value);
+        _widgets[widget3_id]
+            .widget
+            .borrow_mut()
+            .as_any()
+            .downcast_mut::<ProgressWidget>()
+            .unwrap()
+            .set_progress(progress3_value);
     });
 
     engine.setup(500, 180);

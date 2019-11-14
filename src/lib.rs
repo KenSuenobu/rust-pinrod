@@ -149,7 +149,7 @@ mod macros {
             /// This function is a macro-created getter function that returns the `Widget` as an `Any`
             /// type.  This allows the `Widget` trait to be downcast into a `struct` that implements
             /// the `Widget` trait.
-            fn as_any(&mut self) -> &dyn Any {
+            fn as_any(&mut self) -> &mut dyn Any {
                 self
             }
         }

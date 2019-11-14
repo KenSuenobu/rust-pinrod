@@ -38,7 +38,7 @@ use std::collections::HashMap;
 pub trait Widget {
     /// Retrieves this `Widget` as an `Any` object so that it can be downcast using `downcast_ref`
     /// to a `struct` that implements the `Widget` trait.
-    fn as_any(&mut self) -> &dyn Any;
+    fn as_any(&mut self) -> &mut dyn Any;
 
     /// Draws the widget.  If you wish to modify the canvas object, you must declare it as `mut` in
     /// your implementation (ie `fn draw(&mut self, mut canvas: Canvas<Window>)`).  The `_canvas`

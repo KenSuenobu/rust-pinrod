@@ -10,6 +10,7 @@
 - Added `default_widget_functions` macro to inject default functions for `Widget` structs. (#235)
 - Removed config options from ProgressWidget, now uses `set_progress` to set the progress values.
 - Added `get_progress` to ProgressWidget
+- Modified `timer` test to use downcast_mut on casted object for callback.
 
 ## 0.4.13
 
