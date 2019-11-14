@@ -60,9 +60,6 @@ pub const CONFIG_BORDER_WIDTH: u8 = 8;
 /// value.
 pub const CONFIG_TEXT: u8 = 9;
 
-/// `Widget` progress value store.  This is stored as a `Config::Numeric` value.
-pub const CONFIG_PROGRESS: u8 = 10;
-
 /// `Widget` image position direction, controls the position of an `Image` within the bounds of a
 /// `Widget`.  This is stored as a `Config::CompassPosition` value.
 pub const CONFIG_IMAGE_POSITION: u8 = 11;
