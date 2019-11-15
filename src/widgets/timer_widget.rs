@@ -18,6 +18,7 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
+use std::any::Any;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -113,5 +114,6 @@ impl Widget for TimerWidget {
         }
     }
 
+    default_widget_functions!();
     default_widget_properties!();
 }

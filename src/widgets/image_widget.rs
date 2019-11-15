@@ -26,6 +26,7 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
+use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -135,6 +136,7 @@ impl Widget for ImageWidget {
         }
     }
 
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }

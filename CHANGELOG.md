@@ -1,5 +1,20 @@
 # Pushrod Change Log
 
+## 0.4.14
+
+- Added `HorizontalLayout` manager (#228)
+- Added `POINT_X, POINT_Y` and `SIZE_WIDTH, SIZE_HEIGHT` `usize` constants for `Points` and `Size` types.
+- Added `PaddingConstraint` struct.
+- Added `CONFIG_PADDING` option to `WidgetConfig` class.
+- Added `as_any` to `Widget` classes so that they can be `downcast_ref`-applied. (#235)
+- Added `default_widget_functions` macro to inject default functions for `Widget` structs. (#235)
+- Removed config options from ProgressWidget, now uses `set_progress` to set the progress values.
+- Added `get_progress` to ProgressWidget
+- Modified `timer` test to use downcast_mut on casted object for callback.
+- Added `cast!` macro that casts `WidgetContainer` object to specified `Widget` type, used in examples. (#236)
+- Added extra functions to get/set padding (#233)
+- Added invalidated flag to layout as `needs_layout` function (#237)
+
 ## 0.4.13
 
 - Documentation improvements

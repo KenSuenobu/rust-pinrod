@@ -39,6 +39,7 @@
 /// These macros are used and shared by all components in the `Pushrod` library.
 mod macros {
     #[macro_export]
+
     /// This macro is used by `Widget` implementations, which auto-injects getter code for the
     /// `Widget`'s properties.  Since all `Widget` implementations share these functions, and must
     /// implement them locally, this `macro` serves as a quick way to implement the same reused code
@@ -140,6 +141,20 @@ mod macros {
             }
         }
     }
+
+    /// This macro implements extra functions for the `Widget` automatically.  This is a list of functions
+    /// that are not optional, and must be implemented in some form or fashion.  If you choose not to
+    /// implement your own version of the functions, use this macro to apply the functions automatically.
+    macro_rules! default_widget_functions {
+        () => {
+            /// This function is a macro-created getter function that returns the `Widget` as an `Any`
+            /// type.  This allows the `Widget` trait to be downcast into a `struct` that implements
+            /// the `Widget` trait.
+            fn as_any(&mut self) -> &mut dyn Any {
+                self
+            }
+        }
+    }
 }
 
 /// `widgets` is a core rendering library used by `Pushrod`, containing the default set of `Widget`s.
@@ -147,3 +162,6 @@ pub mod widgets;
 
 /// `render` is the core rendering/event loop portion of `Pushrod`.
 pub mod render;
+
+/// `layouts` is the core layout managers included with `Pushrod`.
+pub mod layouts;

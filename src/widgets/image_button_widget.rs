@@ -26,6 +26,7 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use std::any::Any;
 use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
@@ -194,6 +195,7 @@ impl Widget for ImageButtonWidget {
         self.button_clicked_callback(_widgets, _button, _clicks, _state);
     }
 
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }

@@ -60,9 +60,6 @@ pub const CONFIG_BORDER_WIDTH: u8 = 8;
 /// value.
 pub const CONFIG_TEXT: u8 = 9;
 
-/// `Widget` progress value store.  This is stored as a `Config::Numeric` value.
-pub const CONFIG_PROGRESS: u8 = 10;
-
 /// `Widget` image position direction, controls the position of an `Image` within the bounds of a
 /// `Widget`.  This is stored as a `Config::CompassPosition` value.
 pub const CONFIG_IMAGE_POSITION: u8 = 11;
@@ -105,6 +102,16 @@ pub enum CompassPosition {
     SE,
 }
 
+/// This struct stores padding constraints.
+#[derive(Clone, Default, Debug)]
+pub struct PaddingConstraint {
+    pub top: i32,
+    pub bottom: i32,
+    pub left: i32,
+    pub right: i32,
+    pub spacing: i32,
+}
+
 /// Configuration object type - allows configurations to be set using `Piston`, `Pushrod`, or
 /// native types.
 #[derive(Clone, Debug)]
@@ -129,6 +136,9 @@ pub enum Config {
 
     /// This stores a `ComapssPosition`.
     CompassPosition(CompassPosition),
+
+    /// This stores a `PaddingConstraint`.
+    PaddingConstraint(PaddingConstraint),
 }
 
 /// This is the store for the `WidgetConfig`, which each `Widget` object needs.  This stores
@@ -270,6 +280,11 @@ impl WidgetConfig {
         self.config.insert(config, Config::CompassPosition(value));
     }
 
+    /// Applies a `PaddingConstraint`.
+    pub fn set_padding(&mut self, config: u8, value: PaddingConstraint) {
+        self.config.insert(config, Config::PaddingConstraint(value));
+    }
+
     /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
     pub fn get_point(&self, k: u8) -> Points {
         match self.config.get(&k) {
@@ -323,6 +338,14 @@ impl WidgetConfig {
         match self.config.get(&k) {
             Some(Config::CompassPosition(position)) => position.clone(),
             _ => CompassPosition::W,
+        }
+    }
+
+    /// Retrieves a `PaddingConstraint` toggle for a configuration key.  Returns empty `PaddingConstraint` if not set.
+    pub fn get_padding(&self, k: u8) -> PaddingConstraint {
+        match self.config.get(&k) {
+            Some(Config::PaddingConstraint(constraint)) => constraint.clone(),
+            _ => PaddingConstraint::default(),
         }
     }
 }

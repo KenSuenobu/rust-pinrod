@@ -24,6 +24,7 @@ use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
 use sdl2::rect::Rect;
+use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
 
@@ -156,6 +157,7 @@ impl Widget for TextWidget {
         };
     }
 
+    default_widget_functions!();
     default_widget_properties!();
     default_widget_callbacks!();
 }
