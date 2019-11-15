@@ -15,7 +15,7 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::CONFIG_SIZE;
+use crate::render::widget_config::{PaddingConstraint, CONFIG_SIZE};
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.
@@ -24,18 +24,20 @@ pub struct HorizontalLayout {
     widget_positions: Vec<LayoutPosition>,
     origin: Points,
     size: Size,
-    spacing: u32,
+    padding: PaddingConstraint,
+    invalidated: bool,
 }
 
 /// Creates a new `HorizontalLayout` manager.
 impl HorizontalLayout {
-    pub fn new(x: i32, y: i32, w: u32, h: u32, spacing: u32) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32, padding: PaddingConstraint) -> Self {
         Self {
             widget_ids: Vec::new(),
             widget_positions: Vec::new(),
             origin: vec![x, y],
             size: vec![w, h],
-            spacing,
+            padding,
+            invalidated: false,
         }
     }
 }
@@ -46,6 +48,16 @@ impl Layout for HorizontalLayout {
     fn add_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
         self.widget_ids.push(widget_id);
         self.widget_positions.push(widget_position);
+        self.invalidated = true;
+    }
+
+    fn set_padding(&mut self, padding: PaddingConstraint) {
+        self.padding = padding.clone();
+        self.invalidated = true;
+    }
+
+    fn get_padding(&self) -> PaddingConstraint {
+        self.padding.clone()
     }
 
     /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.
@@ -56,8 +68,8 @@ impl Layout for HorizontalLayout {
 
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
-        let subtractor_right = self.spacing / 2;
-        let subtractor_left = subtractor_right - 1;
+        let subtractor_right = (self.padding.spacing / 2) as u32;
+        let subtractor_left = (subtractor_right - 1) as u32;
 
         eprintln!(
             "HorizontalLayout: rightside={} leftside={}",
@@ -86,17 +98,15 @@ impl Layout for HorizontalLayout {
                 .get_config()
                 .to_x(set_x);
 
-            let widget_size = _widgets[widget_id as usize]
-                .widget
-                .borrow_mut()
-                .get_config()
-                .get_size(CONFIG_SIZE);
-
             _widgets[widget_id as usize]
                 .widget
                 .borrow_mut()
                 .get_config()
                 .set_size(CONFIG_SIZE, set_width, self.size[SIZE_HEIGHT]);
         }
+    }
+
+    fn needs_layout(&self) -> bool {
+        self.invalidated
     }
 }

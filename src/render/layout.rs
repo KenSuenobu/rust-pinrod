@@ -14,6 +14,7 @@
 // limitations under the License.
 
 use crate::render::widget_cache::WidgetContainer;
+use crate::render::widget_config::PaddingConstraint;
 
 /// This is a structure that describes the position of a `Widget` within its `Layout`.  `X` and
 /// `Y` coordinates are not given as physical positions on the screen, rather, their position in the
@@ -31,7 +32,17 @@ pub trait Layout {
     /// marker in the manager.
     fn add_widget(&mut self, _widget_id: i32, _widget_position: LayoutPosition);
 
+    /// Changes the `PaddingConstraint` for this `Layout`.
+    fn set_padding(&mut self, padding: PaddingConstraint);
+
+    /// Retrieves the current `PaddingConstraint`.
+    fn get_padding(&self) -> PaddingConstraint;
+
     /// Performs a layout, applying the `WidgetContainer` list at the time, so that referenced
     /// `Widget`s can be adjusted as necessary.
     fn do_layout(&mut self, _widgets: &[WidgetContainer]);
+
+    /// Indicates whether or not the `Layout` needs to have `do_layout` re-run.  This is generally
+    /// needed when the `LayoutPosition` changes, or when `PaddingConstraint`s change.
+    fn needs_layout(&self) -> bool;
 }
