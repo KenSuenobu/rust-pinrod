@@ -39,6 +39,7 @@
 /// These macros are used and shared by all components in the `Pushrod` library.
 mod macros {
     #[macro_export]
+
     /// This macro is used by `Widget` implementations, which auto-injects getter code for the
     /// `Widget`'s properties.  Since all `Widget` implementations share these functions, and must
     /// implement them locally, this `macro` serves as a quick way to implement the same reused code

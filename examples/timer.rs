@@ -8,8 +8,22 @@ use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
 use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::text_widget::TextWidget;
 use pushrod::widgets::timer_widget::*;
+use pushrod::render::widget::*;
 use sdl2::pixels::Color;
 use std::any::Any;
+
+#[macro_export]
+
+macro_rules! cast {
+    ($a:expr, $b:expr, $c:ident) => {
+        $a[$b]
+        .widget
+        .borrow_mut()
+        .as_any()
+        .downcast_mut::<$c>()
+        .unwrap()
+    }
+}
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -38,55 +52,22 @@ pub fn main() {
         let widget1_id = widget_id_for_name(_widgets, String::from("widget1"));
         let widget2_id = widget_id_for_name(_widgets, String::from("widget2"));
         let widget3_id = widget_id_for_name(_widgets, String::from("widget3"));
-        let progress1_value: u8 = (_widgets[widget1_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
+        let progress1_value: u8 = (cast!(_widgets, widget1_id, ProgressWidget)
             .get_progress()
             + 1)
             % 100;
-        let progress2_value: u8 = (_widgets[widget2_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
+        let progress2_value: u8 = (cast!(_widgets, widget2_id, ProgressWidget)
             .get_progress()
             + 1)
             % 100;
-        let progress3_value: u8 = (_widgets[widget3_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
+        let progress3_value: u8 = (cast!(_widgets, widget3_id, ProgressWidget)
             .get_progress()
             + 1)
             % 100;
 
-        _widgets[widget1_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
-            .set_progress(progress1_value);
-        _widgets[widget2_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
-            .set_progress(progress2_value);
-        _widgets[widget3_id]
-            .widget
-            .borrow_mut()
-            .as_any()
-            .downcast_mut::<ProgressWidget>()
-            .unwrap()
-            .set_progress(progress3_value);
+        cast!(_widgets, widget1_id, ProgressWidget).set_progress(progress1_value);
+        cast!(_widgets, widget2_id, ProgressWidget).set_progress(progress2_value);
+        cast!(_widgets, widget3_id, ProgressWidget).set_progress(progress3_value);
     });
 
     engine.setup(500, 180);

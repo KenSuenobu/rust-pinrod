@@ -93,8 +93,6 @@ impl Widget for ProgressWidget {
         let progress_width =
             (f64::from(self.get_size(CONFIG_SIZE)[0]) * (f64::from(self.progress)) / 100.0) as u32;
 
-        eprintln!("{:?}", progress_width);
-
         c.set_draw_color(base_color);
         c.fill_rect(Rect::new(
             self.config.to_x(1),

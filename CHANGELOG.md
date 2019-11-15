@@ -11,6 +11,7 @@
 - Removed config options from ProgressWidget, now uses `set_progress` to set the progress values.
 - Added `get_progress` to ProgressWidget
 - Modified `timer` test to use downcast_mut on casted object for callback.
+- Added `cast!` macro that casts `WidgetContainer` object to specified `Widget` type, used in examples. (#236)
 
 ## 0.4.13
 
