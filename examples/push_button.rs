@@ -21,7 +21,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(400, 100);
     let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me!"), 40);
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
@@ -29,8 +29,6 @@ pub fn main() {
     button1.on_click(|x, _widgets| {
         eprintln!("Click me clicked!");
     });
-
-    engine.setup(400, 100);
 
     engine.add_widget(Box::new(button1), String::from("button1"));
 

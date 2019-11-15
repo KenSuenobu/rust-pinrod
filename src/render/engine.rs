@@ -51,20 +51,20 @@ pub struct Engine {
 /// That's all there is to it.  If you want to see more interactions on how the `Engine` is used in
 /// an application, check out the demo test code, and look at `rust-pushrod-chassis`.
 impl Engine {
-    /// Creates a new `Engine` object.
-    pub fn new() -> Self {
+    /// Creates a new `Engine` object.  Sets the engine up with the bounds of the screen, which
+    /// must be provided at instantiation time.  This is in order to set up the `BaseWidget` in the
+    /// top-level of the `Engine`, so that it knows what area of the screen to refresh when
+    /// required as part of the draw cycle.
+    pub fn new(w: u32, h: u32) -> Self {
+        let base_widget = BaseWidget::new(0, 0, w, h);
+        let mut cache = WidgetCache::new();
+
+        cache.add_widget(Box::new(base_widget), "base".to_string());
+
         Self {
-            cache: WidgetCache::new(),
+            cache,
             current_widget_id: 0,
         }
-    }
-
-    /// Sets up the top-level widget so that other widgets can be added to the screen.
-    pub fn setup(&mut self, window_width: u32, window_height: u32) {
-        let base_widget = BaseWidget::new(0, 0, window_width, window_height);
-
-        self.cache
-            .add_widget(Box::new(base_widget), "base".to_string());
     }
 
     /// Adds a widget to the display list.  Widgets are rendered in the order in which they were
@@ -164,11 +164,5 @@ impl Engine {
 
             ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
         }
-    }
-}
-
-impl Default for Engine {
-    fn default() -> Self {
-        Self::new()
     }
 }

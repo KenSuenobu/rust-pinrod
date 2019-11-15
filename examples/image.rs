@@ -19,7 +19,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(WIDTH, HEIGHT);
     let mut widget1 =
         ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 16, 60, 60, false);
 
@@ -133,8 +133,6 @@ pub fn main() {
 
     widget12.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget12.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
-
-    engine.setup(WIDTH, HEIGHT);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));

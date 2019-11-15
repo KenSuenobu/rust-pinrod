@@ -20,7 +20,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(800, 600);
     let mut new_base_widget = BaseWidget::new(100, 100, 600, 400);
 
     new_base_widget
@@ -78,8 +78,6 @@ pub fn main() {
                 button, clicks, state
             );
         });
-
-    engine.setup(800, 600);
 
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 

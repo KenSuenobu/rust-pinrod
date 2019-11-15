@@ -16,7 +16,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(500, 200);
     let mut widget1 = TextWidget::new(
         String::from("assets/OpenSans-Regular.ttf"),
         sdl2::ttf::FontStyle::NORMAL,
@@ -64,8 +64,6 @@ pub fn main() {
     widget3
         .get_config()
         .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 255));
-
-    engine.setup(500, 200);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));
