@@ -70,10 +70,6 @@ pub const CONFIG_FONT_SIZE: u8 = 12;
 /// `PushButtonWidget` selected state.  This is stored as a `Config::Toggle` value.
 pub const CONFIG_SELECTED_STATE: u8 = 13;
 
-/// `PaddingConstraint` that can be applied to a `Widget` or a `Layout`.  This is stored as a
-/// `Config::PaddingConstraint` value.
-pub const CONFIG_PADDING: u8 = 14;
-
 /// This enum is used by the `ImageWidget`, which controls the positioning of the image being
 /// rendered within the bounds of the `Widget`.
 #[derive(Clone, Debug)]

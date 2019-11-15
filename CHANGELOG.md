@@ -12,6 +12,8 @@
 - Added `get_progress` to ProgressWidget
 - Modified `timer` test to use downcast_mut on casted object for callback.
 - Added `cast!` macro that casts `WidgetContainer` object to specified `Widget` type, used in examples. (#236)
+- Added extra functions to get/set padding (#233)
+- Added invalidated flag to layout as `needs_layout` function (#237)
 
 ## 0.4.13
 
