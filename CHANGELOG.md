@@ -4,6 +4,7 @@
 
 - Changed Engine to take `w, h` of screen size when initializing.
 - Removed `setup` method to clean that up.
+- Removed commented code from `Quit` event.
 
 ## 0.4.14
 

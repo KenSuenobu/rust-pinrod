@@ -21,10 +21,12 @@ use sdl2::Sdl;
 use crate::render::widget::{BaseWidget, Widget};
 use crate::render::widget_cache::WidgetCache;
 use std::time::Duration;
+use crate::render::layout_cache::LayoutCache;
 
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
-    cache: WidgetCache,
+    widget_cache: WidgetCache,
+    layout_cache: LayoutCache,
     current_widget_id: i32,
 }
 
@@ -62,7 +64,8 @@ impl Engine {
         cache.add_widget(Box::new(base_widget), "base".to_string());
 
         Self {
-            cache,
+            widget_cache: cache,
+            layout_cache: LayoutCache::new(),
             current_widget_id: 0,
         }
     }
@@ -70,7 +73,7 @@ impl Engine {
     /// Adds a widget to the display list.  Widgets are rendered in the order in which they were
     /// created in the display list.
     pub fn add_widget(&mut self, widget: Box<dyn Widget>, widget_name: String) -> i32 {
-        self.cache.add_widget(widget, widget_name)
+        self.widget_cache.add_widget(widget, widget_name)
     }
 
     /// Main application run loop, controls interaction between the user and the application.
@@ -88,7 +91,7 @@ impl Engine {
                     Event::MouseButtonDown {
                         mouse_btn, clicks, ..
                     } => {
-                        self.cache.button_clicked(
+                        self.widget_cache.button_clicked(
                             self.current_widget_id,
                             mouse_btn as u8,
                             clicks,
@@ -99,68 +102,41 @@ impl Engine {
                     Event::MouseButtonUp {
                         mouse_btn, clicks, ..
                     } => {
-                        self.cache
+                        self.widget_cache
                             .button_clicked(-1, mouse_btn as u8, clicks, false);
                     }
 
                     Event::MouseMotion { x, y, .. } => {
                         let cur_widget_id = self.current_widget_id;
 
-                        self.current_widget_id = self.cache.find_widget(x, y);
+                        self.current_widget_id = self.widget_cache.find_widget(x, y);
 
                         if cur_widget_id != self.current_widget_id {
-                            self.cache.mouse_exited(cur_widget_id);
-                            self.cache.mouse_entered(self.current_widget_id);
+                            self.widget_cache.mouse_exited(cur_widget_id);
+                            self.widget_cache.mouse_entered(self.current_widget_id);
                         }
 
-                        self.cache.mouse_moved(self.current_widget_id, vec![x, y]);
+                        self.widget_cache.mouse_moved(self.current_widget_id, vec![x, y]);
                     }
 
                     Event::MouseWheel { x, y, .. } => {
-                        self.cache
+                        self.widget_cache
                             .mouse_scrolled(self.current_widget_id, vec![x, y]);
                     }
 
                     Event::Quit { .. } => {
-                        //                        let buttons: Vec<_> = vec![
-                        //                            ButtonData {
-                        //                                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
-                        //                                button_id: 1,
-                        //                                text: "Yes",
-                        //                            },
-                        //                            ButtonData {
-                        //                                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
-                        //                                button_id: 2,
-                        //                                text: "No",
-                        //                            },
-                        //                        ];
-                        //
-                        //                        let res = show_message_box(
-                        //                            MessageBoxFlag::WARNING,
-                        //                            buttons.as_slice(),
-                        //                            "Quit",
-                        //                            "Are you sure?",
-                        //                            None,
-                        //                            None,
-                        //                        )
-                        //                        .unwrap();
-                        //
-                        //                        if let ClickedButton::CustomButton(x) = res {
-                        //                            if x.button_id == 1 {
                         break 'running;
-                        //                            }
-                        //                        }
                     }
 
                     remaining_event => {
-                        self.cache
+                        self.widget_cache
                             .other_event(self.current_widget_id, remaining_event);
                     }
                 }
             }
 
-            self.cache.tick();
-            self.cache.draw_loop(&mut canvas);
+            self.widget_cache.tick();
+            self.widget_cache.draw_loop(&mut canvas);
 
             ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
         }

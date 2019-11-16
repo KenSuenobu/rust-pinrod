@@ -52,3 +52,7 @@ pub mod widget_cache;
 /// This is a layout manager description module, describing rules for `Layout` managers to be used
 /// in the system, and having `Widget`s added to them.
 pub mod layout;
+
+/// This is a caching object that stores a container of `Layout` objects, managed by the Pushrod
+/// engine.
+pub mod layout_cache;
