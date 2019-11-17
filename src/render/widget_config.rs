@@ -112,6 +112,19 @@ pub struct PaddingConstraint {
     pub spacing: i32,
 }
 
+/// Implementation to create a new `PaddingConstraint` object.
+impl PaddingConstraint {
+    pub fn new(top: i32, bottom: i32, left: i32, right: i32, spacing: i32) -> Self {
+        Self {
+            top,
+            bottom,
+            left,
+            right,
+            spacing,
+        }
+    }
+}
+
 /// Configuration object type - allows configurations to be set using `Piston`, `Pushrod`, or
 /// native types.
 #[derive(Clone, Debug)]

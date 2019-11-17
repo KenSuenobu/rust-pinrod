@@ -73,7 +73,7 @@ impl Layout for HorizontalLayout {
         let offset_y: i32 = self.origin[1];
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
-        let subtractor_right = (self.padding.spacing / 2) as u32;
+        let subtractor_right = ((self.padding.spacing / 2) + 1) as u32;
         let subtractor_left = (subtractor_right - 1) as u32;
 
         eprintln!(
@@ -115,6 +115,8 @@ impl Layout for HorizontalLayout {
                 .get_config()
                 .set_invalidate(true);
         }
+
+        self.invalidated = false;
     }
 
     fn needs_layout(&self) -> bool {
