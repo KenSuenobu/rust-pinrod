@@ -15,21 +15,22 @@
 
 use crate::render::widget::Widget;
 use crate::render::widget_cache::WidgetContainer;
+use crate::render::layout_cache::LayoutContainer;
 
 /// This is an `FnMut` type that takes no additional parameters, returning a mutable reference
-/// to the current `Widget`, and borrowing the `WidgetContainer` list.
-pub type FunctionNoParametersType = Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer])>>;
+/// to the current `Widget`, and borrowing the `WidgetContainer` and `LayoutContainer` lists.
+pub type FunctionNoParametersType = Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// This is an `FnMut` that takes a `Point` as a `Vec<i32>` of points: X and Y, returning a mutable reference
-/// to the current `Widget`, and borrowing the `WidgetContainer` list.
+/// to the current `Widget`, and borrowing the `WidgetContainer` and `LayoutContainer` lists.
 pub type FunctionPointParametersType =
-    Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], Vec<i32>)>>;
+    Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer], Vec<i32>)>>;
 
 /// This is an `FnMut` that takes a button click ID, the number of clicks, the click state (`true` indicating
 /// the click was pressed, `false` otherwise), returning a mutable reference
-/// to the current `Widget`, and borrowing the `WidgetContainer` list.
+/// to the current `Widget`, and borrowing the `WidgetContainer` and `LayoutContainer` lists.
 pub type FunctionClickParametersType =
-    Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], u8, u8, bool)>>;
+    Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer], u8, u8, bool)>>;
 
 /// This is a registry that contains a series of `FnMut` definitions for actions that can be applied
 /// to a `Widget`.  These can vary from a screen refresh (`tick`), to a mouse move event, etc.  Each
@@ -102,7 +103,7 @@ impl CallbackRegistry {
     /// is not set, this function will be bypassed.
     pub fn on_tick<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer]) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer]) + 'static,
     {
         self.on_tick = Some(Box::new(callback));
         self.has_on_tick = true;
@@ -112,7 +113,7 @@ impl CallbackRegistry {
     /// is not set, this function will be bypassed.
     pub fn on_mouse_entered<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer]) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer]) + 'static,
     {
         self.on_mouse_entered = Some(Box::new(callback));
         self.has_on_mouse_entered = true;
@@ -122,7 +123,7 @@ impl CallbackRegistry {
     /// is not set, this function will be bypassed.
     pub fn on_mouse_exited<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer]) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer]) + 'static,
     {
         self.on_mouse_exited = Some(Box::new(callback));
         self.has_on_mouse_exited = true;
@@ -132,7 +133,7 @@ impl CallbackRegistry {
     /// is not set, this function will be bypassed.
     pub fn on_mouse_moved<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer], Vec<i32>) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer], Vec<i32>) + 'static,
     {
         self.on_mouse_moved = Some(Box::new(callback));
         self.has_on_mouse_moved = true;
@@ -142,7 +143,7 @@ impl CallbackRegistry {
     /// `Widget`.  If this is not set, this function will be bypassed.
     pub fn on_mouse_scrolled<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer], Vec<i32>) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer], Vec<i32>) + 'static,
     {
         self.on_mouse_scrolled = Some(Box::new(callback));
         self.has_on_mouse_scrolled = true;
@@ -152,7 +153,7 @@ impl CallbackRegistry {
     /// `Widget`.  If this is not set, this function will be bypassed.
     pub fn on_mouse_clicked<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut dyn Widget, &[WidgetContainer], u8, u8, bool) + 'static,
+        F: FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer], u8, u8, bool) + 'static,
     {
         self.on_mouse_clicked = Some(Box::new(callback));
         self.has_on_mouse_clicked = true;

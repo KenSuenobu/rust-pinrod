@@ -21,10 +21,11 @@ use crate::render::widget_config::WidgetConfig;
 use std::any::Any;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
+use crate::render::layout_cache::LayoutContainer;
 
 /// This is the callback type that is used when an `on_timeout` callback is triggered from this
 /// `Widget`.
-pub type TimerCallbackType = Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer])>>;
+pub type TimerCallbackType = Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// Private function used to return the current time in milliseconds.
 fn time_ms() -> u64 {
@@ -82,15 +83,15 @@ impl TimerWidget {
     /// Assigns the callback closure that will be used when a timer tick is triggered.
     pub fn on_timeout<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut TimerWidget, &[WidgetContainer]) + 'static,
+        F: FnMut(&mut TimerWidget, &[WidgetContainer], &[LayoutContainer]) + 'static,
     {
         self.on_timeout = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_timeout` callback.
-    fn call_timeout_callback(&mut self, widgets: &[WidgetContainer]) {
+    fn call_timeout_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_timeout.take() {
-            cb(self, widgets);
+            cb(self, widgets, layouts);
             self.on_timeout = Some(cb);
         }
     }
@@ -101,7 +102,7 @@ impl Widget for TimerWidget {
     /// The `TimerWidget` responds to the `tick` callback, which is used to determine the timer
     /// display ticks.  This function is _only_ called when the timer tick occurs, so if there is a
     /// function inside the drawing loop that drops frames, this timer may not get called reliably.
-    fn tick(&mut self, _widgets: &[WidgetContainer]) {
+    fn tick(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         if !self.enabled {
             return;
         }
@@ -110,7 +111,7 @@ impl Widget for TimerWidget {
 
         if elapsed > self.timeout {
             self.initiated = time_ms();
-            self.call_timeout_callback(_widgets);
+            self.call_timeout_callback(_widgets, _layouts);
         }
     }
 

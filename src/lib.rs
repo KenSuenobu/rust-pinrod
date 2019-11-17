@@ -76,10 +76,10 @@ mod macros {
         () => {
             /// This function is a macro-created tick callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn tick_callback(&mut self, _widgets: &[WidgetContainer]) {
+            fn tick_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
                 if self.get_callbacks().has_on_tick() {
                     if let Some(mut cb) = self.get_callbacks().on_tick.take() {
-                        cb(self, _widgets);
+                        cb(self, _widgets, _layouts);
                         self.get_callbacks().on_tick = Some(cb);
                     }
                 }
@@ -87,10 +87,10 @@ mod macros {
 
             /// This function is a macro-created mouse entered callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_entered_callback(&mut self, _widgets: &[WidgetContainer]) {
+            fn mouse_entered_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
                 if self.get_callbacks().has_on_mouse_entered() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_entered.take() {
-                        cb(self, _widgets);
+                        cb(self, _widgets, _layouts);
                         self.get_callbacks().on_mouse_entered = Some(cb);
                     }
                 }
@@ -98,10 +98,10 @@ mod macros {
 
             /// This function is a macro-created mouse exited callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_exited_callback(&mut self, _widgets: &[WidgetContainer]) {
+            fn mouse_exited_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
                 if self.get_callbacks().has_on_mouse_exited() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_exited.take() {
-                        cb(self, _widgets);
+                        cb(self, _widgets, _layouts);
                         self.get_callbacks().on_mouse_exited = Some(cb);
                     }
                 }
@@ -109,10 +109,10 @@ mod macros {
 
             /// This function is a macro-created mouse moved callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {
+            fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {
                 if self.get_callbacks().has_on_mouse_moved() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_moved.take() {
-                        cb(self, _widgets, _points);
+                        cb(self, _widgets, _layouts, _points);
                         self.get_callbacks().on_mouse_moved = Some(cb);
                     }
                 }
@@ -120,10 +120,10 @@ mod macros {
 
             /// This function is a macro-created mouse scrolled callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {
+            fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {
                 if self.get_callbacks().has_on_mouse_scrolled() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_scrolled.take() {
-                        cb(self, _widgets, _points);
+                        cb(self, _widgets, _layouts, _points);
                         self.get_callbacks().on_mouse_scrolled = Some(cb);
                     }
                 }
@@ -131,10 +131,10 @@ mod macros {
 
             /// This function is a macro-created mouse scrolled callback override, created by the
             /// `default_widget_callbacks!()` macro.
-            fn button_clicked_callback(&mut self, _widgets: &[WidgetContainer], _button: u8, _clicks: u8, _state: bool) {
+            fn button_clicked_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _button: u8, _clicks: u8, _state: bool) {
                 if self.get_callbacks().has_on_mouse_clicked() {
                     if let Some(mut cb) = self.get_callbacks().on_mouse_clicked.take() {
-                        cb(self, _widgets, _button, _clicks, _state);
+                        cb(self, _widgets, _layouts, _button, _clicks, _state);
                         self.get_callbacks().on_mouse_clicked = Some(cb);
                     }
                 }

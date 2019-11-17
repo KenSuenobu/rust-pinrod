@@ -26,7 +26,7 @@ pub fn main() {
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button1.on_click(|x, _widgets| {
+    button1.on_click(|x, _widgets, _layouts| {
         eprintln!("Click me clicked!");
     });
 

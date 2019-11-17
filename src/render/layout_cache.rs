@@ -17,11 +17,13 @@ use crate::render::layout::Layout;
 use crate::render::widget_cache::WidgetContainer;
 use std::cell::RefCell;
 
+/// This is a container object that stores a `Layout` object, and its ID.
 pub struct LayoutContainer {
     pub layout: RefCell<Box<dyn Layout>>,
     layout_id: i32,
 }
 
+/// This is an implementation that allows for creation of a `LayoutContainer`.
 impl LayoutContainer {
     pub fn new(layout: Box<dyn Layout>, layout_id: i32) -> Self {
         Self {
@@ -31,15 +33,19 @@ impl LayoutContainer {
     }
 }
 
+/// This is a container object that stores a `Vec` of `LayoutContainer` objects for its cache.
 pub struct LayoutCache {
     cache: Vec<LayoutContainer>,
 }
 
+/// This is the implementation of the `LayoutCache`.
 impl LayoutCache {
+    /// Creates a new cache object.
     pub fn new() -> Self {
         Self { cache: Vec::new() }
     }
 
+    /// Adds a `Box<Layout>` to the `Layout` stack.
     pub fn add_layout(&mut self, layout: Box<dyn Layout>) -> i32 {
         let layout_id = self.cache.len() as i32;
 
@@ -48,14 +54,18 @@ impl LayoutCache {
         layout_id
     }
 
+    /// Retrieves a `&mut LayoutContainer` object by its ID.
     pub fn get_layout_by_id(&mut self, id: i32) -> &mut LayoutContainer {
         &mut self.cache[id as usize]
     }
 
+    /// Retrieves a borrowed slice of the `LayoutContainer` cache that can be sent to callbacks.
     pub fn get_layout_cache(&self) -> &[LayoutContainer] {
         &self.cache
     }
 
+    /// Performs the `do_layout` call on `Layout` objects only if their `needs_layout` flag is set
+    /// to `true`.
     pub fn do_layout(&self, widgets: &[WidgetContainer]) {
         for x in &self.cache {
             let needs_layout = x.layout.borrow().needs_layout();

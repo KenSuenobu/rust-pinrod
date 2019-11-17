@@ -48,7 +48,7 @@ pub fn main() {
     widget3.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
     let mut timer = TimerWidget::new(100, true);
-    timer.on_timeout(|x, _widgets| {
+    timer.on_timeout(|x, _widgets, _layouts| {
         let widget1_id = widget_id_for_name(_widgets, String::from("widget1"));
         let widget2_id = widget_id_for_name(_widgets, String::from("widget2"));
         let widget3_id = widget_id_for_name(_widgets, String::from("widget3"));

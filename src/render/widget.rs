@@ -25,6 +25,7 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::layout_cache::LayoutContainer;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -57,21 +58,21 @@ pub trait Widget {
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
     /// implementation is **optional**.
-    fn mouse_entered(&mut self, _widgets: &[WidgetContainer]) {
-        self.mouse_entered_callback(_widgets);
+    fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
+        self.mouse_entered_callback(_widgets, _layouts);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.  This function
     /// implementation is **optional**.
-    fn mouse_exited(&mut self, _widgets: &[WidgetContainer]) {
-        self.mouse_exited_callback(_widgets);
+    fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
+        self.mouse_exited_callback(_widgets, _layouts);
     }
 
     /// When a mouse moves within the bounds of the `Widget`, this function is triggered.  It
     /// contains the `X` and `Y` coordinates relative to the bounds of the `Widget`.  The
     /// points start at `0x0`.  This function implementation is **optional**.
-    fn mouse_moved(&mut self, _widgets: &[WidgetContainer], _points: Points) {
-        self.mouse_moved_callback(_widgets, _points);
+    fn mouse_moved(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {
+        self.mouse_moved_callback(_widgets, _layouts, _points);
     }
 
     /// When a mouse scroll is triggered within the bounds of the `Widget`, this function is
@@ -79,8 +80,8 @@ pub trait Widget {
     /// indicates vertical movement.  Positive movement means to the right or down, respectively.
     /// Negative movement means to the left or up, respectively.  This function implementation
     /// is **optional**.
-    fn mouse_scrolled(&mut self, _widgets: &[WidgetContainer], _points: Points) {
-        self.mouse_scrolled_callback(_widgets, _points);
+    fn mouse_scrolled(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {
+        self.mouse_scrolled_callback(_widgets, _layouts, _points);
     }
 
     /// When a mouse button is clicked within (or outside of) the bounds of the `Widget`, this
@@ -94,50 +95,51 @@ pub trait Widget {
     fn button_clicked(
         &mut self,
         _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
         _button: u8,
         _clicks: u8,
         _state: bool,
     ) {
-        self.button_clicked_callback(_widgets, _button, _clicks, _state);
+        self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);
     }
 
     /// When a timer tick goes by (ie. a frame is displayed on the screen), this function is
     /// called.  This function implementation is **optional**.
-    fn tick(&mut self, _widgets: &[WidgetContainer]) {
-        self.tick_callback(_widgets);
+    fn tick(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
+        self.tick_callback(_widgets, _layouts);
     }
 
     /// When an `Event` is sent to the application that is not handled by the `Engine::run` loop, this
     /// method is called, sending the unhandled `Event` to the currently active `Widget`.  **This behavior
     /// is subject to change** as the `Engine::run` loop is modified to handle more `Event`s.
-    fn other_event(&mut self, _widgets: &[WidgetContainer], _event: Event) {
+    fn other_event(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _event: Event) {
         eprintln!("Other event: {:?}", _event);
     }
 
     /// This calls the `on_tick` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_tick` callback.
-    fn tick_callback(&mut self, _widgets: &[WidgetContainer]) {}
+    fn tick_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {}
 
     /// This calls the `on_mouse_entered` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_entered` callback.
-    fn mouse_entered_callback(&mut self, _widgets: &[WidgetContainer]) {}
+    fn mouse_entered_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {}
 
     /// This calls the `on_mouse_exited` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_exited` callback.
-    fn mouse_exited_callback(&mut self, _widgets: &[WidgetContainer]) {}
+    fn mouse_exited_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {}
 
     /// This calls the `on_mouse_moved` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_moved` callback.
-    fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {}
+    fn mouse_moved_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {}
 
     /// This calls the `on_mouse_scrolled` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
     /// to honor an `on_mouse_scrolled` callback.
-    fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _points: Points) {}
+    fn mouse_scrolled_callback(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer], _points: Points) {}
 
     /// This calls the `on_button_clicked` callback.  This is implemented by the `default_widget_callbacks!` macro,
     /// so you do not need to implement it.  However, you need to call this function if you wish
@@ -145,6 +147,7 @@ pub trait Widget {
     fn button_clicked_callback(
         &mut self,
         _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
         _button: u8,
         _clicks: u8,
         _state: bool,

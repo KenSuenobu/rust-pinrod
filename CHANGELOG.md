@@ -10,6 +10,7 @@
 - Added `horizontal_layout` test.
 - Add `get_layout_by_id` to `LayoutCache` (#240)
 - Modified `Engine` so that it handles `do_layout` as required (when `needs_layout` is set) (#232)
+- Added `LayoutContainer` slices to callbacks (#242)
 
 ## 0.4.14
 

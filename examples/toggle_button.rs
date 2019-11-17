@@ -26,7 +26,7 @@ pub fn main() {
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button1.on_toggle(|x, _widgets, _state| {
+    button1.on_toggle(|x, _widgets, _layouts, _state| {
         eprintln!("1 Toggled: {}", _state);
     });
 
@@ -34,7 +34,7 @@ pub fn main() {
 
     button2.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button2.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button2.on_toggle(|x, _widgets, _state| {
+    button2.on_toggle(|x, _widgets, _layouts, _state| {
         eprintln!("2 Toggled: {}", _state);
     });
 

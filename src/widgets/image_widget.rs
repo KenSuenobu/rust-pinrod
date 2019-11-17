@@ -16,6 +16,7 @@
 use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::{
     CompassPosition, Config, WidgetConfig, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION, CONFIG_SIZE,
 };
