@@ -15,7 +15,7 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{PaddingConstraint, CONFIG_SIZE};
+use crate::render::widget_config::{PaddingConstraint, CONFIG_ORIGIN, CONFIG_SIZE};
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.
@@ -42,7 +42,9 @@ impl HorizontalLayout {
     }
 }
 
-/// This is the `Layout` implementation for the `HorizontalLayout` manager.
+/// This is the `Layout` implementation for the `HorizontalLayout` manager.  This `Layout` manager will
+/// not reposition any objects within the bounds of the `Layout` until at least 2 objects have been
+/// added to the bounds of the `Layout`.
 impl Layout for HorizontalLayout {
     /// Adds a widget to the `HorizontalLayout` managed stack.
     fn add_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
@@ -60,16 +62,19 @@ impl Layout for HorizontalLayout {
         self.padding.clone()
     }
 
-    /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.
+    /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.  Currently only obeys
+    /// the spacing in the object.  The rest of the padding is not (yet) honored.
     fn do_layout(&mut self, _widgets: &[WidgetContainer]) {
         if self.widget_ids.len() <= 1 {
             return;
         }
 
+        let offset_x: i32 = self.origin[0];
+        let offset_y: i32 = self.origin[1];
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
-        let subtractor_right = (self.padding.spacing / 2) as u32;
-        let subtractor_left = (subtractor_right - 1) as u32;
+        let subtractor_right = ((self.padding.spacing as f64 / 2.0).ceil()) as u32;
+        let subtractor_left = ((self.padding.spacing as f64 / 2.0).floor()) as u32;
 
         eprintln!(
             "HorizontalLayout: rightside={} leftside={}",
@@ -85,10 +90,10 @@ impl Layout for HorizontalLayout {
                 set_x = (i * set_width) as i32;
                 set_width = widget_width - subtractor_right;
             } else if i == num_widgets - 1 {
-                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_x = (i * set_width) as i32 + subtractor_left as i32;
                 set_width = widget_width - subtractor_left;
             } else {
-                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_x = (i * set_width) as i32 + subtractor_left as i32;
                 set_width = widget_width - subtractor_left - subtractor_right;
             }
 
@@ -96,14 +101,22 @@ impl Layout for HorizontalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .to_x(set_x);
+                .set_point(CONFIG_ORIGIN, offset_x + set_x, offset_y);
 
             _widgets[widget_id as usize]
                 .widget
                 .borrow_mut()
                 .get_config()
                 .set_size(CONFIG_SIZE, set_width, self.size[SIZE_HEIGHT]);
+
+            _widgets[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .get_config()
+                .set_invalidate(true);
         }
+
+        self.invalidated = false;
     }
 
     fn needs_layout(&self) -> bool {

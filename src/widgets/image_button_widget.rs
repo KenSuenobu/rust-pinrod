@@ -22,6 +22,7 @@ use crate::render::Points;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
@@ -31,7 +32,8 @@ use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.
-pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer])>>;
+pub type OnClickCallbackType =
+    Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// This is the storage object for the `ImageButtonWidget`.  It stores the config, properties, callback registry.
 pub struct ImageButtonWidget {
@@ -113,15 +115,15 @@ impl ImageButtonWidget {
     /// Assigns the callback closure that will be used when a button click is triggered.
     pub fn on_click<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut ImageButtonWidget, &[WidgetContainer]) + 'static,
+        F: FnMut(&mut ImageButtonWidget, &[WidgetContainer], &[LayoutContainer]) + 'static,
     {
         self.on_click = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_click` callback.
-    fn call_click_callback(&mut self, widgets: &[WidgetContainer]) {
+    fn call_click_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_click.take() {
-            cb(self, widgets);
+            cb(self, widgets, layouts);
             self.on_click = Some(cb);
         }
     }
@@ -139,24 +141,24 @@ impl Widget for ImageButtonWidget {
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
     /// implementation is **optional**.
-    fn mouse_entered(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         if self.active {
             self.draw_hovered();
         }
 
         self.in_bounds = true;
-        self.mouse_entered_callback(_widgets);
+        self.mouse_entered_callback(_widgets, _layouts);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.  This function
     /// implementation is **optional**.
-    fn mouse_exited(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         if self.active {
             self.draw_unhovered();
         }
 
         self.in_bounds = false;
-        self.mouse_exited_callback(_widgets);
+        self.mouse_exited_callback(_widgets, _layouts);
     }
 
     /// When a mouse button is clicked within (or outside of) the bounds of the `Widget`, this
@@ -170,6 +172,7 @@ impl Widget for ImageButtonWidget {
     fn button_clicked(
         &mut self,
         _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
         _button: u8,
         _clicks: u8,
         _state: bool,
@@ -187,12 +190,12 @@ impl Widget for ImageButtonWidget {
                 if self.in_bounds && had_bounds {
                     // Callback here
                     eprintln!("Call callback here: clicks={}", _clicks);
-                    self.call_click_callback(_widgets);
+                    self.call_click_callback(_widgets, _layouts);
                 }
             }
         }
 
-        self.button_clicked_callback(_widgets, _button, _clicks, _state);
+        self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);
     }
 
     default_widget_functions!();

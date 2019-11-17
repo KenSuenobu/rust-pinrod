@@ -20,7 +20,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(800, 600);
     let mut new_base_widget = BaseWidget::new(100, 100, 600, 400);
 
     new_base_widget
@@ -32,7 +32,7 @@ pub fn main() {
 
     new_base_widget
         .get_callbacks()
-        .on_mouse_entered(|x, _widgets| {
+        .on_mouse_entered(|x, _widgets, _layouts| {
             x.get_config()
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 0, 0));
             x.get_config().set_invalidate(true);
@@ -46,7 +46,7 @@ pub fn main() {
 
     new_base_widget
         .get_callbacks()
-        .on_mouse_exited(|x, _widgets| {
+        .on_mouse_exited(|x, _widgets, _layouts| {
             x.get_config()
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
             x.get_config().set_invalidate(true);
@@ -60,26 +60,24 @@ pub fn main() {
 
     new_base_widget
         .get_callbacks()
-        .on_mouse_moved(|_widget, _widgets, points| {
+        .on_mouse_moved(|_widget, _widgets, _layouts, points| {
             eprintln!("Mouse Moved: {:?}", points);
         });
 
     new_base_widget
         .get_callbacks()
-        .on_mouse_scrolled(|_widget, _widgets, points| {
+        .on_mouse_scrolled(|_widget, _widgets, _layouts, points| {
             eprintln!("Mouse Scrolled: {:?}", points);
         });
 
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_clicked(|_widget, _widgets, button, clicks, state| {
+    new_base_widget.get_callbacks().on_mouse_clicked(
+        |_widget, _widgets, _layouts, button, clicks, state| {
             eprintln!(
                 "Mouse Clicked: button={} clicks={} state={}",
                 button, clicks, state
             );
-        });
-
-    engine.setup(800, 600);
+        },
+    );
 
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 

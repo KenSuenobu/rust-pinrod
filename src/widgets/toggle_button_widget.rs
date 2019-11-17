@@ -22,6 +22,7 @@ use crate::render::Points;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
@@ -30,7 +31,7 @@ use std::collections::HashMap;
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
 pub type OnToggleCallbackType =
-    Option<Box<dyn FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool)>>;
+    Option<Box<dyn FnMut(&mut ToggleButtonWidget, &[WidgetContainer], &[LayoutContainer], bool)>>;
 
 /// This is the storage object for the `ToggleButtonWidget`.  It stores the config, properties, callback registry.
 pub struct ToggleButtonWidget {
@@ -149,15 +150,15 @@ impl ToggleButtonWidget {
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
     pub fn on_toggle<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut ToggleButtonWidget, &[WidgetContainer], bool) + 'static,
+        F: FnMut(&mut ToggleButtonWidget, &[WidgetContainer], &[LayoutContainer], bool) + 'static,
     {
         self.on_toggle = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_toggle` callback.
-    fn call_toggle_callback(&mut self, widgets: &[WidgetContainer]) {
+    fn call_toggle_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_toggle.take() {
-            cb(self, widgets, self.selected);
+            cb(self, widgets, layouts, self.selected);
             self.on_toggle = Some(cb);
         }
     }
@@ -174,29 +175,30 @@ impl Widget for ToggleButtonWidget {
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
-    fn mouse_entered(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         if self.active {
             self.draw_hovered();
         }
 
         self.in_bounds = true;
-        self.mouse_entered_callback(_widgets);
+        self.mouse_entered_callback(_widgets, _layouts);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
-    fn mouse_exited(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         if self.active {
             self.draw_unhovered();
         }
 
         self.in_bounds = false;
-        self.mouse_exited_callback(_widgets);
+        self.mouse_exited_callback(_widgets, _layouts);
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
     fn button_clicked(
         &mut self,
         _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
         _button: u8,
         _clicks: u8,
         _state: bool,
@@ -211,12 +213,12 @@ impl Widget for ToggleButtonWidget {
                 if self.in_bounds {
                     self.selected = !self.selected;
                     self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
-                    self.call_toggle_callback(_widgets);
+                    self.call_toggle_callback(_widgets, _layouts);
                 }
             }
         }
 
-        self.button_clicked_callback(_widgets, _button, _clicks, _state);
+        self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);
     }
 
     default_widget_functions!();

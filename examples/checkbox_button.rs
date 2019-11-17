@@ -16,7 +16,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(400, 180);
     let widget1 = CheckboxWidget::new(20, 20, 360, 30, String::from(" Checkbox Item 1"), 22, false);
     let widget2 = CheckboxWidget::new(20, 70, 360, 30, String::from(" Checked Checkbox"), 22, true);
     let widget3 = CheckboxWidget::new(
@@ -28,8 +28,6 @@ pub fn main() {
         22,
         false,
     );
-
-    engine.setup(500, 180);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));

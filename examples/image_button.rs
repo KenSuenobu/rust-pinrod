@@ -16,7 +16,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(400, 180);
     let widget1 = ImageButtonWidget::new(
         20,
         20,
@@ -44,8 +44,6 @@ pub fn main() {
         24,
         String::from("assets/checkbox_unselected.png"),
     );
-
-    engine.setup(500, 180);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));

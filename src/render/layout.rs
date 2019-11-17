@@ -24,6 +24,13 @@ pub struct LayoutPosition {
     pub y: i32,
 }
 
+/// Implementation of the `LayoutPosition` that generates a new `LayoutPosition` object.
+impl LayoutPosition {
+    pub fn new(x: i32, y: i32) -> Self {
+        Self { x, y }
+    }
+}
+
 /// This is a `Layout` trait that is used by the `Engine` service, which stores a list of `Widget`s,
 /// their positions (based on matrix coordinates), and an entry point to trigger the layout compute
 /// action.

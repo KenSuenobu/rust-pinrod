@@ -1,5 +1,17 @@
 # Pushrod Change Log
 
+## 0.4.15
+
+- Changed Engine to take `w, h` of screen size when initializing.
+- Removed `setup` method to clean that up.
+- Removed commented code from `Quit` event.
+- Added `Layout` and `LayoutCache` to the `Engine` (#239)
+- Modified `HorizontalLayout` so that it moves the point of origin of `Widget`s based on `Layout`'s origin.
+- Added `horizontal_layout` test.
+- Add `get_layout_by_id` to `LayoutCache` (#240)
+- Modified `Engine` so that it handles `do_layout` as required (when `needs_layout` is set) (#232)
+- Added `LayoutContainer` slices to callbacks (#242)
+
 ## 0.4.14
 
 - Added `HorizontalLayout` manager (#228)

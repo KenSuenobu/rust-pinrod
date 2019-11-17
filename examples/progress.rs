@@ -16,7 +16,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(400, 180);
     let mut widget1 = ProgressWidget::new(20, 20, 360, 40, 25);
 
     widget1.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
@@ -28,8 +28,6 @@ pub fn main() {
     let mut widget3 = ProgressWidget::new(20, 120, 360, 40, 75);
 
     widget3.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
-
-    engine.setup(500, 180);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));

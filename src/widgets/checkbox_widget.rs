@@ -22,6 +22,7 @@ use crate::render::Points;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
@@ -32,7 +33,7 @@ use std::collections::HashMap;
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
 pub type OnToggleCallbackType =
-    Option<Box<dyn FnMut(&mut CheckboxWidget, &[WidgetContainer], bool)>>;
+    Option<Box<dyn FnMut(&mut CheckboxWidget, &[WidgetContainer], &[LayoutContainer], bool)>>;
 
 /// This is the storage object for the `CheckboxWidget`.  It stores the config, properties, callback registry.
 pub struct CheckboxWidget {
@@ -116,15 +117,15 @@ impl CheckboxWidget {
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
     pub fn on_toggle<F>(&mut self, callback: F)
     where
-        F: FnMut(&mut CheckboxWidget, &[WidgetContainer], bool) + 'static,
+        F: FnMut(&mut CheckboxWidget, &[WidgetContainer], &[LayoutContainer], bool) + 'static,
     {
         self.on_toggle = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_toggle` callback.
-    fn call_toggle_callback(&mut self, widgets: &[WidgetContainer]) {
+    fn call_toggle_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_toggle.take() {
-            cb(self, widgets, self.selected);
+            cb(self, widgets, layouts, self.selected);
             self.on_toggle = Some(cb);
         }
     }
@@ -162,16 +163,16 @@ impl Widget for CheckboxWidget {
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
-    fn mouse_entered(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = true;
-        self.mouse_entered_callback(_widgets);
+        self.mouse_entered_callback(_widgets, _layouts);
         self.get_config().set_invalidate(true);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
-    fn mouse_exited(&mut self, _widgets: &[WidgetContainer]) {
+    fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
-        self.mouse_exited_callback(_widgets);
+        self.mouse_exited_callback(_widgets, _layouts);
         self.get_config().set_invalidate(true);
     }
 
@@ -179,6 +180,7 @@ impl Widget for CheckboxWidget {
     fn button_clicked(
         &mut self,
         _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
         _button: u8,
         _clicks: u8,
         _state: bool,
@@ -192,14 +194,14 @@ impl Widget for CheckboxWidget {
                 if self.in_bounds {
                     self.selected = !self.selected;
                     self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
-                    self.call_toggle_callback(_widgets);
+                    self.call_toggle_callback(_widgets, _layouts);
                 }
             }
 
             self.get_config().set_invalidate(true);
         }
 
-        self.button_clicked_callback(_widgets, _button, _clicks, _state);
+        self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);
     }
 
     default_widget_functions!();

@@ -15,6 +15,7 @@
 
 use std::cell::RefCell;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::Widget;
 use crate::render::widget_config::{CONFIG_ORIGIN, CONFIG_SIZE};
 use sdl2::event::Event;
@@ -84,10 +85,6 @@ pub struct WidgetCache {
 /// This is the `WidgetCache` implementation.  This cache object manages the `Widget` list for use by the
 /// Pushrod `Engine`.
 impl WidgetCache {
-    pub fn new() -> Self {
-        Self { cache: Vec::new() }
-    }
-
     /// This adds a `Widget` to the render list.  It requires that the `Widget` being added is in a `Box`,
     /// along with a `widget_name`.  Returns the ID of the `Widget` that was added.  Use this ID if
     /// you plan on adding further `Widget`s, with this `Widget` as the parent.  The point of
@@ -176,12 +173,20 @@ impl WidgetCache {
     /// to `false`, it indicates that the mouse button was released.  When setting the button state
     /// to `widget_id == -1`, the button click message will be sent to _all_ `Widget`s, so use
     /// `widget_id == - 1` with care.
-    pub fn button_clicked(&mut self, widget_id: i32, button: u8, clicks: u8, state: bool) {
+    pub fn button_clicked(
+        &mut self,
+        widget_id: i32,
+        button: u8,
+        clicks: u8,
+        state: bool,
+        cache: &[LayoutContainer],
+    ) {
         if widget_id == -1 {
             for i in 0..self.cache.len() {
                 if !self.is_hidden(i as i32) && self.is_enabled(i as i32) {
                     self.cache[i as usize].widget.borrow_mut().button_clicked(
                         &self.cache,
+                        cache,
                         button,
                         clicks,
                         state,
@@ -192,71 +197,71 @@ impl WidgetCache {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .button_clicked(&self.cache, button, clicks, state);
+                .button_clicked(&self.cache, cache, button, clicks, state);
         }
     }
 
     /// This function calls the `mouse_moved` callback for the `Widget` specified by `widget_id`.
-    pub fn mouse_moved(&mut self, widget_id: i32, points: Vec<i32>) {
+    pub fn mouse_moved(&mut self, widget_id: i32, points: Vec<i32>, cache: &[LayoutContainer]) {
         if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .mouse_moved(&self.cache, points);
+                .mouse_moved(&self.cache, cache, points);
         }
     }
 
     /// This function calls the `mouse_scrolled` callback for the `Widget` specified by `widget_id`.
-    pub fn mouse_scrolled(&mut self, widget_id: i32, points: Vec<i32>) {
+    pub fn mouse_scrolled(&mut self, widget_id: i32, points: Vec<i32>, cache: &[LayoutContainer]) {
         if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .mouse_scrolled(&self.cache, points);
+                .mouse_scrolled(&self.cache, cache, points);
         }
     }
 
     /// This function calls the `mouse_exited` callback for the `Widget` specified by `widget_id`.
-    pub fn mouse_exited(&mut self, widget_id: i32) {
+    pub fn mouse_exited(&mut self, widget_id: i32, cache: &[LayoutContainer]) {
         if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .mouse_exited(&self.cache);
+                .mouse_exited(&self.cache, cache);
         }
     }
 
     /// This function calls the `mouse_entered` callback for the `Widget` specified by `widget_id`.
-    pub fn mouse_entered(&mut self, widget_id: i32) {
+    pub fn mouse_entered(&mut self, widget_id: i32, cache: &[LayoutContainer]) {
         if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .mouse_entered(&self.cache);
+                .mouse_entered(&self.cache, cache);
         }
     }
 
     /// This function calls the `tick` method on all registered `Widget`s in the cache.  The purpose
     /// for the `tick` is to indicate that a drawing loop is about to occur, and the `Widget` can
     /// update itself as necessary beforehand.
-    pub fn tick(&mut self) {
+    pub fn tick(&mut self, _cache: &[LayoutContainer]) {
         let cache_size = self.cache.len();
 
         for i in 0..cache_size {
             if !self.is_hidden(i as i32) {
-                self.cache[i].widget.borrow_mut().tick(&self.cache);
+                self.cache[i].widget.borrow_mut().tick(&self.cache, _cache);
             }
         }
     }
 
     /// This function sends all other un-handled events from SDL2 to the currently highlighted
     /// `Widget`.
-    pub fn other_event(&mut self, widget_id: i32, event: Event) {
+    pub fn other_event(&mut self, widget_id: i32, event: Event, cache: &[LayoutContainer]) {
         if !self.is_hidden(widget_id) && self.is_enabled(widget_id) {
             self.cache[widget_id as usize]
                 .widget
                 .borrow_mut()
-                .other_event(&self.cache, event);
+                .other_event(&self.cache, cache, event);
         }
     }
 
@@ -274,6 +279,12 @@ impl WidgetCache {
                 return;
             }
         }
+    }
+
+    /// Returns a borrowed slice of the `WidgetContainer` `Vec` object, which can be passed on to
+    /// `Layout` objects so that the layout can be computed and performed.
+    pub fn borrow_cache(&mut self) -> &[WidgetContainer] {
+        &self.cache
     }
 
     // Private functions

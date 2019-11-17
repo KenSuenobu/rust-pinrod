@@ -34,7 +34,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new();
+    let mut engine = Engine::new(400, 180);
     let mut widget1 = ProgressWidget::new(20, 20, 360, 40, 25);
 
     widget1.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
@@ -48,7 +48,7 @@ pub fn main() {
     widget3.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
     let mut timer = TimerWidget::new(100, true);
-    timer.on_timeout(|x, _widgets| {
+    timer.on_timeout(|x, _widgets, _layouts| {
         let widget1_id = widget_id_for_name(_widgets, String::from("widget1"));
         let widget2_id = widget_id_for_name(_widgets, String::from("widget2"));
         let widget3_id = widget_id_for_name(_widgets, String::from("widget3"));
@@ -63,8 +63,6 @@ pub fn main() {
         cast!(_widgets, widget2_id, ProgressWidget).set_progress(progress2_value);
         cast!(_widgets, widget3_id, ProgressWidget).set_progress(progress3_value);
     });
-
-    engine.setup(500, 180);
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
     engine.add_widget(Box::new(widget2), String::from("widget2"));
