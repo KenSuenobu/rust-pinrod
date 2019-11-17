@@ -7,6 +7,7 @@
 - Removed commented code from `Quit` event.
 - Added `Layout` and `LayoutCache` to the `Engine`
 - Modified `HorizontalLayout` so that it moves the point of origin of `Widget`s based on `Layout`'s origin.
+- Added `horizontal_layout` test.
 
 ## 0.4.14
 
