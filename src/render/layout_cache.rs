@@ -52,6 +52,10 @@ impl LayoutCache {
         &mut self.cache[id as usize]
     }
 
+    pub fn get_layout_cache(&self) -> &[LayoutContainer] {
+        &self.cache
+    }
+
     pub fn do_layout(&self, widgets: &[WidgetContainer]) {
         for x in &self.cache {
             let needs_layout = x.layout.borrow().needs_layout();

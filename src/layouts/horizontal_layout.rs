@@ -73,8 +73,8 @@ impl Layout for HorizontalLayout {
         let offset_y: i32 = self.origin[1];
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
-        let subtractor_right = ((self.padding.spacing / 2) + 1) as u32;
-        let subtractor_left = (subtractor_right - 1) as u32;
+        let subtractor_right = ((self.padding.spacing as f64 / 2.0).ceil()) as u32;
+        let subtractor_left = ((self.padding.spacing as f64 / 2.0).floor()) as u32;
 
         eprintln!(
             "HorizontalLayout: rightside={} leftside={}",
@@ -90,10 +90,10 @@ impl Layout for HorizontalLayout {
                 set_x = (i * set_width) as i32;
                 set_width = widget_width - subtractor_right;
             } else if i == num_widgets - 1 {
-                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_x = (i * set_width) as i32 + subtractor_left as i32;
                 set_width = widget_width - subtractor_left;
             } else {
-                set_x = (i * set_width) as i32 - subtractor_left as i32;
+                set_x = (i * set_width) as i32 + subtractor_left as i32;
                 set_width = widget_width - subtractor_left - subtractor_right;
             }
 
