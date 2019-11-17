@@ -13,8 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::cell::RefCell;
 use crate::render::layout::Layout;
+use crate::render::widget_cache::WidgetContainer;
+use std::cell::RefCell;
 
 pub struct LayoutContainer {
     pub layout: RefCell<Box<dyn Layout>>,
@@ -36,9 +37,7 @@ pub struct LayoutCache {
 
 impl LayoutCache {
     pub fn new() -> Self {
-        Self {
-            cache: Vec::new(),
-        }
+        Self { cache: Vec::new() }
     }
 
     pub fn add_layout(&mut self, layout: Box<dyn Layout>) -> i32 {
@@ -53,4 +52,13 @@ impl LayoutCache {
         &mut self.cache[id as usize]
     }
 
+    pub fn do_layout(&self, widgets: &[WidgetContainer]) {
+        for x in &self.cache {
+            let needs_layout = x.layout.borrow().needs_layout();
+
+            if needs_layout {
+                x.layout.borrow_mut().do_layout(widgets);
+            }
+        }
+    }
 }

@@ -276,6 +276,12 @@ impl WidgetCache {
         }
     }
 
+    /// Returns a borrowed slice of the `WidgetContainer` `Vec` object, which can be passed on to
+    /// `Layout` objects so that the layout can be computed and performed.
+    pub fn borrow_cache(&mut self) -> &[WidgetContainer] {
+        &self.cache
+    }
+
     // Private functions
 
     fn get_children_of(&mut self, widget_id: i32) -> Vec<i32> {

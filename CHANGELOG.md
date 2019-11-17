@@ -5,6 +5,7 @@
 - Changed Engine to take `w, h` of screen size when initializing.
 - Removed `setup` method to clean that up.
 - Removed commented code from `Quit` event.
+- Added `Layout` and `LayoutCache` to the `Engine`
 
 ## 0.4.14
 

@@ -14,14 +14,14 @@
 // limitations under the License.
 
 use sdl2::event::Event;
-//use sdl2::messagebox::*;
 use sdl2::video::Window;
 use sdl2::Sdl;
 
+use crate::render::layout::Layout;
+use crate::render::layout_cache::LayoutCache;
 use crate::render::widget::{BaseWidget, Widget};
 use crate::render::widget_cache::WidgetCache;
 use std::time::Duration;
-use crate::render::layout_cache::LayoutCache;
 
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
@@ -70,10 +70,15 @@ impl Engine {
         }
     }
 
-    /// Adds a widget to the display list.  Widgets are rendered in the order in which they were
+    /// Adds a `Widget` to the display list.  `Widget`s are rendered in the order in which they were
     /// created in the display list.
     pub fn add_widget(&mut self, widget: Box<dyn Widget>, widget_name: String) -> i32 {
         self.widget_cache.add_widget(widget, widget_name)
+    }
+
+    /// Adds a `Layout` to the `Layout` list.
+    pub fn add_layout(&mut self, layout: Box<dyn Layout>) -> i32 {
+        self.layout_cache.add_layout(layout)
     }
 
     /// Main application run loop, controls interaction between the user and the application.
@@ -116,7 +121,8 @@ impl Engine {
                             self.widget_cache.mouse_entered(self.current_widget_id);
                         }
 
-                        self.widget_cache.mouse_moved(self.current_widget_id, vec![x, y]);
+                        self.widget_cache
+                            .mouse_moved(self.current_widget_id, vec![x, y]);
                     }
 
                     Event::MouseWheel { x, y, .. } => {
@@ -136,6 +142,8 @@ impl Engine {
             }
 
             self.widget_cache.tick();
+            self.layout_cache
+                .do_layout(self.widget_cache.borrow_cache());
             self.widget_cache.draw_loop(&mut canvas);
 
             ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
