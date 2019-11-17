@@ -13,13 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::Widget;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::layout_cache::LayoutContainer;
 
 /// This is an `FnMut` type that takes no additional parameters, returning a mutable reference
 /// to the current `Widget`, and borrowing the `WidgetContainer` and `LayoutContainer` lists.
-pub type FunctionNoParametersType = Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer])>>;
+pub type FunctionNoParametersType =
+    Option<Box<dyn FnMut(&mut dyn Widget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// This is an `FnMut` that takes a `Point` as a `Vec<i32>` of points: X and Y, returning a mutable reference
 /// to the current `Widget`, and borrowing the `WidgetContainer` and `LayoutContainer` lists.

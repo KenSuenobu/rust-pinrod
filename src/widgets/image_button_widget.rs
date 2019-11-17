@@ -22,17 +22,18 @@ use crate::render::Points;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::layout_cache::LayoutContainer;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.
-pub type OnClickCallbackType = Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer], &[LayoutContainer])>>;
+pub type OnClickCallbackType =
+    Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// This is the storage object for the `ImageButtonWidget`.  It stores the config, properties, callback registry.
 pub struct ImageButtonWidget {

@@ -18,14 +18,15 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
+use crate::render::layout_cache::LayoutContainer;
 use std::any::Any;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
-use crate::render::layout_cache::LayoutContainer;
 
 /// This is the callback type that is used when an `on_timeout` callback is triggered from this
 /// `Widget`.
-pub type TimerCallbackType = Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer], &[LayoutContainer])>>;
+pub type TimerCallbackType =
+    Option<Box<dyn FnMut(&mut TimerWidget, &[WidgetContainer], &[LayoutContainer])>>;
 
 /// Private function used to return the current time in milliseconds.
 fn time_ms() -> u64 {

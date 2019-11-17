@@ -15,6 +15,7 @@
 
 use std::cell::RefCell;
 
+use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::Widget;
 use crate::render::widget_config::{CONFIG_ORIGIN, CONFIG_SIZE};
 use sdl2::event::Event;
@@ -22,7 +23,6 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use crate::render::layout_cache::LayoutContainer;
 
 /// This is a container that stores information about a `Widget` that will be drawn on the screen.
 /// It stores the `Widget` object, the actual point of origin inside the `Window` (as a `Vec<i32>`
@@ -85,10 +85,6 @@ pub struct WidgetCache {
 /// This is the `WidgetCache` implementation.  This cache object manages the `Widget` list for use by the
 /// Pushrod `Engine`.
 impl WidgetCache {
-    pub fn new() -> Self {
-        Self { cache: Vec::new() }
-    }
-
     /// This adds a `Widget` to the render list.  It requires that the `Widget` being added is in a `Box`,
     /// along with a `widget_name`.  Returns the ID of the `Widget` that was added.  Use this ID if
     /// you plan on adding further `Widget`s, with this `Widget` as the parent.  The point of
@@ -177,7 +173,14 @@ impl WidgetCache {
     /// to `false`, it indicates that the mouse button was released.  When setting the button state
     /// to `widget_id == -1`, the button click message will be sent to _all_ `Widget`s, so use
     /// `widget_id == - 1` with care.
-    pub fn button_clicked(&mut self, widget_id: i32, button: u8, clicks: u8, state: bool, cache: &[LayoutContainer]) {
+    pub fn button_clicked(
+        &mut self,
+        widget_id: i32,
+        button: u8,
+        clicks: u8,
+        state: bool,
+        cache: &[LayoutContainer],
+    ) {
         if widget_id == -1 {
             for i in 0..self.cache.len() {
                 if !self.is_hidden(i as i32) && self.is_enabled(i as i32) {

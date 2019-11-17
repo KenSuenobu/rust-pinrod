@@ -59,13 +59,13 @@ impl Engine {
     /// required as part of the draw cycle.
     pub fn new(w: u32, h: u32) -> Self {
         let base_widget = BaseWidget::new(0, 0, w, h);
-        let mut cache = WidgetCache::new();
+        let mut cache = WidgetCache::default();
 
         cache.add_widget(Box::new(base_widget), "base".to_string());
 
         Self {
             widget_cache: cache,
-            layout_cache: LayoutCache::new(),
+            layout_cache: LayoutCache::default(),
             current_widget_id: 0,
         }
     }
@@ -108,10 +108,13 @@ impl Engine {
                     Event::MouseButtonUp {
                         mouse_btn, clicks, ..
                     } => {
-                        self.widget_cache
-                            .button_clicked(-1, mouse_btn as u8, clicks, false,
-                                            self.layout_cache.get_layout_cache(),
-                            );
+                        self.widget_cache.button_clicked(
+                            -1,
+                            mouse_btn as u8,
+                            clicks,
+                            false,
+                            self.layout_cache.get_layout_cache(),
+                        );
                     }
 
                     Event::MouseMotion { x, y, .. } => {
@@ -120,25 +123,27 @@ impl Engine {
                         self.current_widget_id = self.widget_cache.find_widget(x, y);
 
                         if cur_widget_id != self.current_widget_id {
-                            self.widget_cache.mouse_exited(cur_widget_id,
-                                                           self.layout_cache.get_layout_cache(),
-                            );
-                            self.widget_cache.mouse_entered(self.current_widget_id,
-                                                            self.layout_cache.get_layout_cache(),
+                            self.widget_cache
+                                .mouse_exited(cur_widget_id, self.layout_cache.get_layout_cache());
+                            self.widget_cache.mouse_entered(
+                                self.current_widget_id,
+                                self.layout_cache.get_layout_cache(),
                             );
                         }
 
-                        self.widget_cache
-                            .mouse_moved(self.current_widget_id, vec![x, y],
-                                         self.layout_cache.get_layout_cache(),
-                            );
+                        self.widget_cache.mouse_moved(
+                            self.current_widget_id,
+                            vec![x, y],
+                            self.layout_cache.get_layout_cache(),
+                        );
                     }
 
                     Event::MouseWheel { x, y, .. } => {
-                        self.widget_cache
-                            .mouse_scrolled(self.current_widget_id, vec![x, y],
-                                            self.layout_cache.get_layout_cache(),
-                            );
+                        self.widget_cache.mouse_scrolled(
+                            self.current_widget_id,
+                            vec![x, y],
+                            self.layout_cache.get_layout_cache(),
+                        );
                     }
 
                     Event::Quit { .. } => {
@@ -146,10 +151,11 @@ impl Engine {
                     }
 
                     remaining_event => {
-                        self.widget_cache
-                            .other_event(self.current_widget_id, remaining_event,
-                                         self.layout_cache.get_layout_cache(),
-                            );
+                        self.widget_cache.other_event(
+                            self.current_widget_id,
+                            remaining_event,
+                            self.layout_cache.get_layout_cache(),
+                        );
                     }
                 }
             }

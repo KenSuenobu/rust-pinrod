@@ -15,7 +15,7 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{PaddingConstraint, CONFIG_SIZE, CONFIG_ORIGIN};
+use crate::render::widget_config::{PaddingConstraint, CONFIG_ORIGIN, CONFIG_SIZE};
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.

@@ -25,26 +25,28 @@ pub struct LayoutContainer {
 
 /// This is an implementation that allows for creation of a `LayoutContainer`.
 impl LayoutContainer {
+    /// Creates a new `LayoutContainer`-wrapped `Layout` object.
     pub fn new(layout: Box<dyn Layout>, layout_id: i32) -> Self {
         Self {
             layout: RefCell::new(layout),
             layout_id,
         }
     }
+
+    /// Retrieves the current layout ID.
+    pub fn get_layout_id(&self) -> i32 {
+        self.layout_id
+    }
 }
 
 /// This is a container object that stores a `Vec` of `LayoutContainer` objects for its cache.
+#[derive(Default)]
 pub struct LayoutCache {
     cache: Vec<LayoutContainer>,
 }
 
 /// This is the implementation of the `LayoutCache`.
 impl LayoutCache {
-    /// Creates a new cache object.
-    pub fn new() -> Self {
-        Self { cache: Vec::new() }
-    }
-
     /// Adds a `Box<Layout>` to the `Layout` stack.
     pub fn add_layout(&mut self, layout: Box<dyn Layout>) -> i32 {
         let layout_id = self.cache.len() as i32;

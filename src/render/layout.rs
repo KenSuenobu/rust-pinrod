@@ -27,10 +27,7 @@ pub struct LayoutPosition {
 /// Implementation of the `LayoutPosition` that generates a new `LayoutPosition` object.
 impl LayoutPosition {
     pub fn new(x: i32, y: i32) -> Self {
-        Self {
-            x,
-            y,
-        }
+        Self { x, y }
     }
 }
 

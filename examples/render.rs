@@ -70,14 +70,14 @@ pub fn main() {
             eprintln!("Mouse Scrolled: {:?}", points);
         });
 
-    new_base_widget
-        .get_callbacks()
-        .on_mouse_clicked(|_widget, _widgets, _layouts, button, clicks, state| {
+    new_base_widget.get_callbacks().on_mouse_clicked(
+        |_widget, _widgets, _layouts, button, clicks, state| {
             eprintln!(
                 "Mouse Clicked: button={} clicks={} state={}",
                 button, clicks, state
             );
-        });
+        },
+    );
 
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 
