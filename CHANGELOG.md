@@ -6,6 +6,7 @@
 - Removed `setup` method to clean that up.
 - Removed commented code from `Quit` event.
 - Added `Layout` and `LayoutCache` to the `Engine`
+- Modified `HorizontalLayout` so that it moves the point of origin of `Widget`s based on `Layout`'s origin.
 
 ## 0.4.14
 

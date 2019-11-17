@@ -15,7 +15,7 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{PaddingConstraint, CONFIG_SIZE};
+use crate::render::widget_config::{PaddingConstraint, CONFIG_SIZE, CONFIG_ORIGIN};
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 /// This is the `HorizontalLayout` storage structure for the `HorizontalLayout` implementation.
@@ -66,6 +66,8 @@ impl Layout for HorizontalLayout {
             return;
         }
 
+        let offset_x: i32 = self.origin[0];
+        let offset_y: i32 = self.origin[1];
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
         let subtractor_right = (self.padding.spacing / 2) as u32;
@@ -96,13 +98,19 @@ impl Layout for HorizontalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .to_x(set_x);
+                .set_point(CONFIG_ORIGIN, offset_x + set_x, offset_y);
 
             _widgets[widget_id as usize]
                 .widget
                 .borrow_mut()
                 .get_config()
                 .set_size(CONFIG_SIZE, set_width, self.size[SIZE_HEIGHT]);
+
+            _widgets[widget_id as usize]
+                .widget
+                .borrow_mut()
+                .get_config()
+                .set_invalidate(true);
         }
     }
 
