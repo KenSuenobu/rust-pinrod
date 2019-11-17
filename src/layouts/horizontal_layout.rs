@@ -42,7 +42,9 @@ impl HorizontalLayout {
     }
 }
 
-/// This is the `Layout` implementation for the `HorizontalLayout` manager.
+/// This is the `Layout` implementation for the `HorizontalLayout` manager.  This `Layout` manager will
+/// not reposition any objects within the bounds of the `Layout` until at least 2 objects have been
+/// added to the bounds of the `Layout`.
 impl Layout for HorizontalLayout {
     /// Adds a widget to the `HorizontalLayout` managed stack.
     fn add_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
@@ -60,7 +62,8 @@ impl Layout for HorizontalLayout {
         self.padding.clone()
     }
 
-    /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.
+    /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.  Currently only obeys
+    /// the spacing in the object.  The rest of the padding is not (yet) honored.
     fn do_layout(&mut self, _widgets: &[WidgetContainer]) {
         if self.widget_ids.len() <= 1 {
             return;
