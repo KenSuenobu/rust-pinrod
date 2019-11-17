@@ -1,5 +1,10 @@
 # Pushrod Change Log
 
+## 0.4.16
+
+- Added `set_text` and `get_text` accessors to `TextWidget` (#244)
+- Modified `horizontal_layout` test so that left and right buttons change spacing text as well.
+
 ## 0.4.15
 
 - Changed Engine to take `w, h` of screen size when initializing.
