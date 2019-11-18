@@ -13,7 +13,6 @@ use sdl2::pixels::Color;
 use std::any::Any;
 
 #[macro_export]
-
 macro_rules! cast {
     ($a:expr, $b:expr, $c:ident) => {
         $a[$b]

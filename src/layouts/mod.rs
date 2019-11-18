@@ -18,3 +18,7 @@
 /// This is a `HorizontalLayout` manager.  It handles the even spacing of
 /// `Widget`s in a horizontal display area.
 pub mod horizontal_layout;
+
+/// This is a `VerticalLayout` manager.  It handles the even spacing of `Widget`s in
+/// a vertical display area.
+pub mod vertical_layout;

@@ -1,7 +1,7 @@
 extern crate pushrod;
 extern crate sdl2;
 
-use pushrod::layouts::horizontal_layout::HorizontalLayout;
+use pushrod::layouts::vertical_layout::VerticalLayout;
 use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::layout::{Layout, LayoutPosition};
@@ -40,7 +40,7 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 160);
-    let mut layout = HorizontalLayout::new(20, 20, 360, 80, PaddingConstraint::new(0, 0, 0, 0, 1));
+    let mut layout = VerticalLayout::new(180, 20, 180, 120, PaddingConstraint::new(0, 0, 0, 0, 1));
 
     let mut widget1 = BaseWidget::new(0, 0, 0, 0);
 
@@ -69,8 +69,8 @@ pub fn main() {
         16,
         TextJustify::Right,
         String::from("Spacing:"),
-        20,
-        116,
+        30,
+        46,
         80,
         22,
     );
@@ -85,8 +85,8 @@ pub fn main() {
         16,
         TextJustify::Left,
         String::from("1"),
-        110,
-        116,
+        120,
+        46,
         40,
         22,
     );
@@ -95,7 +95,7 @@ pub fn main() {
         .get_config()
         .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 255));
 
-    let mut button1 = PushButtonWidget::new(150, 112, 50, 30, String::from("<"), 20);
+    let mut button1 = PushButtonWidget::new(40, 90, 50, 30, String::from("<"), 20);
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
@@ -129,7 +129,7 @@ pub fn main() {
         cast!(_widgets, text_widget2_id, TextWidget).set_text(format!("{}", spacing));
     });
 
-    let mut button2 = PushButtonWidget::new(200, 112, 50, 30, String::from(">"), 20);
+    let mut button2 = PushButtonWidget::new(90, 90, 50, 30, String::from(">"), 20);
 
     button2.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button2.set_numeric(CONFIG_BORDER_WIDTH, 2);

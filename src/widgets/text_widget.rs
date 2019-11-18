@@ -83,6 +83,17 @@ impl TextWidget {
             msg: msg.clone(),
         }
     }
+
+    /// Changes the text displayed in the body of the `Widget`.
+    pub fn set_text(&mut self, msg: String) {
+        self.msg = msg.clone();
+        self.get_config().set_invalidate(true);
+    }
+
+    /// Retrieves the text currently being displayed in the `TextWidget`.
+    pub fn get_text(&self) -> String {
+        self.msg.clone()
+    }
 }
 
 /// This is the `Widget` implementation of the `TextWidget`.  Text is rendered onto a 3D texture, then
