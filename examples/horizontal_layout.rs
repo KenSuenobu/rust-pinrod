@@ -107,8 +107,6 @@ pub fn main() {
             spacing = 0;
         }
 
-        eprintln!("Spacing: {} {}", spacing, text_widget2_id);
-
         let spacing_new = PaddingConstraint::new(0, 0, 0, 0, spacing);
 
         _layouts[0].layout.borrow_mut().set_padding(spacing_new);
@@ -142,8 +140,6 @@ pub fn main() {
         if spacing >= MAX_SPACING {
             spacing = MAX_SPACING;
         }
-
-        eprintln!("Spacing: {} {}", spacing, text_widget2_id);
 
         let spacing_new = PaddingConstraint::new(0, 0, 0, 0, spacing);
 

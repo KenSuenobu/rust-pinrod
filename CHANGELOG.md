@@ -4,6 +4,7 @@
 
 - Added `set_text` and `get_text` accessors to `TextWidget` (#244)
 - Modified `horizontal_layout` test so that left and right buttons change spacing text as well.
+- Modified test code so that it compiles and runs properly after recent changes.
 
 ## 0.4.15
 
