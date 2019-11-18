@@ -4,6 +4,7 @@
 
 - Added quick accessor for is_invalidated and set_invalidated.
 - Renamed `set_invalidate` to `set_invalidated` in config flag.
+- Fixed button logic so that callback only occurs when mouse released over the initiated object (#245)
 
 ## 0.4.16
 

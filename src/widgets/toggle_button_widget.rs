@@ -43,6 +43,7 @@ pub struct ToggleButtonWidget {
     active: bool,
     selected: bool,
     in_bounds: bool,
+    originated: bool,
     on_toggle: OnToggleCallbackType,
 }
 
@@ -105,6 +106,7 @@ impl ToggleButtonWidget {
             active: false,
             selected,
             in_bounds: false,
+            originated: false,
             on_toggle: None,
         }
     }
@@ -207,14 +209,17 @@ impl Widget for ToggleButtonWidget {
             if _state {
                 self.draw_hovered();
                 self.active = true;
+                self.originated = true;
             } else {
                 self.active = false;
 
-                if self.in_bounds {
+                if self.in_bounds && self.originated {
                     self.selected = !self.selected;
                     self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
                     self.call_toggle_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
         }
 

@@ -333,10 +333,7 @@ impl WidgetCache {
             if !is_hidden && is_invalidated {
                 c.set_clip_rect(paint_widget.widget.borrow_mut().get_drawing_area());
                 paint_widget.widget.borrow_mut().draw(c);
-                paint_widget
-                    .widget
-                    .borrow_mut()
-                    .set_invalidated(false);
+                paint_widget.widget.borrow_mut().set_invalidated(false);
                 c.set_clip_rect(top_level_rect);
 
                 needs_present = true;

@@ -45,6 +45,7 @@ pub struct ImageButtonWidget {
     image_widget: ImageWidget,
     active: bool,
     in_bounds: bool,
+    originated: bool,
     on_click: OnClickCallbackType,
 }
 
@@ -88,6 +89,7 @@ impl ImageButtonWidget {
             image_widget,
             active: false,
             in_bounds: false,
+            originated: false,
             on_click: None,
         }
     }
@@ -181,17 +183,20 @@ impl Widget for ImageButtonWidget {
             if _state {
                 self.draw_hovered();
                 self.active = true;
+                self.originated = true;
             } else {
                 let had_bounds = self.active;
 
                 self.draw_unhovered();
                 self.active = false;
 
-                if self.in_bounds && had_bounds {
+                if self.in_bounds && had_bounds && self.originated {
                     // Callback here
                     eprintln!("Call callback here: clicks={}", _clicks);
                     self.call_click_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
         }
 

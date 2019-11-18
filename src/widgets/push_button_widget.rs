@@ -44,6 +44,7 @@ pub struct PushButtonWidget {
     text_widget: TextWidget,
     active: bool,
     in_bounds: bool,
+    originated: bool,
     on_click: OnClickCallbackType,
 }
 
@@ -81,6 +82,7 @@ impl PushButtonWidget {
             text_widget,
             active: false,
             in_bounds: false,
+            originated: false,
             on_click: None,
         }
     }
@@ -173,17 +175,20 @@ impl Widget for PushButtonWidget {
             if _state {
                 self.draw_hovered();
                 self.active = true;
+                self.originated = true;
             } else {
                 let had_bounds = self.active;
 
                 self.draw_unhovered();
                 self.active = false;
 
-                if self.in_bounds && had_bounds {
+                if self.in_bounds && had_bounds && self.originated {
                     // Callback here
                     eprintln!("Call callback here: clicks={}", _clicks);
                     self.call_click_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
         }
 
