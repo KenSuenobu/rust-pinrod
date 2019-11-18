@@ -1,5 +1,5 @@
 // Pushrod Widget Library
-// Image Widget
+// Tab Widget
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
 
-/// This is the storage object for the `ImageWidget`.  It stores the config, properties, callback registry,
-/// the image name, and a scale flag.
+/// This is the storage object for the `TextWidget`.  It stores the config, properties, callback registry,
+/// the font name, style, size, justification, and text message.
 pub struct ImageWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
@@ -114,7 +114,7 @@ impl Widget for ImageWidget {
                 None,
                 Rect::new(texture_x, texture_y, width, height),
             )
-            .unwrap();
+                .unwrap();
         } else {
             c.copy(
                 &texture,
@@ -126,14 +126,7 @@ impl Widget for ImageWidget {
                     widget_h as u32,
                 ),
             )
-            .unwrap();
-        }
-    }
-
-    /// Responds to a screen redraw only if the `CONFIG_IMAGE_POSITION` key was changed.
-    fn on_config_changed(&mut self, _k: u8, _v: Config) {
-        if _k == CONFIG_IMAGE_POSITION {
-            self.get_config().set_invalidated(true);
+                .unwrap();
         }
     }
 

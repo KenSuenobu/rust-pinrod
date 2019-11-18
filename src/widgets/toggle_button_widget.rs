@@ -111,6 +111,17 @@ impl ToggleButtonWidget {
         }
     }
 
+    /// Sets the selected state of this `Widget`.
+    pub fn set_selected(&mut self, selected: bool) {
+        self.selected = selected;
+        self.get_config().set_invalidated(true);
+    }
+
+    /// Returns the selected state of this `Widget`: `true` indicates selected, `false` otherwise.
+    pub fn is_selected(&self) -> bool {
+        self.selected
+    }
+
     /// Draws the state when the mouse is over the top of the `Widget`.
     fn draw_hovered(&mut self) {
         let base_color = if self.selected {
