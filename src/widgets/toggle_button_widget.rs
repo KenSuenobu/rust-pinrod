@@ -125,7 +125,7 @@ impl ToggleButtonWidget {
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
         self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Draws the state when the mouse leaves the scope of the `Widget`.
@@ -144,7 +144,7 @@ impl ToggleButtonWidget {
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
         self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Assigns the callback closure that will be used when the `Widget` toggles state.

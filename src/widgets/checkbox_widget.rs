@@ -166,14 +166,14 @@ impl Widget for CheckboxWidget {
     fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = true;
         self.mouse_entered_callback(_widgets, _layouts);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
         self.mouse_exited_callback(_widgets, _layouts);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
@@ -198,7 +198,7 @@ impl Widget for CheckboxWidget {
                 }
             }
 
-            self.get_config().set_invalidate(true);
+            self.get_config().set_invalidated(true);
         }
 
         self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);

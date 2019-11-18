@@ -114,17 +114,17 @@ pub fn main() {
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
         _widgets[3]
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
         _widgets[4]
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
 
         cast!(_widgets, text_widget2_id, TextWidget).set_text(format!("{}", spacing));
     });
@@ -148,17 +148,17 @@ pub fn main() {
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
         _widgets[3]
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
         _widgets[4]
             .widget
             .borrow_mut()
             .get_config()
-            .set_invalidate(true);
+            .set_invalidated(true);
 
         cast!(_widgets, text_widget2_id, TextWidget).set_text(format!("{}", spacing));
     });

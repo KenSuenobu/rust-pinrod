@@ -2,6 +2,8 @@
 
 ## 0.4.17
 
+- Added quick accessor for is_invalidated and set_invalidated.
+- Renamed `set_invalidate` to `set_invalidated` in config flag.
 
 ## 0.4.16
 

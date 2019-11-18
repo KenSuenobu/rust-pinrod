@@ -113,7 +113,7 @@ impl Layout for HorizontalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_invalidate(true);
+                .set_invalidated(true);
         }
 
         self.invalidated = false;

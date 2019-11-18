@@ -113,7 +113,7 @@ impl Layout for VerticalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_invalidate(true);
+                .set_invalidated(true);
         }
 
         self.invalidated = false;

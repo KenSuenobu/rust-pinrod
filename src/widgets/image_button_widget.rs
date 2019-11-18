@@ -99,7 +99,7 @@ impl ImageButtonWidget {
             .set_color(CONFIG_COLOR_TEXT, Color::RGB(255, 255, 255));
         self.text_widget
             .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     fn draw_unhovered(&mut self) {
@@ -109,7 +109,7 @@ impl ImageButtonWidget {
             .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         self.text_widget
             .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Assigns the callback closure that will be used when a button click is triggered.

@@ -133,7 +133,7 @@ impl Widget for ImageWidget {
     /// Responds to a screen redraw only if the `CONFIG_IMAGE_POSITION` key was changed.
     fn on_config_changed(&mut self, _k: u8, _v: Config) {
         if _k == CONFIG_IMAGE_POSITION {
-            self.get_config().set_invalidate(true);
+            self.get_config().set_invalidated(true);
         }
     }
 

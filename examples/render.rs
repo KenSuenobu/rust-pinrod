@@ -35,12 +35,12 @@ pub fn main() {
         .on_mouse_entered(|x, _widgets, _layouts| {
             x.get_config()
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 0, 0));
-            x.get_config().set_invalidate(true);
+            x.get_config().set_invalidated(true);
             _widgets[0]
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_invalidate(true);
+                .set_invalidated(true);
             eprintln!("Mouse Entered");
         });
 
@@ -49,12 +49,12 @@ pub fn main() {
         .on_mouse_exited(|x, _widgets, _layouts| {
             x.get_config()
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-            x.get_config().set_invalidate(true);
+            x.get_config().set_invalidated(true);
             _widgets[0]
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_invalidate(true);
+                .set_invalidated(true);
             eprintln!("Mouse Exited");
         });
 
