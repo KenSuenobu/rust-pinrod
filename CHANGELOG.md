@@ -1,5 +1,8 @@
 # Pushrod Change Log
 
+## 0.4.17
+
+
 ## 0.4.16
 
 - Added `set_text` and `get_text` accessors to `TextWidget` (#244)
