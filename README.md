@@ -32,13 +32,9 @@ These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 Soon to follow will be:
 
-- [ ] Support for Layouts
-  - [ ] Horizontal Layout
-  - [ ] Vertical Layout
+- [x] Support for Layouts
   - [ ] Dialog or Form Layout
   - [ ] Grid Layout
-- [ ] Vertical Space Widget
-- [ ] Horizontal Space Widget
 - [ ] Menu Bar Widget
 - [ ] Simple Popup Menu Widget
 - [ ] Drop Down Menu Widget
@@ -53,6 +49,9 @@ Soon to follow will be:
 
 ## Additional Items
 
+- [x] Support for Layouts
+  - [x] Horizontal Layout
+  - [x] Vertical Layout
 - [x] Port engine from Piston to SDL2
 - [x] Text Widget
   - [x] OpenSans Font Included
@@ -81,17 +80,17 @@ Soon to follow will be:
   - [x] Mouse Button Up
   - [x] Mouse Entered
   - [x] Mouse Exited
+- [x] Get rid of Point and Size, use array value types instead
+- [x] Horizontal Layout sample application
+- [x] Vertical Layout sample application
+- [x] Update documentation
+- [x] Layout Manager optimizations (call `do_update` at the end of layout)
 - [ ] Modify Event system so that it is a single trait
-- [ ] Get rid of Point and Size, use array value types instead
 - [ ] Fix all `Widget`s so that they draw to a texture
 - [ ] Fix Invalidation such that it walks the children so that drawing is done in order
-- [x] Horizontal Layout sample application
-- [ ] Vertical Layout sample application
-- [ ] Update documentation
 - [ ] Widget offset updates (adding a child origin based on parent)
 - [ ] Optimizations to screen invalidation
 - [ ] Optimizations to drawing (every object is a 3D texture, not just blitting to a master texture)
-- [ ] Layout Manager optimizations (call `do_update` at the end of layout)
 - [ ] `PageWidget`: page controller to contain and swap displays of different pages of containers
 - [ ] `GridLayoutContainer`: layout objects equally sized in a grid
 - [ ] `ToolboxWidget`: layout that displays clickable images and captioned text
@@ -124,4 +123,13 @@ Pushrod only requires:
 
 ```bash
 sudo apt install libsdl2-dev libsdl2-ttf-dev libsdl2-image-dev
+```
+
+### Mac OS X
+
+```bash
+brew update
+brew upgrade
+brew install ruby
+brew install sdl2 sdl2_image sdl2_ttf
 ```
