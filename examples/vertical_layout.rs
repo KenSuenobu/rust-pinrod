@@ -1,6 +1,7 @@
 extern crate pushrod;
 extern crate sdl2;
 
+use pushrod::layouts::vertical_layout::VerticalLayout;
 use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::layout::{Layout, LayoutPosition};
@@ -14,7 +15,6 @@ use pushrod::widgets::push_button_widget::PushButtonWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::fmt::Display;
-use pushrod::layouts::vertical_layout::VerticalLayout;
 
 #[macro_export]
 macro_rules! cast {
