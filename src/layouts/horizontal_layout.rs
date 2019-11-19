@@ -70,16 +70,11 @@ impl Layout for HorizontalLayout {
         }
 
         let offset_x: i32 = self.origin[0];
-        let offset_y: i32 = self.origin[1];
+        let offset_y: i32 = self.origin[1] + self.padding.top;
         let num_widgets = self.widget_ids.len() as u32;
         let widget_width = self.size[SIZE_WIDTH] / num_widgets as u32;
         let subtractor_right = ((self.padding.spacing as f64 / 2.0).ceil()) as u32;
         let subtractor_left = ((self.padding.spacing as f64 / 2.0).floor()) as u32;
-
-        eprintln!(
-            "HorizontalLayout: rightside={} leftside={}",
-            subtractor_right, subtractor_left
-        );
 
         for i in 0..num_widgets {
             let set_x: i32;
@@ -87,11 +82,11 @@ impl Layout for HorizontalLayout {
             let widget_id = self.widget_ids[i as usize];
 
             if i == 0 {
-                set_x = (i * set_width) as i32;
-                set_width = widget_width - subtractor_right;
+                set_x = (i * set_width) as i32 + self.padding.left;
+                set_width = widget_width - subtractor_right - self.padding.left as u32;
             } else if i == num_widgets - 1 {
                 set_x = (i * set_width) as i32 + subtractor_left as i32;
-                set_width = widget_width - subtractor_left;
+                set_width = widget_width - subtractor_left - self.padding.right as u32;
             } else {
                 set_x = (i * set_width) as i32 + subtractor_left as i32;
                 set_width = widget_width - subtractor_left - subtractor_right;
@@ -107,7 +102,11 @@ impl Layout for HorizontalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_size(CONFIG_SIZE, set_width, self.size[SIZE_HEIGHT]);
+                .set_size(
+                    CONFIG_SIZE,
+                    set_width,
+                    self.size[SIZE_HEIGHT] - self.padding.top as u32 - self.padding.bottom as u32,
+                );
 
             _widgets[widget_id as usize]
                 .widget
