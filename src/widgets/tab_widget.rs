@@ -17,10 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{
-    WidgetConfig, CONFIG_COLOR_BASE,
-    CONFIG_ORIGIN, CONFIG_SIZE,
-};
+use crate::render::widget_config::{WidgetConfig, CONFIG_COLOR_BASE, CONFIG_ORIGIN, CONFIG_SIZE};
 use crate::render::{Points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::rect::Point;
