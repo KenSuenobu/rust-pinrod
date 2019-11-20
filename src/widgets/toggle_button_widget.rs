@@ -43,6 +43,7 @@ pub struct ToggleButtonWidget {
     active: bool,
     selected: bool,
     in_bounds: bool,
+    originated: bool,
     on_toggle: OnToggleCallbackType,
 }
 
@@ -105,8 +106,20 @@ impl ToggleButtonWidget {
             active: false,
             selected,
             in_bounds: false,
+            originated: false,
             on_toggle: None,
         }
+    }
+
+    /// Sets the selected state of this `Widget`.
+    pub fn set_selected(&mut self, selected: bool) {
+        self.selected = selected;
+        self.get_config().set_invalidated(true);
+    }
+
+    /// Returns the selected state of this `Widget`: `true` indicates selected, `false` otherwise.
+    pub fn is_selected(&self) -> bool {
+        self.selected
     }
 
     /// Draws the state when the mouse is over the top of the `Widget`.
@@ -125,7 +138,7 @@ impl ToggleButtonWidget {
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
         self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Draws the state when the mouse leaves the scope of the `Widget`.
@@ -144,7 +157,7 @@ impl ToggleButtonWidget {
         self.base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         self.text_widget.set_color(CONFIG_COLOR_TEXT, text_color);
         self.text_widget.set_color(CONFIG_COLOR_BASE, base_color);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Assigns the callback closure that will be used when the `Widget` toggles state.
@@ -207,14 +220,17 @@ impl Widget for ToggleButtonWidget {
             if _state {
                 self.draw_hovered();
                 self.active = true;
+                self.originated = true;
             } else {
                 self.active = false;
 
-                if self.in_bounds {
+                if self.in_bounds && self.originated {
                     self.selected = !self.selected;
                     self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
                     self.call_toggle_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
         }
 

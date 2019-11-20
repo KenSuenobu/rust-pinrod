@@ -273,7 +273,7 @@ impl WidgetCache {
         let cache_size = self.cache.len();
 
         for i in 0..cache_size {
-            if self.cache[i].widget.borrow_mut().get_config().invalidated() {
+            if self.cache[i].widget.borrow_mut().is_invalidated() {
                 self.draw(0, canvas);
 
                 return;
@@ -333,11 +333,7 @@ impl WidgetCache {
             if !is_hidden && is_invalidated {
                 c.set_clip_rect(paint_widget.widget.borrow_mut().get_drawing_area());
                 paint_widget.widget.borrow_mut().draw(c);
-                paint_widget
-                    .widget
-                    .borrow_mut()
-                    .get_config()
-                    .set_invalidate(false);
+                paint_widget.widget.borrow_mut().set_invalidated(false);
                 c.set_clip_rect(top_level_rect);
 
                 needs_present = true;

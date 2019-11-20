@@ -212,7 +212,7 @@ impl WidgetConfig {
     /// the `Widget` needs to be redrawn on the screen, `false` indicates that it its state has
     /// not changed, and its image can be pulled from a buffer if necessary, skipping the `draw`
     /// call.
-    pub fn set_invalidate(&mut self, flag: bool) {
+    pub fn set_invalidated(&mut self, flag: bool) {
         self.invalidated = flag;
     }
 

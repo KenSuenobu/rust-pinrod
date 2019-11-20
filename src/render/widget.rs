@@ -277,7 +277,7 @@ pub trait Widget {
         if _origin[0] != old_origin[0] || _origin[1] != old_origin[1] {
             self.get_config()
                 .set_point(CONFIG_ORIGIN, _origin[0], _origin[1]);
-            self.get_config().set_invalidate(true);
+            self.get_config().set_invalidated(true);
         }
     }
 
@@ -289,7 +289,7 @@ pub trait Widget {
 
         if _size[0] != old_size[0] || _size[1] != old_size[1] {
             self.get_config().set_size(CONFIG_SIZE, _size[0], _size[1]);
-            self.get_config().set_invalidate(true);
+            self.get_config().set_invalidated(true);
         }
     }
 
@@ -301,6 +301,16 @@ pub trait Widget {
             self.get_config().get_size(CONFIG_SIZE)[0],
             self.get_config().get_size(CONFIG_SIZE)[1],
         )
+    }
+
+    /// Returns whether or not a `Widget` is invalidated state.
+    fn is_invalidated(&mut self) -> bool {
+        self.get_config().invalidated()
+    }
+
+    /// Sets invalidation state for the current `Widget`.
+    fn set_invalidated(&mut self, flag: bool) {
+        self.get_config().set_invalidated(flag);
     }
 }
 

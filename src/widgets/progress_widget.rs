@@ -75,7 +75,7 @@ impl ProgressWidget {
             self.progress = progress;
         }
 
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Retrieves the current progress value as a `u8` value.

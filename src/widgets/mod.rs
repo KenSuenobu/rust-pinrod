@@ -44,3 +44,7 @@ pub mod image_button_widget;
 /// box with a black/white color on select.  Rather, it enables/disables a checkbox to indicate a
 /// selected option.
 pub mod checkbox_widget;
+
+/// This is a `TabWidget`, which acts as a container for `ToggleButtonWidget`s that can act as a control
+/// for a tab-controlled container.
+pub mod tab_widget;

@@ -87,7 +87,7 @@ impl TextWidget {
     /// Changes the text displayed in the body of the `Widget`.
     pub fn set_text(&mut self, msg: String) {
         self.msg = msg.clone();
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Retrieves the text currently being displayed in the `TextWidget`.
@@ -150,18 +150,18 @@ impl Widget for TextWidget {
     /// Monitors for changes in the text, color changes, or font sizes.
     fn on_config_changed(&mut self, _k: u8, _v: Config) {
         match _k {
-            CONFIG_COLOR_TEXT => self.get_config().set_invalidate(true),
-            CONFIG_COLOR_BASE => self.get_config().set_invalidate(true),
+            CONFIG_COLOR_TEXT => self.get_config().set_invalidated(true),
+            CONFIG_COLOR_BASE => self.get_config().set_invalidated(true),
             CONFIG_FONT_SIZE => {
                 if let Config::Numeric(size) = _v {
                     self.font_size = size;
-                    self.get_config().set_invalidate(true);
+                    self.get_config().set_invalidated(true);
                 }
             }
             CONFIG_TEXT => {
                 if let Config::Text(text) = _v {
                     self.msg = text.clone();
-                    self.get_config().set_invalidate(true);
+                    self.get_config().set_invalidated(true);
                 }
             }
 

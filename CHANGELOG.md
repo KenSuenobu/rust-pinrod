@@ -1,5 +1,13 @@
 # Pushrod Change Log
 
+## 0.4.17
+
+- Added quick accessor for is_invalidated and set_invalidated.
+- Renamed `set_invalidate` to `set_invalidated` in config flag.
+- Fixed button logic so that callback only occurs when mouse released over the initiated object (#245)
+- Modified `HorizontalLayout` and `VerticalLayout` to respect full padding (#247)
+- Modified layout test so that it contains horizontal and vertical layouts.
+
 ## 0.4.16
 
 - Added `set_text` and `get_text` accessors to `TextWidget` (#244)

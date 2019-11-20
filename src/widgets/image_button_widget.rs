@@ -45,6 +45,7 @@ pub struct ImageButtonWidget {
     image_widget: ImageWidget,
     active: bool,
     in_bounds: bool,
+    originated: bool,
     on_click: OnClickCallbackType,
 }
 
@@ -88,6 +89,7 @@ impl ImageButtonWidget {
             image_widget,
             active: false,
             in_bounds: false,
+            originated: false,
             on_click: None,
         }
     }
@@ -99,7 +101,7 @@ impl ImageButtonWidget {
             .set_color(CONFIG_COLOR_TEXT, Color::RGB(255, 255, 255));
         self.text_widget
             .set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     fn draw_unhovered(&mut self) {
@@ -109,7 +111,7 @@ impl ImageButtonWidget {
             .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         self.text_widget
             .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Assigns the callback closure that will be used when a button click is triggered.
@@ -181,17 +183,20 @@ impl Widget for ImageButtonWidget {
             if _state {
                 self.draw_hovered();
                 self.active = true;
+                self.originated = true;
             } else {
                 let had_bounds = self.active;
 
                 self.draw_unhovered();
                 self.active = false;
 
-                if self.in_bounds && had_bounds {
+                if self.in_bounds && had_bounds && self.originated {
                     // Callback here
                     eprintln!("Call callback here: clicks={}", _clicks);
                     self.call_click_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
         }
 

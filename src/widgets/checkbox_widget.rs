@@ -46,6 +46,7 @@ pub struct CheckboxWidget {
     active: bool,
     selected: bool,
     in_bounds: bool,
+    originated: bool,
     on_toggle: OnToggleCallbackType,
 }
 
@@ -110,6 +111,7 @@ impl CheckboxWidget {
             active: false,
             selected,
             in_bounds: false,
+            originated: false,
             on_toggle: None,
         }
     }
@@ -166,14 +168,14 @@ impl Widget for CheckboxWidget {
     fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = true;
         self.mouse_entered_callback(_widgets, _layouts);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
         self.mouse_exited_callback(_widgets, _layouts);
-        self.get_config().set_invalidate(true);
+        self.get_config().set_invalidated(true);
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
@@ -188,17 +190,20 @@ impl Widget for CheckboxWidget {
         if _button == 1 {
             if _state {
                 self.active = true;
+                self.originated = true;
             } else {
                 self.active = false;
 
-                if self.in_bounds {
+                if self.in_bounds && self.originated {
                     self.selected = !self.selected;
                     self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
                     self.call_toggle_callback(_widgets, _layouts);
                 }
+
+                self.originated = false;
             }
 
-            self.get_config().set_invalidate(true);
+            self.get_config().set_invalidated(true);
         }
 
         self.button_clicked_callback(_widgets, _layouts, _button, _clicks, _state);

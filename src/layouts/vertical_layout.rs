@@ -76,22 +76,17 @@ impl Layout for VerticalLayout {
         let subtractor_bottom = ((self.padding.spacing as f64 / 2.0).ceil()) as u32;
         let subtractor_top = ((self.padding.spacing as f64 / 2.0).floor()) as u32;
 
-        eprintln!(
-            "VerticalLayout: rightside={} leftside={}",
-            subtractor_bottom, subtractor_top
-        );
-
         for i in 0..num_widgets {
             let set_y: i32;
             let mut set_height: u32 = widget_height;
             let widget_id = self.widget_ids[i as usize];
 
             if i == 0 {
-                set_y = (i * set_height) as i32;
-                set_height = widget_height - subtractor_bottom;
+                set_y = (i * set_height) as i32 + self.padding.top;
+                set_height = widget_height - subtractor_bottom - self.padding.top as u32;
             } else if i == num_widgets - 1 {
                 set_y = (i * set_height) as i32 + subtractor_top as i32;
-                set_height = widget_height - subtractor_top;
+                set_height = widget_height - subtractor_top - self.padding.bottom as u32;
             } else {
                 set_y = (i * set_height) as i32 + subtractor_top as i32;
                 set_height = widget_height - subtractor_top - subtractor_bottom;
@@ -101,19 +96,27 @@ impl Layout for VerticalLayout {
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_point(CONFIG_ORIGIN, offset_x, offset_y + set_y);
+                .set_point(
+                    CONFIG_ORIGIN,
+                    offset_x + self.padding.left,
+                    offset_y + set_y,
+                );
 
             _widgets[widget_id as usize]
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_size(CONFIG_SIZE, self.size[SIZE_WIDTH], set_height);
+                .set_size(
+                    CONFIG_SIZE,
+                    self.size[SIZE_WIDTH] - self.padding.right as u32 - self.padding.left as u32,
+                    set_height,
+                );
 
             _widgets[widget_id as usize]
                 .widget
                 .borrow_mut()
                 .get_config()
-                .set_invalidate(true);
+                .set_invalidated(true);
         }
 
         self.invalidated = false;
