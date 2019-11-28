@@ -28,14 +28,33 @@ use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
 
+/// This is an internal store structure that is used by the TabWidget to keep track of the
+/// tabs, and the selected indices in the tab.
+struct TabWidgetStore {
+    tab: String,
+    width: i32,
+    tab_index: u8,
+}
+
+/// This creates a new `TabWidgetStore` structure, used by the `TabWidget`.
+impl TabWidgetStore {
+    pub fn new(tab: String, width: i32, tab_index: u8) -> Self {
+        Self {
+            tab: tab.clone(),
+            width,
+            tab_index,
+        }
+    }
+}
+
 /// This is the storage object for the `TabWidget`.  It stores the config, properties, callback registry,
 /// and the tab widget IDs.
 pub struct TabWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    tabs: Vec<String>,
-    selected_tab: i32,
+    tabs: Vec<TabWidgetStore>,
+    selected_tab: u8,
 }
 
 /// Creates a new `ImageWidget`, which draws an image in a supported image format for SDL2 at a specific

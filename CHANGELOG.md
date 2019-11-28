@@ -1,5 +1,9 @@
 # Pushrod Change Log
 
+## 0.4.18
+
+- Worked on `tab_widget`
+
 ## 0.4.17
 
 - Added quick accessor for is_invalidated and set_invalidated.
