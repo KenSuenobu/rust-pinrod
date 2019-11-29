@@ -44,3 +44,7 @@ pub mod image_button_widget;
 /// box with a black/white color on select.  Rather, it enables/disables a checkbox to indicate a
 /// selected option.
 pub mod checkbox_widget;
+
+/// This is a `SliderWidget` that displays a slider in a movable area, which changes values from min to
+/// max bounds.
+pub mod slider_widget;

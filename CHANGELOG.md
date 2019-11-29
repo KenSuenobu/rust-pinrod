@@ -2,7 +2,7 @@
 
 ## 0.4.18
 
-- Worked on `tab_widget`
+- Adding `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation.
 
 ## 0.4.17
 
