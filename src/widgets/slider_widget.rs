@@ -125,12 +125,19 @@ impl Widget for SliderWidget {
                     Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height + 1))).unwrap();
 
         // Draw slider at current value
-        let slider_width = (width as u32 / (self.max - self.min));
-        let slider_start = self.current * slider_width;
+        let slider_center = (width as u32 / (self.max - self.min)) * self.current;
+        let slider_start = if slider_center <= 10 { 0 } else { slider_center - 10 };
+        let slider_end = slider_center + 10;
+
+        c.set_draw_color(base_color);
+        c.fill_rect(Rect::new(self.get_config().to_x(slider_start as i32),
+        self.get_config().to_y(0), 20, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
 
         c.set_draw_color(Color::RGB(0, 0, 0));
-        c.fill_rect(Rect::new(self.get_config().to_x(slider_start as i32),
-        self.get_config().to_y(0), slider_width, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
+        c.draw_rect(Rect::new(self.get_config().to_x(slider_start as i32),
+                              self.get_config().to_y(0), 20, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
+
+        eprintln!("Center: {}", slider_center);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
@@ -170,9 +177,9 @@ impl Widget for SliderWidget {
 
         current_i32 += _points[POINT_X];
 
-        if current_i32 > self.max as i32 {
+        if current_i32 >= self.max as i32 {
             current_i32 = self.max as i32;
-        } else if current_i32 < self.min as i32 {
+        } else if current_i32 <= self.min as i32 {
             current_i32 = self.min as i32;
         }
 
