@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, SIZE_HEIGHT, SIZE_WIDTH, POINT_X};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -29,6 +29,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use sdl2::rect::{Point, Rect};
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -106,6 +107,30 @@ impl SliderWidget {
 impl Widget for SliderWidget {
     /// Draws the `CheckboxWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>) {
+        let base_color = self.get_color(CONFIG_COLOR_BASE);
+
+        c.set_draw_color(base_color);
+        c.fill_rect(self.get_drawing_area()).unwrap();
+
+        // Draw base - three lines in the center
+        let half_height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT] / 2) as i32;
+        let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
+
+        c.set_draw_color(Color::RGB(192, 192, 192));
+        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height)),
+                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height))).unwrap();
+        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height - 1)),
+                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height - 1))).unwrap();
+        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height + 1)),
+                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height + 1))).unwrap();
+
+        // Draw slider at current value
+        let slider_width = (width as u32 / (self.max - self.min));
+        let slider_start = self.current * slider_width;
+
+        c.set_draw_color(Color::RGB(0, 0, 0));
+        c.fill_rect(Rect::new(self.get_config().to_x(slider_start as i32),
+        self.get_config().to_y(0), slider_width, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
@@ -116,6 +141,22 @@ impl Widget for SliderWidget {
     /// When a mouse exits the bounds of the `Widget`, this function is triggered.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
+    }
+
+    /// When a mouse is moved in the bounds of this `Widget`, this function is triggered.
+    fn mouse_moved(
+        &mut self,
+        _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
+        points: Points,
+    ) {
+        if self.in_bounds && self.active && self.originated {
+            let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
+            let slider_width = (width as u32 / (self.max - self.min));
+            self.current = (points[POINT_X] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_X]) as u32 / slider_width;
+
+            self.get_config().set_invalidated(true);
+        }
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
@@ -133,13 +174,6 @@ impl Widget for SliderWidget {
                 self.originated = true;
             } else {
                 self.active = false;
-
-                if self.in_bounds && self.originated {
-//                    self.selected = !self.selected;
-//                    self.set_toggle(CONFIG_SELECTED_STATE, self.selected);
-//                    self.call_toggle_callback(_widgets, _layouts);
-                }
-
                 self.originated = false;
             }
 

@@ -3,6 +3,7 @@
 ## 0.4.18
 
 - Adding `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation.
+- Added `slider` example, added `SliderHorizontal` orientation for testing.
 
 ## 0.4.17
 
