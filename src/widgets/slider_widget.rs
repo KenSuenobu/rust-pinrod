@@ -159,6 +159,28 @@ impl Widget for SliderWidget {
         }
     }
 
+    /// Handles the scrolling functionality.
+    fn mouse_scrolled(
+        &mut self,
+        _widgets: &[WidgetContainer],
+        _layouts: &[LayoutContainer],
+        _points: Points,
+    ) {
+        let mut current_i32 = self.current as i32;
+
+        current_i32 += _points[POINT_X];
+
+        if current_i32 > self.max as i32 {
+            current_i32 = self.max as i32;
+        } else if current_i32 < self.min as i32 {
+            current_i32 = self.min as i32;
+        }
+
+        self.current = current_i32 as u32;
+
+        self.get_config().set_invalidated(true);
+    }
+
     /// Overrides the `button_clicked` callback to handle toggling.
     fn button_clicked(
         &mut self,
