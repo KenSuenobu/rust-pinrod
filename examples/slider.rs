@@ -2,12 +2,8 @@ extern crate pushrod;
 extern crate sdl2;
 
 use pushrod::render::engine::Engine;
-use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER};
-use pushrod::widgets::toggle_button_widget::ToggleButtonWidget;
-use sdl2::pixels::Color;
-use pushrod::widgets::slider_widget::{SliderWidget, SliderOrientation};
 use pushrod::widgets::slider_widget::SliderOrientation::SliderHorizontal;
+use pushrod::widgets::slider_widget::{SliderOrientation, SliderWidget};
 
 /*
  * This demo just tests the rendering functionality of the `BaseWidget`.  It only tests the
@@ -25,6 +21,10 @@ pub fn main() {
         .unwrap();
     let mut engine = Engine::new(400, 100);
     let mut slider1 = SliderWidget::new(20, 20, 360, 20, 0, 100, 20, SliderHorizontal);
+
+    slider1.on_value_changed(|slider, _widgets, _layouts, pos| {
+        eprintln!("Slider moved: {}", pos);
+    });
 
     engine.add_widget(Box::new(slider1), String::from("slider1"));
 

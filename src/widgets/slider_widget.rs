@@ -17,23 +17,21 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, SIZE_HEIGHT, SIZE_WIDTH, POINT_X};
+use crate::render::{Points, POINT_X, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
-use crate::render::widget_config::CompassPosition::Center;
-use crate::widgets::image_widget::ImageWidget;
-use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use sdl2::rect::{Point, Rect};
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
-pub type OnValueChangedCallbackType = Option<Box<dyn FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32)>>;
+pub type OnValueChangedCallbackType =
+    Option<Box<dyn FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32)>>;
 
 pub enum SliderOrientation {
     SliderHorizontal,
@@ -58,9 +56,8 @@ pub struct SliderWidget {
 /// This is the implementation of the `SliderWidget` that draws a button on the screen that can be
 /// toggled on or off.
 impl SliderWidget {
-    /// Creates a new `CheckboxWidget` given the `x, y, w, h` coordinates, the `text` to display
-    /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
-    /// being checked, `false` otherwise.
+    /// Creates a new `SliderWidget` given the `x, y, w, h` coordinates, sets the min and max values,
+    /// the current value, and the orientation of the slider as drawn.
     pub fn new(
         x: i32,
         y: i32,
@@ -88,14 +85,18 @@ impl SliderWidget {
 
     /// Assigns the callback closure that will be used when the `Widget` changes value.
     pub fn on_value_changed<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32) + 'static,
+    where
+        F: FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32) + 'static,
     {
         self.on_value_changed = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_value_changed` callback.
-    fn call_value_changed_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
+    fn call_value_changed_callback(
+        &mut self,
+        widgets: &[WidgetContainer],
+        layouts: &[LayoutContainer],
+    ) {
         if let Some(mut cb) = self.on_value_changed.take() {
             cb(self, widgets, layouts, self.current);
             self.on_value_changed = Some(cb);
@@ -105,7 +106,7 @@ impl SliderWidget {
 
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
-    /// Draws the `CheckboxWidget` contents.
+    /// Draws the `SliderWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>) {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
@@ -117,27 +118,69 @@ impl Widget for SliderWidget {
         let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
 
         c.set_draw_color(Color::RGB(192, 192, 192));
-        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height)),
-                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height))).unwrap();
-        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height - 1)),
-                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height - 1))).unwrap();
-        c.draw_line(Point::new(self.get_config().to_x(0), self.get_config().to_y(half_height + 1)),
-                    Point::new(self.get_config().to_x(width), self.get_config().to_y(half_height + 1))).unwrap();
+        c.draw_line(
+            Point::new(
+                self.get_config().to_x(0),
+                self.get_config().to_y(half_height),
+            ),
+            Point::new(
+                self.get_config().to_x(width),
+                self.get_config().to_y(half_height),
+            ),
+        )
+        .unwrap();
+        c.draw_line(
+            Point::new(
+                self.get_config().to_x(0),
+                self.get_config().to_y(half_height - 1),
+            ),
+            Point::new(
+                self.get_config().to_x(width),
+                self.get_config().to_y(half_height - 1),
+            ),
+        )
+        .unwrap();
+        c.draw_line(
+            Point::new(
+                self.get_config().to_x(0),
+                self.get_config().to_y(half_height + 1),
+            ),
+            Point::new(
+                self.get_config().to_x(width),
+                self.get_config().to_y(half_height + 1),
+            ),
+        )
+        .unwrap();
 
         // Draw slider at current value
-        let slider_center = (width as u32 / (self.max - self.min)) * self.current;
-        let slider_start = if slider_center <= 10 { 0 } else { slider_center - 10 };
-        let slider_end = slider_center + 10;
+        let slider_center = ((width as f64 / self.max as f64) * self.current as f64) as u32;
+        let mut slider_start = if slider_center <= 15 {
+            0
+        } else {
+            slider_center - 15
+        };
+
+        if slider_center >= width as u32 - 15 {
+            slider_start = width as u32 - 30;
+        }
 
         c.set_draw_color(base_color);
-        c.fill_rect(Rect::new(self.get_config().to_x(slider_start as i32),
-        self.get_config().to_y(0), 20, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
+        c.fill_rect(Rect::new(
+            self.get_config().to_x(slider_start as i32),
+            self.get_config().to_y(0),
+            30,
+            self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
+        ))
+        .unwrap();
 
         c.set_draw_color(Color::RGB(0, 0, 0));
-        c.draw_rect(Rect::new(self.get_config().to_x(slider_start as i32),
-                              self.get_config().to_y(0), 20, self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]));
-
-        eprintln!("Center: {}", slider_center);
+        c.draw_rect(Rect::new(
+            self.get_config().to_x(slider_start as i32),
+            self.get_config().to_y(0),
+            30,
+            self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
+        ))
+        .unwrap();
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
@@ -159,10 +202,15 @@ impl Widget for SliderWidget {
     ) {
         if self.in_bounds && self.active && self.originated {
             let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
-            let slider_width = (width as u32 / (self.max - self.min));
-            self.current = (points[POINT_X] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_X]) as u32 / slider_width;
+            let position_x =
+                points[POINT_X] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_X] as i32;
+            let percentage = position_x as f64 / width as f64;
+            let actual = (percentage * self.max as f64) as u32;
+
+            self.current = actual;
 
             self.get_config().set_invalidated(true);
+            self.call_value_changed_callback(_widgets, _layouts);
         }
     }
 
@@ -186,6 +234,7 @@ impl Widget for SliderWidget {
         self.current = current_i32 as u32;
 
         self.get_config().set_invalidated(true);
+        self.call_value_changed_callback(_widgets, _layouts);
     }
 
     /// Overrides the `button_clicked` callback to handle toggling.
