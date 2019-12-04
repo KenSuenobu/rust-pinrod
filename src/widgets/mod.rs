@@ -45,6 +45,6 @@ pub mod image_button_widget;
 /// selected option.
 pub mod checkbox_widget;
 
-/// This is a `TabWidget`, which acts as a container for `ToggleButtonWidget`s that can act as a control
-/// for a tab-controlled container.
-pub mod tab_widget;
+/// This is a `SliderWidget` that displays a slider in a movable area, which changes values from min to
+/// max bounds.
+pub mod slider_widget;

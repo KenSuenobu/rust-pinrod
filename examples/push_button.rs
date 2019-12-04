@@ -3,7 +3,7 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER};
+use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER};
 use pushrod::widgets::push_button_widget::PushButtonWidget;
 use sdl2::pixels::Color;
 
@@ -26,7 +26,7 @@ pub fn main() {
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button1.on_click(|x, _widgets, _layouts| {
+    button1.on_click(|_x, _widgets, _layouts| {
         eprintln!("Click me clicked!");
     });
 

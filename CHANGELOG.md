@@ -1,5 +1,15 @@
 # Pushrod Change Log
 
+## 0.4.18
+
+- Added `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation. (#30)
+- Added `slider` example, added `SliderHorizontal` orientation for testing.
+- Added mouse scrolling functionality to slider.
+- Implemented min/max for `SliderWidget`
+- Added PartialEq to SliderOrientation
+- Added Vertical orientation code for slider widget.
+- Generic code clean-up, reformatting, and clippy.
+
 ## 0.4.17
 
 - Added quick accessor for is_invalidated and set_invalidated.
