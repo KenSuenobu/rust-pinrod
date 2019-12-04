@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, POINT_X, SIZE_HEIGHT, SIZE_WIDTH};
+use crate::render::{Points, POINT_X, SIZE_HEIGHT, SIZE_WIDTH, POINT_Y};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -27,12 +27,14 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
 pub type OnValueChangedCallbackType =
     Option<Box<dyn FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32)>>;
 
+#[derive(PartialEq)]
 pub enum SliderOrientation {
     SliderHorizontal,
     SliderVertical,
@@ -108,79 +110,157 @@ impl SliderWidget {
 impl Widget for SliderWidget {
     /// Draws the `SliderWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>) {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+        if self.orientation == SliderHorizontal {
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            c.set_draw_color(base_color);
+            c.fill_rect(self.get_drawing_area()).unwrap();
 
-        // Draw base - three lines in the center
-        let half_height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT] / 2) as i32;
-        let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
+            // Draw base - three lines in the center
+            let half_height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT] / 2) as i32;
+            let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
 
-        c.set_draw_color(Color::RGB(192, 192, 192));
-        c.draw_line(
-            Point::new(
+            c.set_draw_color(Color::RGB(192, 192, 192));
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(0),
+                    self.get_config().to_y(half_height),
+                ),
+                Point::new(
+                    self.get_config().to_x(width),
+                    self.get_config().to_y(half_height),
+                ),
+            )
+                .unwrap();
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(0),
+                    self.get_config().to_y(half_height - 1),
+                ),
+                Point::new(
+                    self.get_config().to_x(width),
+                    self.get_config().to_y(half_height - 1),
+                ),
+            )
+                .unwrap();
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(0),
+                    self.get_config().to_y(half_height + 1),
+                ),
+                Point::new(
+                    self.get_config().to_x(width),
+                    self.get_config().to_y(half_height + 1),
+                ),
+            )
+                .unwrap();
+
+            // Draw slider at current value
+            let full_range = self.max - self.min;
+            let slider_center = ((width as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
+            let mut slider_start = if slider_center <= 15 {
+                0
+            } else {
+                slider_center - 15
+            };
+
+            if slider_center >= width as u32 - 15 {
+                slider_start = width as u32 - 30;
+            }
+
+            c.set_draw_color(base_color);
+            c.fill_rect(Rect::new(
+                self.get_config().to_x(slider_start as i32),
+                self.get_config().to_y(0),
+                30,
+                self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
+            ))
+                .unwrap();
+
+            c.set_draw_color(Color::RGB(0, 0, 0));
+            c.draw_rect(Rect::new(
+                self.get_config().to_x(slider_start as i32),
+                self.get_config().to_y(0),
+                30,
+                self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
+            ))
+                .unwrap();
+        } else if self.orientation == SliderVertical {
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+
+            c.set_draw_color(base_color);
+            c.fill_rect(self.get_drawing_area()).unwrap();
+
+            // Draw base - three lines in the center
+            let half_width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH] / 2) as i32;
+            let height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]) as i32;
+
+            c.set_draw_color(Color::RGB(192, 192, 192));
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(half_width),
+                    self.get_config().to_y(0),
+                ),
+                Point::new(
+                    self.get_config().to_x(half_width),
+                    self.get_config().to_y(height),
+                ),
+            )
+                .unwrap();
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(half_width - 1),
+                    self.get_config().to_y(0),
+                ),
+                Point::new(
+                    self.get_config().to_x(half_width - 1),
+                    self.get_config().to_y(height),
+                ),
+            )
+                .unwrap();
+            c.draw_line(
+                Point::new(
+                    self.get_config().to_x(half_width + 1),
+                    self.get_config().to_y(0),
+                ),
+                Point::new(
+                    self.get_config().to_x(half_width + 1),
+                    self.get_config().to_y(height),
+                ),
+            )
+                .unwrap();
+
+            // Draw slider at current value
+            let full_range = self.max - self.min;
+            let slider_center = ((height as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
+            let mut slider_start = if slider_center <= 15 {
+                0
+            } else {
+                slider_center - 15
+            };
+
+            if slider_center >= height as u32 - 15 {
+                slider_start = height as u32 - 30;
+            }
+
+            c.set_draw_color(base_color);
+            c.fill_rect(Rect::new(
                 self.get_config().to_x(0),
-                self.get_config().to_y(half_height),
-            ),
-            Point::new(
-                self.get_config().to_x(width),
-                self.get_config().to_y(half_height),
-            ),
-        )
-        .unwrap();
-        c.draw_line(
-            Point::new(
-                self.get_config().to_x(0),
-                self.get_config().to_y(half_height - 1),
-            ),
-            Point::new(
-                self.get_config().to_x(width),
-                self.get_config().to_y(half_height - 1),
-            ),
-        )
-        .unwrap();
-        c.draw_line(
-            Point::new(
-                self.get_config().to_x(0),
-                self.get_config().to_y(half_height + 1),
-            ),
-            Point::new(
-                self.get_config().to_x(width),
-                self.get_config().to_y(half_height + 1),
-            ),
-        )
-        .unwrap();
+                self.get_config().to_y(slider_start as i32),
+                self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
+                30,
+            ))
+                .unwrap();
 
-        // Draw slider at current value
-        let slider_center = ((width as f64 / self.max as f64) * self.current as f64) as u32;
-        let mut slider_start = if slider_center <= 15 {
-            0
-        } else {
-            slider_center - 15
-        };
-
-        if slider_center >= width as u32 - 15 {
-            slider_start = width as u32 - 30;
+            c.set_draw_color(Color::RGB(0, 0, 0));
+            c.draw_rect(Rect::new(
+                self.get_config().to_x(0),
+                self.get_config().to_y(slider_start as i32),
+                self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
+                30,
+            ))
+                .unwrap();
         }
-
-        c.set_draw_color(base_color);
-        c.fill_rect(Rect::new(
-            self.get_config().to_x(slider_start as i32),
-            self.get_config().to_y(0),
-            30,
-            self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
-        ))
-        .unwrap();
-
-        c.set_draw_color(Color::RGB(0, 0, 0));
-        c.draw_rect(Rect::new(
-            self.get_config().to_x(slider_start as i32),
-            self.get_config().to_y(0),
-            30,
-            self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
-        ))
-        .unwrap();
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
@@ -201,16 +281,31 @@ impl Widget for SliderWidget {
         points: Points,
     ) {
         if self.in_bounds && self.active && self.originated {
-            let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
-            let position_x =
-                points[POINT_X] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_X] as i32;
-            let percentage = position_x as f64 / width as f64;
-            let actual = (percentage * self.max as f64) as u32;
+            if self.orientation == SliderHorizontal {
+                let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
+                let position_x =
+                    points[POINT_X] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_X] as i32;
+                let percentage = position_x as f64 / width as f64;
+                let full_range = self.max - self.min;
+                let actual = (percentage * full_range as f64) as u32;
 
-            self.current = actual;
+                self.current = self.min + actual;
 
-            self.get_config().set_invalidated(true);
-            self.call_value_changed_callback(_widgets, _layouts);
+                self.get_config().set_invalidated(true);
+                self.call_value_changed_callback(_widgets, _layouts);
+            } else if self.orientation == SliderVertical {
+                let height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]) as i32;
+                let position_y =
+                    points[POINT_Y] - self.get_config().get_point(CONFIG_ORIGIN)[POINT_Y] as i32;
+                let percentage = position_y as f64 / height as f64;
+                let full_range = self.max - self.min;
+                let actual = (percentage * full_range as f64) as u32;
+
+                self.current = self.min + actual;
+
+                self.get_config().set_invalidated(true);
+                self.call_value_changed_callback(_widgets, _layouts);
+            }
         }
     }
 
@@ -219,11 +314,15 @@ impl Widget for SliderWidget {
         &mut self,
         _widgets: &[WidgetContainer],
         _layouts: &[LayoutContainer],
-        _points: Points,
+        points: Points,
     ) {
         let mut current_i32 = self.current as i32;
 
-        current_i32 += _points[POINT_X];
+        if self.orientation == SliderHorizontal {
+            current_i32 += points[POINT_X];
+        } else if self.orientation == SliderVertical {
+            current_i32 += -points[POINT_Y];
+        }
 
         if current_i32 >= self.max as i32 {
             current_i32 = self.max as i32;
