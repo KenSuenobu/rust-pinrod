@@ -2,6 +2,7 @@
 
 ## 0.4.19
 
+- Removed redraw debugging.
 
 ## 0.4.18
 

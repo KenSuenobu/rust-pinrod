@@ -34,9 +34,13 @@ use std::collections::HashMap;
 pub type OnValueChangedCallbackType =
     Option<Box<dyn FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32)>>;
 
+/// These are the possible slider orientations.
 #[derive(PartialEq)]
 pub enum SliderOrientation {
+    /// Indicates a horizontally controllable slider.
     SliderHorizontal,
+
+    /// Indicates a vertically controllable slider.
     SliderVertical,
 }
 
@@ -55,11 +59,11 @@ pub struct SliderWidget {
     on_value_changed: OnValueChangedCallbackType,
 }
 
-/// This is the implementation of the `SliderWidget` that draws a button on the screen that can be
-/// toggled on or off.
+/// This is the implementation of the `SliderWidget`, a control that draws a bounds line indicator, and a
+/// draggable slider.
 impl SliderWidget {
-    /// Creates a new `SliderWidget` given the `x, y, w, h` coordinates, sets the min and max values,
-    /// the current value, and the orientation of the slider as drawn.
+    /// Creates a new `SliderWidget` given the `x, y, w, h` coordinates, sets the `min` and `max` values,
+    /// the `current` value, and the `orientation` of the slider as drawn.
     pub fn new(
         x: i32,
         y: i32,

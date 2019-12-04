@@ -325,11 +325,6 @@ impl WidgetCache {
                 .get_config()
                 .get_size(CONFIG_SIZE)[1];
 
-            eprintln!(
-                "Widget redraw: id={:?} hidden={} invalidated={}",
-                paint_id, is_hidden, is_invalidated
-            );
-
             if !is_hidden && is_invalidated {
                 c.set_clip_rect(paint_widget.widget.borrow_mut().get_drawing_area());
                 paint_widget.widget.borrow_mut().draw(c);
@@ -351,7 +346,6 @@ impl WidgetCache {
         }
 
         if needs_present {
-            eprintln!("Presenting canvas.");
             c.present();
         }
     }
