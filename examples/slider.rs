@@ -6,7 +6,7 @@ use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::CONFIG_COLOR_TEXT;
 use pushrod::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
-use pushrod::widgets::slider_widget::{SliderOrientation, SliderWidget};
+use pushrod::widgets::slider_widget::SliderWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 
@@ -39,7 +39,7 @@ pub fn main() {
     let mut engine = Engine::new(400, 300);
     let mut slider1 = SliderWidget::new(20, 20, 300, 20, 0, 100, 20, SliderHorizontal);
 
-    slider1.on_value_changed(|slider, _widgets, _layouts, pos| {
+    slider1.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text1_id = widget_id_for_name(_widgets, String::from("text1"));
 
         cast!(_widgets, text1_id, TextWidget).set_text(format!("{}", pos));
@@ -63,7 +63,7 @@ pub fn main() {
 
     let mut slider2 = SliderWidget::new(20, 50, 300, 20, 20, 80, 40, SliderHorizontal);
 
-    slider2.on_value_changed(|slider, _widgets, _layouts, pos| {
+    slider2.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text2_id = widget_id_for_name(_widgets, String::from("text2"));
 
         cast!(_widgets, text2_id, TextWidget).set_text(format!("{}", pos));
@@ -87,7 +87,7 @@ pub fn main() {
 
     let mut slider3 = SliderWidget::new(30, 80, 20, 170, 0, 100, 0, SliderVertical);
 
-    slider3.on_value_changed(|slider, _widgets, _layouts, pos| {
+    slider3.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text3_id = widget_id_for_name(_widgets, String::from("text3"));
 
         cast!(_widgets, text3_id, TextWidget).set_text(format!("{}", pos));
@@ -111,7 +111,7 @@ pub fn main() {
 
     let mut slider4 = SliderWidget::new(60, 80, 20, 170, 20, 80, 40, SliderVertical);
 
-    slider4.on_value_changed(|slider, _widgets, _layouts, pos| {
+    slider4.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text4_id = widget_id_for_name(_widgets, String::from("text4"));
 
         cast!(_widgets, text4_id, TextWidget).set_text(format!("{}", pos));
