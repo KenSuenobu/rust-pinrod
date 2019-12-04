@@ -8,6 +8,7 @@
 - Implemented min/max for `SliderWidget`
 - Added PartialEq to SliderOrientation
 - Added Vertical orientation code for slider widget.
+- Generic code clean-up, reformatting, and clippy.
 
 ## 0.4.17
 

@@ -159,15 +159,13 @@ impl Widget for SliderWidget {
             let full_range = self.max - self.min;
             let slider_center =
                 ((width as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
-            let mut slider_start = if slider_center <= 15 {
+            let slider_start = if slider_center >= width as u32 - 15 {
+                width as u32 - 30
+            } else if slider_center <= 15 {
                 0
             } else {
                 slider_center - 15
             };
-
-            if slider_center >= width as u32 - 15 {
-                slider_start = width as u32 - 30;
-            }
 
             c.set_draw_color(base_color);
             c.fill_rect(Rect::new(
@@ -235,15 +233,13 @@ impl Widget for SliderWidget {
             let full_range = self.max - self.min;
             let slider_center =
                 ((height as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
-            let mut slider_start = if slider_center <= 15 {
+            let slider_start = if slider_center >= height as u32 - 15 {
+                height as u32 - 30
+            } else if slider_center <= 15 {
                 0
             } else {
                 slider_center - 15
             };
-
-            if slider_center >= height as u32 - 15 {
-                slider_start = height as u32 - 30;
-            }
 
             c.set_draw_color(base_color);
             c.fill_rect(Rect::new(

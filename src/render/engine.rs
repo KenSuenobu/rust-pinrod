@@ -83,6 +83,11 @@ impl Engine {
         self.layout_cache.add_layout(layout)
     }
 
+    /// Sets running flag: `false` shuts down the engine.
+    pub fn set_running(&mut self, state: bool) {
+        self.running = state;
+    }
+
     /// Main application run loop, controls interaction between the user and the application.
     pub fn run(&mut self, sdl: Sdl, window: Window) {
         let mut canvas = window.into_canvas().software().build().unwrap();
