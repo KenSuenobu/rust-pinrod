@@ -1,5 +1,8 @@
 # Pushrod Change Log
 
+## 0.4.19
+
+
 ## 0.4.18
 
 - Added `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation. (#30)
