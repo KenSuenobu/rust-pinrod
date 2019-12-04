@@ -17,17 +17,17 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, POINT_X, SIZE_HEIGHT, SIZE_WIDTH, POINT_Y};
+use crate::render::{Points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -131,7 +131,7 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(half_height),
                 ),
             )
-                .unwrap();
+            .unwrap();
             c.draw_line(
                 Point::new(
                     self.get_config().to_x(0),
@@ -142,7 +142,7 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(half_height - 1),
                 ),
             )
-                .unwrap();
+            .unwrap();
             c.draw_line(
                 Point::new(
                     self.get_config().to_x(0),
@@ -153,11 +153,12 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(half_height + 1),
                 ),
             )
-                .unwrap();
+            .unwrap();
 
             // Draw slider at current value
             let full_range = self.max - self.min;
-            let slider_center = ((width as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
+            let slider_center =
+                ((width as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
             let mut slider_start = if slider_center <= 15 {
                 0
             } else {
@@ -175,7 +176,7 @@ impl Widget for SliderWidget {
                 30,
                 self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
             ))
-                .unwrap();
+            .unwrap();
 
             c.set_draw_color(Color::RGB(0, 0, 0));
             c.draw_rect(Rect::new(
@@ -184,7 +185,7 @@ impl Widget for SliderWidget {
                 30,
                 self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
             ))
-                .unwrap();
+            .unwrap();
         } else if self.orientation == SliderVertical {
             let base_color = self.get_color(CONFIG_COLOR_BASE);
 
@@ -206,7 +207,7 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(height),
                 ),
             )
-                .unwrap();
+            .unwrap();
             c.draw_line(
                 Point::new(
                     self.get_config().to_x(half_width - 1),
@@ -217,7 +218,7 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(height),
                 ),
             )
-                .unwrap();
+            .unwrap();
             c.draw_line(
                 Point::new(
                     self.get_config().to_x(half_width + 1),
@@ -228,11 +229,12 @@ impl Widget for SliderWidget {
                     self.get_config().to_y(height),
                 ),
             )
-                .unwrap();
+            .unwrap();
 
             // Draw slider at current value
             let full_range = self.max - self.min;
-            let slider_center = ((height as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
+            let slider_center =
+                ((height as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
             let mut slider_start = if slider_center <= 15 {
                 0
             } else {
@@ -250,7 +252,7 @@ impl Widget for SliderWidget {
                 self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
                 30,
             ))
-                .unwrap();
+            .unwrap();
 
             c.set_draw_color(Color::RGB(0, 0, 0));
             c.draw_rect(Rect::new(
@@ -259,7 +261,7 @@ impl Widget for SliderWidget {
                 self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
                 30,
             ))
-                .unwrap();
+            .unwrap();
         }
     }
 

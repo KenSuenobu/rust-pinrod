@@ -2,11 +2,12 @@
 
 ## 0.4.18
 
-- Adding `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation.
+- Added `SliderWidget`, added `SliderOrientation` for horizontal or vertical orientation. (#30)
 - Added `slider` example, added `SliderHorizontal` orientation for testing.
 - Added mouse scrolling functionality to slider.
 - Implemented min/max for `SliderWidget`
 - Added PartialEq to SliderOrientation
+- Added Vertical orientation code for slider widget.
 
 ## 0.4.17
 

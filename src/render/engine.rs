@@ -28,6 +28,7 @@ pub struct Engine {
     widget_cache: WidgetCache,
     layout_cache: LayoutCache,
     current_widget_id: i32,
+    running: bool,
 }
 
 /// This is the heart of the Pushrod event engine, and is what is used to drive the interaction
@@ -67,6 +68,7 @@ impl Engine {
             widget_cache: cache,
             layout_cache: LayoutCache::default(),
             current_widget_id: 0,
+            running: true,
         }
     }
 
@@ -166,6 +168,10 @@ impl Engine {
             self.widget_cache.draw_loop(&mut canvas);
 
             ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+
+            if !self.running {
+                break 'running;
+            }
         }
     }
 }
