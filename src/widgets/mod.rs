@@ -48,3 +48,7 @@ pub mod checkbox_widget;
 /// This is a `SliderWidget` that displays a slider in a movable area, which changes values from min to
 /// max bounds.
 pub mod slider_widget;
+
+/// This is a `GridWidget` that contains a number of `Widget`s that can be repositioned and snapped to
+/// a grid coordinate.
+pub mod grid_widget;
