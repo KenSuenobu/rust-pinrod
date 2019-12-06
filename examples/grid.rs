@@ -1,16 +1,16 @@
 extern crate pushrod;
 extern crate sdl2;
 
+use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT};
 use pushrod::widgets::grid_widget::GridWidget;
 use pushrod::widgets::push_button_widget::PushButtonWidget;
-use sdl2::pixels::Color;
-use pushrod::widgets::slider_widget::SliderWidget;
 use pushrod::widgets::slider_widget::SliderOrientation::SliderHorizontal;
-use pushrod::render::callbacks::widget_id_for_name;
-use pushrod::widgets::text_widget::{TextWidget, TextJustify};
+use pushrod::widgets::slider_widget::SliderWidget;
+use pushrod::widgets::text_widget::{TextJustify, TextWidget};
+use sdl2::pixels::Color;
 
 /*
  * This demo just tests the rendering functionality of the `BaseWidget`.  It only tests the

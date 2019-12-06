@@ -17,13 +17,12 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
+use crate::render::{Points, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
-use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
