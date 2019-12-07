@@ -13,7 +13,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 180);
+    let mut engine = Engine::new(400, 180, 60);
     let widget1 = ImageButtonWidget::new(
         20,
         20,

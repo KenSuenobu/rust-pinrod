@@ -3,6 +3,9 @@
 ## 0.4.20
 
 - Sample applications cleanup
+- Added `fps` to `engine::new`, which enables CPU throttling for app as appropriate
+- Modified engine `run` loop to measure time flux for CPU and implements thread sleep as appropriate (#259)
+- Modified `grid` example so that the minimum is 1, not 0 (step cannot be 0 in the grid)
 
 ## 0.4.19
 

@@ -30,7 +30,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 180);
+    let mut engine = Engine::new(400, 180, 30);
     let mut widget1 = ProgressWidget::new(20, 20, 360, 40, 25);
 
     widget1.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));

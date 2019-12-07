@@ -38,7 +38,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 300);
+    let mut engine = Engine::new(400, 300, 60);
     let mut layout = HorizontalLayout::new(20, 20, 360, 80, PaddingConstraint::new(0, 0, 0, 0, 1));
     let mut layout2 =
         VerticalLayout::new(250, 120, 130, 160, PaddingConstraint::new(0, 0, 0, 0, 1));

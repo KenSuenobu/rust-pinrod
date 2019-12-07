@@ -20,7 +20,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(800, 600);
+    let mut engine = Engine::new(800, 600, 30);
     let mut new_base_widget = BaseWidget::new(100, 100, 600, 400);
 
     new_base_widget

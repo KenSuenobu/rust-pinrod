@@ -21,7 +21,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 100);
+    let mut engine = Engine::new(400, 100, 60);
     let mut button1 = ToggleButtonWidget::new(20, 20, 170, 60, String::from("1"), 40, false);
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
