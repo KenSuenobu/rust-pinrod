@@ -6,7 +6,6 @@ use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT};
 use pushrod::widgets::grid_widget::GridWidget;
-use pushrod::widgets::push_button_widget::PushButtonWidget;
 use pushrod::widgets::slider_widget::SliderOrientation::SliderHorizontal;
 use pushrod::widgets::slider_widget::SliderWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};

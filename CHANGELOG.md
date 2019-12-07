@@ -2,6 +2,7 @@
 
 ## 0.4.20
 
+- Sample applications cleanup
 
 ## 0.4.19
 

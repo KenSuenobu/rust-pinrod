@@ -2,10 +2,7 @@ extern crate pushrod;
 extern crate sdl2;
 
 use pushrod::render::engine::Engine;
-use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
 use pushrod::widgets::checkbox_widget::*;
-use sdl2::pixels::Color;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
