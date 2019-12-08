@@ -52,3 +52,6 @@ pub mod slider_widget;
 /// This is a `GridWidget` that contains a number of `Widget`s that can be repositioned and snapped to
 /// a grid coordinate.
 pub mod grid_widget;
+
+/// This is a `ListWidget` that displays a list of items in a selectable box.
+pub mod list_widget;
