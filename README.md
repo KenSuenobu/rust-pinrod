@@ -39,12 +39,10 @@ Soon to follow will be:
 - [ ] Simple Popup Menu Widget
 - [ ] Drop Down Menu Widget
 - [ ] Drop Down Menu Button Widget
-- [ ] Grid Widget
 - [ ] Toolbox Widget
 - [ ] Tab Widget
 - [ ] Group Box Widget
 - [ ] Split Container Widget
-- [ ] Slider Widget
 - [ ] Viewport Widget that adjusts a viewable area with scrolling
 
 ## Additional Items
@@ -62,6 +60,8 @@ Soon to follow will be:
 - [x] Image Button Widget
 - [x] Toggle Button Widget
 - [x] Checkbox Widget
+- [x] Slider Widget
+- [x] Grid Widget
 - [x] Fix build so that it builds on TravisCI for both OSes properly
 - [x] New traits for optimization:
   - [x] `Drawable`
@@ -94,8 +94,6 @@ Soon to follow will be:
 - [ ] `PageWidget`: page controller to contain and swap displays of different pages of containers
 - [ ] `GridLayoutContainer`: layout objects equally sized in a grid
 - [ ] `ToolboxWidget`: layout that displays clickable images and captioned text
-- [ ] `HorizontalSpaceWidget`: horizontal spacer for layout containers
-- [ ] `VerticalSpaceWidget`: vertical spacer for layout containers
 - [ ] `DropdownMenuWidget`: displays a dropdown menu with selectable items in a list
 - [ ] `SplitContainerWidget`: splits two displays horizontally or vertically by a resizable spacer
 - [ ] `GridWidget`: displays a grid (either by lines or dots) evenly spaced by a grid snap offset
