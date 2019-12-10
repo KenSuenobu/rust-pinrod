@@ -71,6 +71,15 @@ impl ListWidget {
         }
     }
 
+    /// Adds a text item to the `ListWidget`.
+    pub fn add_item(&mut self, item: String) -> usize {
+        let item_size = self.list_items.len() + 1;
+
+        self.list_items.push(item.clone());
+
+        item_size
+    }
+
 //    /// Assigns the callback closure that will be used when the `Widget` changes value.
 //    pub fn on_value_changed<F>(&mut self, callback: F)
 //        where
