@@ -9,6 +9,8 @@
 - Updated documentation to fix `Engine::new` definition (#260)
 - Changed `fps` to `frame_rate` in `Engine::new`
 - Added `ListWidget` (#255), added `list` app to show use
+- Added `append_widget()` to `Layout` trait (#261) - suggested by jbethune
+- Updated `layout` to use append_widget layout method.
 
 ## 0.4.19
 

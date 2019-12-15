@@ -75,10 +75,10 @@ pub fn main() {
     let widget3_id = engine.add_widget(Box::new(widget3), String::from("widget3"));
     let widget4_id = engine.add_widget(Box::new(widget4), String::from("widget4"));
 
-    layout.insert_widget(widget1_id, LayoutPosition::new(0, 0));
-    layout.insert_widget(widget2_id, LayoutPosition::new(1, 0));
-    layout2.insert_widget(widget3_id, LayoutPosition::new(0, 0));
-    layout2.insert_widget(widget4_id, LayoutPosition::new(0, 1));
+    layout.append_widget(widget1_id);
+    layout.append_widget(widget2_id);
+    layout2.append_widget(widget3_id);
+    layout2.append_widget(widget4_id);
     engine.add_layout(Box::new(layout));
     engine.add_layout(Box::new(layout2));
 
