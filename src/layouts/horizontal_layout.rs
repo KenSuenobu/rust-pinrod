@@ -47,10 +47,22 @@ impl HorizontalLayout {
 /// added to the bounds of the `Layout`.
 impl Layout for HorizontalLayout {
     /// Adds a widget to the `HorizontalLayout` managed stack.
-    fn add_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
+    fn insert_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
         self.widget_ids.push(widget_id);
         self.widget_positions.push(widget_position);
         self.invalidated = true;
+    }
+
+    /// Appends a widget to the `HorizontalLayout` managed stack.
+    fn append_widget(&mut self, widget_id: i32) {
+        let positions = self.widget_positions.len();
+        let widget_position = if self.widget_positions.is_empty() {
+            LayoutPosition::new(0, 0)
+        } else {
+            LayoutPosition::new(0, self.widget_positions[positions - 1].y + 1)
+        };
+
+        self.insert_widget(widget_id, widget_position);
     }
 
     fn set_padding(&mut self, padding: PaddingConstraint) {

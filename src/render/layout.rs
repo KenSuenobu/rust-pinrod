@@ -37,7 +37,12 @@ impl LayoutPosition {
 pub trait Layout {
     /// Adds a `Widget` by ID to the `Layout` manager, given its `LayoutPosition`, as a position
     /// marker in the manager.
-    fn add_widget(&mut self, _widget_id: i32, _widget_position: LayoutPosition);
+    fn insert_widget(&mut self, _widget_id: i32, _widget_position: LayoutPosition);
+
+    /// Adds a `Widget` by ID to the `Layout` manager, automatically adding it to the next available
+    /// `LayoutPosition`.  Use this as a way to add a widget if you don't need to specify a
+    /// `LayoutPosition`.
+    fn append_widget(&mut self, _widget_id: i32);
 
     /// Changes the `PaddingConstraint` for this `Layout`.
     fn set_padding(&mut self, padding: PaddingConstraint);

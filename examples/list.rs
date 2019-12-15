@@ -3,7 +3,10 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::{CONFIG_COLOR_SECONDARY, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_BORDER_WIDTH, CONFIG_COLOR_HOVER};
+use pushrod::render::widget_config::{
+    CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_HOVER,
+    CONFIG_COLOR_SECONDARY,
+};
 use pushrod::widgets::list_widget::*;
 use sdl2::pixels::Color;
 

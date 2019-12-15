@@ -22,18 +22,17 @@ use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
-use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
-use sdl2::rect::{Point, Rect};
+use crate::render::{Points, POINT_Y};
+use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use sdl2::pixels::Color;
-use crate::render::{Points, POINT_Y};
 
 /// This is the callback type that is used when an `on_selected` callback is triggered from this
 /// `Widget`.
 pub type OnSelectedCallbackType =
-Option<Box<dyn FnMut(&mut ListWidget, &[WidgetContainer], &[LayoutContainer], i32)>>;
+    Option<Box<dyn FnMut(&mut ListWidget, &[WidgetContainer], &[LayoutContainer], i32)>>;
 
 /// This is the storage object for the `ListWidget`.  It stores the config, properties, callback registry.
 pub struct ListWidget {
@@ -51,12 +50,7 @@ pub struct ListWidget {
 /// selected.
 impl ListWidget {
     /// Creates a new `ListWidget` given the `x, y, w, h` coordinates.
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-    ) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
@@ -78,15 +72,25 @@ impl ListWidget {
         item_size
     }
 
-    fn draw_text(&mut self, c: &mut Canvas<Window>, msg: String, x: u32, y: u32, back_color: Color, text_color: Color) {
-        let base_color = back_color;
+    fn draw_text(
+        &mut self,
+        c: &mut Canvas<Window>,
+        msg: String,
+        x: u32,
+        y: u32,
+        back_color: Color,
+        text_color: Color,
+    ) {
         let text_max_width =
             self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
 
         let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
         let texture_creator = c.texture_creator();
         let mut font = ttf_context
-            .load_font(Path::new(&String::from("assets/OpenSans-Regular.ttf")), 16 as u16)
+            .load_font(
+                Path::new(&String::from("assets/OpenSans-Regular.ttf")),
+                16 as u16,
+            )
             .unwrap();
 
         font.set_style(sdl2::ttf::FontStyle::NORMAL);
@@ -104,21 +108,23 @@ impl ListWidget {
         let TextureQuery { width, height, .. } = texture.query();
 
         let texture_y = self.get_config().to_y(y as i32);
-        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
         let texture_x = self.get_config().to_x(10);
 
         c.set_draw_color(back_color);
-        c.fill_rect(Rect::new(self.get_config().to_x(x as i32),
-        self.get_config().to_y(y as i32),
-                              self.get_size(CONFIG_SIZE)[0],
-        30)).unwrap();
+        c.fill_rect(Rect::new(
+            self.get_config().to_x(x as i32),
+            self.get_config().to_y(y as i32),
+            self.get_size(CONFIG_SIZE)[0],
+            30,
+        ))
+        .unwrap();
 
         c.copy(
             &texture,
             None,
             Rect::new(texture_x, texture_y, width, height),
         )
-            .unwrap();
+        .unwrap();
     }
 
     fn draw_list(&mut self, c: &mut Canvas<Window>) {
@@ -138,26 +144,28 @@ impl ListWidget {
                 text_color = Color::RGB(255, 255, 255);
             }
 
-            self.draw_text(c, self.list_items[i].clone(), 0, list_height * i as u32 as u32,
-                           color, text_color);
+            self.draw_text(
+                c,
+                self.list_items[i].clone(),
+                0,
+                list_height * i as u32 as u32,
+                color,
+                text_color,
+            );
         }
     }
 
     /// Assigns the callback closure that will be used when the `Widget` changes value, based on a selected
     /// item.
     pub fn on_selected<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut ListWidget, &[WidgetContainer], &[LayoutContainer], i32) + 'static,
+    where
+        F: FnMut(&mut ListWidget, &[WidgetContainer], &[LayoutContainer], i32) + 'static,
     {
         self.on_selected = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_selected` callback.
-    fn call_selected_callback(
-        &mut self,
-        widgets: &[WidgetContainer],
-        layouts: &[LayoutContainer],
-    ) {
+    fn call_selected_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_selected.take() {
             cb(self, widgets, layouts, self.selected_item);
             self.on_selected = Some(cb);
@@ -188,7 +196,7 @@ impl Widget for ListWidget {
                     self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
                     self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
                 ))
-                    .unwrap();
+                .unwrap();
             }
         }
     }

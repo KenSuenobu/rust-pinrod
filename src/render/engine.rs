@@ -21,8 +21,8 @@ use crate::render::layout::Layout;
 use crate::render::layout_cache::LayoutCache;
 use crate::render::widget::{BaseWidget, Widget};
 use crate::render::widget_cache::WidgetCache;
-use std::time::{Duration, UNIX_EPOCH, SystemTime};
 use std::thread::sleep;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
@@ -105,7 +105,10 @@ impl Engine {
         let fps_as_ms = (1000.0 / self.frame_rate as f64) as u128;
 
         'running: loop {
-            let start = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis();
+            let start = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
 
             for event in event_pump.poll_iter() {
                 match event {
@@ -182,7 +185,10 @@ impl Engine {
             self.widget_cache.draw_loop(&mut canvas);
 
             // This obeys thread sleep time.
-            let now = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis();
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
 
             if now - start < fps_as_ms {
                 let diff = fps_as_ms - (now - start);
