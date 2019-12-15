@@ -16,7 +16,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(500, 200);
+    let mut engine = Engine::new(500, 200, 20);
     let mut widget1 = TextWidget::new(
         String::from("assets/OpenSans-Regular.ttf"),
         sdl2::ttf::FontStyle::NORMAL,

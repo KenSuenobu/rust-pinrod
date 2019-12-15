@@ -21,7 +21,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 100);
+    let mut engine = Engine::new(400, 100, 30);
     let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me!"), 40);
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));

@@ -52,3 +52,11 @@ pub mod slider_widget;
 /// This is a `GridWidget` that contains a number of `Widget`s that can be repositioned and snapped to
 /// a grid coordinate.
 pub mod grid_widget;
+
+/// This is a `ListWidget` that displays a list of items in a selectable box.
+pub mod list_widget;
+
+/// This is a `TileWidget` that displays an image and some text below it, with a display change when
+/// the widget is hovered over by a mouse enter event.  This is mainly used in conjunction with the
+/// `ToolbarWidget`, which contains a list of `TileWidget`s
+pub mod tile_widget;

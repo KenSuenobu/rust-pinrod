@@ -2,10 +2,7 @@ extern crate pushrod;
 extern crate sdl2;
 
 use pushrod::render::engine::Engine;
-use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
 use pushrod::widgets::checkbox_widget::*;
-use sdl2::pixels::Color;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -16,7 +13,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 180);
+    let mut engine = Engine::new(400, 180, 60);
     let widget1 = CheckboxWidget::new(20, 20, 360, 30, String::from(" Checkbox Item 1"), 22, false);
     let widget2 = CheckboxWidget::new(20, 70, 360, 30, String::from(" Checked Checkbox"), 22, true);
     let widget3 = CheckboxWidget::new(

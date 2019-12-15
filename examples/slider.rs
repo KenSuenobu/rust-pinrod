@@ -36,7 +36,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 300);
+    let mut engine = Engine::new(400, 300, 60);
     let mut slider1 = SliderWidget::new(20, 20, 300, 20, 0, 100, 20, SliderHorizontal);
 
     slider1.on_value_changed(|_slider, _widgets, _layouts, pos| {

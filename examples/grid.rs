@@ -6,7 +6,6 @@ use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT};
 use pushrod::widgets::grid_widget::GridWidget;
-use pushrod::widgets::push_button_widget::PushButtonWidget;
 use pushrod::widgets::slider_widget::SliderOrientation::SliderHorizontal;
 use pushrod::widgets::slider_widget::SliderWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};
@@ -38,7 +37,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 340);
+    let mut engine = Engine::new(400, 340, 60);
     let mut grid1 = GridWidget::new(20, 20, 360, 280, 10);
 
     grid1
@@ -46,7 +45,7 @@ pub fn main() {
         .set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     grid1.get_config().set_numeric(CONFIG_BORDER_WIDTH, 1);
 
-    let mut slider1 = SliderWidget::new(20, 310, 320, 20, 0, 30, 10, SliderHorizontal);
+    let mut slider1 = SliderWidget::new(20, 310, 320, 20, 1, 20, 10, SliderHorizontal);
 
     slider1.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text1_id = widget_id_for_name(_widgets, String::from("text1"));

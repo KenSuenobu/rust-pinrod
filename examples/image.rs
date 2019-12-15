@@ -19,7 +19,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(WIDTH, HEIGHT);
+    let mut engine = Engine::new(WIDTH, HEIGHT, 60);
     let mut widget1 =
         ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 16, 60, 60, false);
 

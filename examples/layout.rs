@@ -9,14 +9,11 @@ use pushrod::render::layout::{Layout, LayoutPosition};
 use pushrod::render::widget::{BaseWidget, Widget};
 use pushrod::render::widget_cache::WidgetContainer;
 use pushrod::render::widget_config::{
-    PaddingConstraint, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER,
-    CONFIG_COLOR_SECONDARY, CONFIG_COLOR_TEXT,
+    PaddingConstraint, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
 };
-use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::push_button_widget::PushButtonWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use std::fmt::Display;
 
 #[macro_export]
 macro_rules! cast {
@@ -41,7 +38,7 @@ pub fn main() {
         .opengl()
         .build()
         .unwrap();
-    let mut engine = Engine::new(400, 300);
+    let mut engine = Engine::new(400, 300, 60);
     let mut layout = HorizontalLayout::new(20, 20, 360, 80, PaddingConstraint::new(0, 0, 0, 0, 1));
     let mut layout2 =
         VerticalLayout::new(250, 120, 130, 160, PaddingConstraint::new(0, 0, 0, 0, 1));
@@ -78,10 +75,10 @@ pub fn main() {
     let widget3_id = engine.add_widget(Box::new(widget3), String::from("widget3"));
     let widget4_id = engine.add_widget(Box::new(widget4), String::from("widget4"));
 
-    layout.add_widget(widget1_id, LayoutPosition::new(0, 0));
-    layout.add_widget(widget2_id, LayoutPosition::new(1, 0));
-    layout2.add_widget(widget3_id, LayoutPosition::new(0, 0));
-    layout2.add_widget(widget4_id, LayoutPosition::new(0, 1));
+    layout.append_widget(widget1_id);
+    layout.append_widget(widget2_id);
+    layout2.append_widget(widget3_id);
+    layout2.append_widget(widget4_id);
     engine.add_layout(Box::new(layout));
     engine.add_layout(Box::new(layout2));
 
@@ -121,7 +118,7 @@ pub fn main() {
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button1.on_click(|x, _widgets, _layouts| {
+    button1.on_click(|_, _widgets, _layouts| {
         let mut spacing = _layouts[0].layout.borrow_mut().get_padding().spacing - 1;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -153,7 +150,7 @@ pub fn main() {
 
     button2.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button2.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button2.on_click(|x, _widgets, _layouts| {
+    button2.on_click(|_, _widgets, _layouts| {
         let mut spacing = _layouts[0].layout.borrow_mut().get_padding().spacing + 1;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -217,7 +214,7 @@ pub fn main() {
 
     button3.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button3.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button3.on_click(|x, _widgets, _layouts| {
+    button3.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let mut top = _layouts[0].layout.borrow_mut().get_padding().top - 1;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -249,7 +246,7 @@ pub fn main() {
 
     button4.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button4.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button4.on_click(|x, _widgets, _layouts| {
+    button4.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let mut top = _layouts[0].layout.borrow_mut().get_padding().top + 1;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -313,7 +310,7 @@ pub fn main() {
 
     button5.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button5.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button5.on_click(|x, _widgets, _layouts| {
+    button5.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let mut bottom = _layouts[0].layout.borrow_mut().get_padding().bottom - 1;
@@ -345,7 +342,7 @@ pub fn main() {
 
     button6.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button6.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button6.on_click(|x, _widgets, _layouts| {
+    button6.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let mut bottom = _layouts[0].layout.borrow_mut().get_padding().bottom + 1;
@@ -409,7 +406,7 @@ pub fn main() {
 
     button7.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button7.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button7.on_click(|x, _widgets, _layouts| {
+    button7.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -441,7 +438,7 @@ pub fn main() {
 
     button8.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button8.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button8.on_click(|x, _widgets, _layouts| {
+    button8.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -505,7 +502,7 @@ pub fn main() {
 
     button9.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button9.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button9.on_click(|x, _widgets, _layouts| {
+    button9.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;
@@ -537,7 +534,7 @@ pub fn main() {
 
     button10.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button10.set_numeric(CONFIG_BORDER_WIDTH, 2);
-    button10.on_click(|x, _widgets, _layouts| {
+    button10.on_click(|_, _widgets, _layouts| {
         let spacing = _layouts[0].layout.borrow_mut().get_padding().spacing;
         let top = _layouts[0].layout.borrow_mut().get_padding().top;
         let bottom = _layouts[0].layout.borrow_mut().get_padding().bottom;

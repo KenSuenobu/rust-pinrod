@@ -1,5 +1,17 @@
 # Pushrod Change Log
 
+## 0.4.20
+
+- Sample applications cleanup
+- Added `fps` to `engine::new`, which enables CPU throttling for app as appropriate
+- Modified engine `run` loop to measure time flux for CPU and implements thread sleep as appropriate (#259)
+- Modified `grid` example so that the minimum is 1, not 0 (step cannot be 0 in the grid)
+- Updated documentation to fix `Engine::new` definition (#260)
+- Changed `fps` to `frame_rate` in `Engine::new`
+- Added `ListWidget` (#255), added `list` app to show use
+- Added `append_widget()` to `Layout` trait (#261) - suggested by jbethune
+- Updated `layout` to use append_widget layout method.
+
 ## 0.4.19
 
 - Removed redraw debugging.

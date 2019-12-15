@@ -21,13 +21,15 @@ use crate::render::layout::Layout;
 use crate::render::layout_cache::LayoutCache;
 use crate::render::widget::{BaseWidget, Widget};
 use crate::render::widget_cache::WidgetCache;
-use std::time::Duration;
+use std::thread::sleep;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
     widget_cache: WidgetCache,
     layout_cache: LayoutCache,
     current_widget_id: i32,
+    frame_rate: u8,
     running: bool,
 }
 
@@ -36,7 +38,7 @@ pub struct Engine {
 /// follows:
 ///
 /// ## Create a new object
-/// Use `Engine::new()` to instantiate a new object.
+/// Use `Engine::new(w, h, frame_rate)` to instantiate a new object.
 ///
 /// ## Set up the base
 /// Call `engine.setup(width, height)`, by passing the width and height of the window that is
@@ -54,11 +56,14 @@ pub struct Engine {
 /// That's all there is to it.  If you want to see more interactions on how the `Engine` is used in
 /// an application, check out the demo test code, and look at `rust-pushrod-chassis`.
 impl Engine {
-    /// Creates a new `Engine` object.  Sets the engine up with the bounds of the screen, which
-    /// must be provided at instantiation time.  This is in order to set up the `BaseWidget` in the
-    /// top-level of the `Engine`, so that it knows what area of the screen to refresh when
-    /// required as part of the draw cycle.
-    pub fn new(w: u32, h: u32) -> Self {
+    /// Creates a new `Engine` object.  Sets the engine up with the bounds of the screen, and the desired
+    /// FPS rate, which must be provided at instantiation time.  This is in order to set up the
+    /// `BaseWidget` in the top-level of the `Engine`, so that it knows what area of the screen to
+    /// refresh when required as part of the draw cycle.
+    ///
+    /// **NOTE**: Setting a lower frame_rate will increase the efficiency of your API, however, it
+    /// could lower responsiveness if you have a very active UI.
+    pub fn new(w: u32, h: u32, frame_rate: u8) -> Self {
         let base_widget = BaseWidget::new(0, 0, w, h);
         let mut cache = WidgetCache::default();
 
@@ -68,6 +73,7 @@ impl Engine {
             widget_cache: cache,
             layout_cache: LayoutCache::default(),
             current_widget_id: 0,
+            frame_rate,
             running: true,
         }
     }
@@ -96,8 +102,14 @@ impl Engine {
         canvas.present();
 
         let mut event_pump = sdl.event_pump().unwrap();
+        let fps_as_ms = (1000.0 / self.frame_rate as f64) as u128;
 
         'running: loop {
+            let start = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
+
             for event in event_pump.poll_iter() {
                 match event {
                     Event::MouseButtonDown {
@@ -172,7 +184,17 @@ impl Engine {
                 .do_layout(self.widget_cache.borrow_cache());
             self.widget_cache.draw_loop(&mut canvas);
 
-            ::std::thread::sleep(Duration::new(0, 1_000_000_000u32 / 60));
+            // This obeys thread sleep time.
+            let now = SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_millis();
+
+            if now - start < fps_as_ms {
+                let diff = fps_as_ms - (now - start);
+
+                sleep(Duration::from_millis(diff as u64));
+            }
 
             if !self.running {
                 break 'running;
