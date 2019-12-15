@@ -1,6 +1,6 @@
 [package]
 name = "rust-pushrod"
-version = "0.4.20"
+version = "0.4.22"
 authors = ["Ken Suenobu <ksuenobu@fastmail.com>"]
 edition = "2018"
 description = "Pushrod UI Library"
