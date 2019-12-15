@@ -8,6 +8,7 @@
 - Modified `grid` example so that the minimum is 1, not 0 (step cannot be 0 in the grid)
 - Updated documentation to fix `Engine::new` definition (#260)
 - Changed `fps` to `frame_rate` in `Engine::new`
+- Added `ListWidget` (#255), added `list` app to show use
 
 ## 0.4.19
 
