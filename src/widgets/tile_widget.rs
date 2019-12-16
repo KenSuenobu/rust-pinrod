@@ -45,14 +45,7 @@ pub struct TileWidget {
 impl TileWidget {
     /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
     /// `font_size` to use, and the `image_name` to load and display.
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        image_filename: String,
-        tile_text: String,
-    ) -> Self {
+    pub fn new(x: i32, y: i32, w: u32, h: u32, image_filename: String, tile_text: String) -> Self {
         Self {
             config: WidgetConfig::new(x, y, w, h),
             system_properties: HashMap::new(),
