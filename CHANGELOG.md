@@ -3,6 +3,7 @@
 ## 0.4.21
 
 - Fixed typo in mod.rs (#263)
+- Removed logging from push button and image button.
 
 ## 0.4.20
 

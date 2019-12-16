@@ -184,7 +184,6 @@ impl Widget for PushButtonWidget {
 
                 if self.in_bounds && had_bounds && self.originated {
                     // Callback here
-                    eprintln!("Call callback here: clicks={}", _clicks);
                     self.call_click_callback(_widgets, _layouts);
                 }
 
