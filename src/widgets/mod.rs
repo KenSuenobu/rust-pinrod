@@ -36,7 +36,7 @@ pub mod push_button_widget;
 /// `on_toggle` callbacks when the state changes.
 pub mod toggle_button_widget;
 
-/// This is an `ImageButtonWidget`, which acts like a `PushButonWidget`, drawing an image on the left-hand
+/// This is an `ImageButtonWidget`, which acts like a `PushButtonWidget`, drawing an image on the left-hand
 /// side of the bounds of the `Widget`, then the text next to it, justified left.
 pub mod image_button_widget;
 
