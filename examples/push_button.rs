@@ -4,6 +4,7 @@ extern crate sdl2;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER};
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::push_button_widget::PushButtonWidget;
 use sdl2::pixels::Color;
 
@@ -22,7 +23,12 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 100, 30);
-    let mut button1 = PushButtonWidget::new(20, 20, 360, 60, String::from("Click me!"), 40);
+    let mut button1 = PushButtonWidget::new(
+        make_points(20, 20),
+        make_size(360, 60),
+        String::from("Click me!"),
+        40,
+    );
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);

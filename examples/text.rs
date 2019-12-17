@@ -4,6 +4,7 @@ extern crate sdl2;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::CONFIG_COLOR_TEXT;
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::text_widget::*;
 use sdl2::pixels::Color;
 
@@ -23,10 +24,8 @@ pub fn main() {
         28,
         TextJustify::Left,
         String::from("Left Justified"),
-        20,
-        16,
-        460,
-        40,
+        make_points(20, 16),
+        make_size(460, 40),
     );
 
     widget1
@@ -39,10 +38,8 @@ pub fn main() {
         28,
         TextJustify::Center,
         String::from("Center Justified"),
-        20,
-        80,
-        460,
-        40,
+        make_points(20, 80),
+        make_size(460, 40),
     );
 
     widget2
@@ -55,10 +52,8 @@ pub fn main() {
         28,
         TextJustify::Right,
         String::from("Right Justified"),
-        20,
-        144,
-        460,
-        40,
+        make_points(20, 144),
+        make_size(460, 40),
     );
 
     widget3

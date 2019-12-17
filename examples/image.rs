@@ -4,6 +4,7 @@ extern crate sdl2;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CompassPosition, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION};
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::image_widget::*;
 use sdl2::pixels::Color;
 
@@ -20,48 +21,60 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(WIDTH, HEIGHT, 60);
-    let mut widget1 =
-        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 16, 60, 60, false);
+    let mut widget1 = ImageWidget::new(
+        String::from("assets/rust-48x48.jpg"),
+        make_points(20, 16),
+        make_size(60, 60),
+        false,
+    );
 
     widget1.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget1.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
-    let mut widget2 =
-        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 90, 16, 60, 60, false);
+    let mut widget2 = ImageWidget::new(
+        String::from("assets/rust-48x48.jpg"),
+        make_points(90, 16),
+        make_size(60, 60),
+        false,
+    );
 
     widget2.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget2.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::N);
 
     let mut widget3 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        160,
-        16,
-        60,
-        60,
+        make_points(160, 16),
+        make_size(60, 60),
         false,
     );
 
     widget3.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget3.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NE);
 
-    let mut widget4 =
-        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 20, 86, 60, 60, false);
+    let mut widget4 = ImageWidget::new(
+        String::from("assets/rust-48x48.jpg"),
+        make_points(20, 86),
+        make_size(60, 60),
+        false,
+    );
 
     widget4.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget4.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::W);
 
-    let mut widget5 =
-        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 90, 86, 60, 60, false);
+    let mut widget5 = ImageWidget::new(
+        String::from("assets/rust-48x48.jpg"),
+        make_points(90, 86),
+        make_size(60, 60),
+        false,
+    );
 
     widget5.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget5.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::Center);
 
     let mut widget6 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        160,
-        86,
-        60,
-        60,
+        make_points(160, 86),
+        make_size(60, 60),
         false,
     );
 
@@ -70,10 +83,8 @@ pub fn main() {
 
     let mut widget7 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        20,
-        156,
-        60,
-        60,
+        make_points(20, 156),
+        make_size(60, 60),
         false,
     );
 
@@ -82,10 +93,8 @@ pub fn main() {
 
     let mut widget8 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        90,
-        156,
-        60,
-        60,
+        make_points(90, 156),
+        make_size(60, 60),
         false,
     );
 
@@ -94,28 +103,28 @@ pub fn main() {
 
     let mut widget9 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        160,
-        156,
-        60,
-        60,
+        make_points(160, 156),
+        make_size(60, 60),
         false,
     );
 
     widget9.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget9.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::SE);
 
-    let mut widget10 =
-        ImageWidget::new(String::from("assets/rust-48x48.jpg"), 230, 16, 80, 80, true);
+    let mut widget10 = ImageWidget::new(
+        String::from("assets/rust-48x48.jpg"),
+        make_points(230, 16),
+        make_size(80, 80),
+        true,
+    );
 
     widget10.set_color(CONFIG_COLOR_BASE, Color::RGB(0, 0, 0));
     widget10.set_compass(CONFIG_IMAGE_POSITION, CompassPosition::NW);
 
     let mut widget11 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        260,
-        46,
-        120,
-        120,
+        make_points(260, 46),
+        make_size(120, 120),
         true,
     );
 
@@ -124,10 +133,8 @@ pub fn main() {
 
     let mut widget12 = ImageWidget::new(
         String::from("assets/rust-48x48.jpg"),
-        320,
-        86,
-        160,
-        160,
+        make_points(320, 86),
+        make_size(160, 160),
         true,
     );
 

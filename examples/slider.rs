@@ -5,6 +5,7 @@ use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::CONFIG_COLOR_TEXT;
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use pushrod::widgets::slider_widget::SliderWidget;
 use pushrod::widgets::text_widget::{TextJustify, TextWidget};
@@ -37,7 +38,14 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 300, 60);
-    let mut slider1 = SliderWidget::new(20, 20, 300, 20, 0, 100, 20, SliderHorizontal);
+    let mut slider1 = SliderWidget::new(
+        make_points(20, 20),
+        make_size(300, 20),
+        0,
+        100,
+        20,
+        SliderHorizontal,
+    );
 
     slider1.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text1_id = widget_id_for_name(_widgets, String::from("text1"));
@@ -51,17 +59,22 @@ pub fn main() {
         16,
         TextJustify::Left,
         String::from("20"),
-        330,
-        20,
-        50,
-        20,
+        make_points(330, 20),
+        make_size(50, 20),
     );
 
     text_widget1
         .get_config()
         .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
 
-    let mut slider2 = SliderWidget::new(20, 50, 300, 20, 20, 80, 40, SliderHorizontal);
+    let mut slider2 = SliderWidget::new(
+        make_points(20, 50),
+        make_size(300, 20),
+        20,
+        80,
+        40,
+        SliderHorizontal,
+    );
 
     slider2.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text2_id = widget_id_for_name(_widgets, String::from("text2"));
@@ -75,17 +88,22 @@ pub fn main() {
         16,
         TextJustify::Left,
         String::from("40"),
-        330,
-        50,
-        50,
-        20,
+        make_points(330, 50),
+        make_size(50, 20),
     );
 
     text_widget2
         .get_config()
         .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
 
-    let mut slider3 = SliderWidget::new(30, 80, 20, 170, 0, 100, 0, SliderVertical);
+    let mut slider3 = SliderWidget::new(
+        make_points(30, 80),
+        make_size(20, 170),
+        0,
+        100,
+        0,
+        SliderVertical,
+    );
 
     slider3.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text3_id = widget_id_for_name(_widgets, String::from("text3"));
@@ -99,17 +117,22 @@ pub fn main() {
         16,
         TextJustify::Center,
         String::from("0"),
-        16,
-        270,
-        50,
-        20,
+        make_points(16, 270),
+        make_size(50, 20),
     );
 
     text_widget3
         .get_config()
         .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
 
-    let mut slider4 = SliderWidget::new(60, 80, 20, 170, 20, 80, 40, SliderVertical);
+    let mut slider4 = SliderWidget::new(
+        make_points(60, 80),
+        make_size(20, 170),
+        20,
+        80,
+        40,
+        SliderVertical,
+    );
 
     slider4.on_value_changed(|_slider, _widgets, _layouts, pos| {
         let text4_id = widget_id_for_name(_widgets, String::from("text4"));
@@ -123,10 +146,8 @@ pub fn main() {
         16,
         TextJustify::Center,
         String::from("40"),
-        56,
-        270,
-        50,
-        20,
+        make_points(56, 270),
+        make_size(50, 20),
     );
 
     text_widget4

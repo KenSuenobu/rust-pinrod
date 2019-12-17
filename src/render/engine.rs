@@ -21,6 +21,7 @@ use crate::render::layout::Layout;
 use crate::render::layout_cache::LayoutCache;
 use crate::render::widget::{BaseWidget, Widget};
 use crate::render::widget_cache::WidgetCache;
+use crate::render::{make_points_origin, make_size};
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
@@ -64,7 +65,7 @@ impl Engine {
     /// **NOTE**: Setting a lower frame_rate will increase the efficiency of your API, however, it
     /// could lower responsiveness if you have a very active UI.
     pub fn new(w: u32, h: u32, frame_rate: u8) -> Self {
-        let base_widget = BaseWidget::new(0, 0, w, h);
+        let base_widget = BaseWidget::new(make_points_origin(), make_size(w, h));
         let mut cache = WidgetCache::default();
 
         cache.add_widget(Box::new(base_widget), "base".to_string());

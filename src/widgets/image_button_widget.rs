@@ -17,7 +17,9 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{
+    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -54,34 +56,41 @@ impl ImageButtonWidget {
     /// Creates a new `ImageButtonWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
     /// `font_size` to use, and the `image_name` to load and display.
     pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
+        points: Points,
+        size: Size,
         text: String,
         font_size: i32,
         image_name: String,
     ) -> Self {
-        let mut base_widget = BaseWidget::new(x, y, w, h);
+        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Left,
             text.clone(),
-            x + h as i32 + 6,
-            y + 2,
-            w - h - 10,
-            h - 4,
+            make_points(
+                points[POINT_X].clone() + size[SIZE_HEIGHT].clone() as i32 + 6,
+                points[POINT_Y].clone() + 2,
+            ),
+            make_size(
+                size[SIZE_WIDTH].clone() - size[SIZE_HEIGHT].clone() - 10,
+                size[SIZE_HEIGHT].clone() - 4,
+            ),
         );
-        let mut image_widget = ImageWidget::new(image_name, x + 2, y + 2, h - 4, h - 4, false);
+        let mut image_widget = ImageWidget::new(
+            image_name,
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            false,
+        );
 
         base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,

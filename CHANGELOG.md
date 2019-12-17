@@ -4,6 +4,7 @@
 
 - Fixed typo in mod.rs (#263)
 - Removed logging from push button and image button.
+- Converted `xywh` coordinates to `Point` and `Size` (#266)
 
 ## 0.4.20
 

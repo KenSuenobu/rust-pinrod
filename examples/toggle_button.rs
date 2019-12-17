@@ -4,6 +4,7 @@ extern crate sdl2;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER};
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::toggle_button_widget::ToggleButtonWidget;
 use sdl2::pixels::Color;
 
@@ -22,7 +23,13 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 100, 60);
-    let mut button1 = ToggleButtonWidget::new(20, 20, 170, 60, String::from("1"), 40, false);
+    let mut button1 = ToggleButtonWidget::new(
+        make_points(20, 20),
+        make_size(170, 60),
+        String::from("1"),
+        40,
+        false,
+    );
 
     button1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button1.set_numeric(CONFIG_BORDER_WIDTH, 2);
@@ -30,7 +37,13 @@ pub fn main() {
         eprintln!("1 Toggled: {}", _state);
     });
 
-    let mut button2 = ToggleButtonWidget::new(210, 20, 170, 60, String::from("2"), 40, true);
+    let mut button2 = ToggleButtonWidget::new(
+        make_points(210, 20),
+        make_size(170, 60),
+        String::from("2"),
+        40,
+        true,
+    );
 
     button2.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
     button2.set_numeric(CONFIG_BORDER_WIDTH, 2);

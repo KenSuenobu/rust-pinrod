@@ -4,6 +4,7 @@ extern crate sdl2;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::{BaseWidget, Widget};
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER};
+use pushrod::render::{make_points, make_size};
 use sdl2::pixels::Color;
 
 /*
@@ -21,7 +22,7 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(800, 600, 30);
-    let mut new_base_widget = BaseWidget::new(100, 100, 600, 400);
+    let mut new_base_widget = BaseWidget::new(make_points(100, 100), make_size(600, 400));
 
     new_base_widget
         .get_config()

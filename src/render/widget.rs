@@ -329,7 +329,7 @@ impl BaseWidget {
     /// Constructs a new base widget, given the points of origin and size.
     pub fn new(points: Points, size: Size) -> Self {
         Self {
-            config: WidgetConfig::new(points, size),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
         }

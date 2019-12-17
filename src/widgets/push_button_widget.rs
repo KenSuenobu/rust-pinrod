@@ -19,7 +19,9 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{
     WidgetConfig, CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_TEXT,
 };
-use crate::render::Points;
+use crate::render::{
+    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -54,18 +56,16 @@ pub struct PushButtonWidget {
 impl PushButtonWidget {
     /// Creates a new `PushButtonWidget`, given `x, y, w, h` coordinates, some `text` to display,
     /// and the `font_size` to use.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, text: String, font_size: i32) -> Self {
-        let mut base_widget = BaseWidget::new(x, y, w, h);
+    pub fn new(points: Points, size: Size, text: String, font_size: i32) -> Self {
+        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Center,
             text.clone(),
-            x + 2,
-            y + 2,
-            w - 4,
-            h - 4,
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_WIDTH].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
         );
 
         base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
@@ -75,7 +75,7 @@ impl PushButtonWidget {
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
 
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,

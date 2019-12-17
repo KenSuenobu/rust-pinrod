@@ -2,6 +2,7 @@ extern crate pushrod;
 extern crate sdl2;
 
 use pushrod::render::engine::Engine;
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::checkbox_widget::*;
 
 pub fn main() {
@@ -14,13 +15,23 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 180, 60);
-    let widget1 = CheckboxWidget::new(20, 20, 360, 30, String::from(" Checkbox Item 1"), 22, false);
-    let widget2 = CheckboxWidget::new(20, 70, 360, 30, String::from(" Checked Checkbox"), 22, true);
+    let widget1 = CheckboxWidget::new(
+        make_points(20, 20),
+        make_size(360, 30),
+        String::from(" Checkbox Item 1"),
+        22,
+        false,
+    );
+    let widget2 = CheckboxWidget::new(
+        make_points(20, 70),
+        make_size(360, 30),
+        String::from(" Checked Checkbox"),
+        22,
+        true,
+    );
     let widget3 = CheckboxWidget::new(
-        20,
-        120,
-        360,
-        30,
+        make_points(20, 120),
+        make_size(360, 30),
         String::from(" Unchecked Checkbox"),
         22,
         false,

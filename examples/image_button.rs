@@ -2,6 +2,7 @@ extern crate pushrod;
 extern crate sdl2;
 
 use pushrod::render::engine::Engine;
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::image_button_widget::*;
 
 pub fn main() {
@@ -15,28 +16,22 @@ pub fn main() {
         .unwrap();
     let mut engine = Engine::new(400, 180, 60);
     let widget1 = ImageButtonWidget::new(
-        20,
-        20,
-        360,
-        40,
+        make_points(20, 20),
+        make_size(360, 40),
         String::from(" Rust Logo"),
         24,
         String::from("assets/rust-48x48.jpg"),
     );
     let widget2 = ImageButtonWidget::new(
-        20,
-        70,
-        360,
-        40,
+        make_points(20, 70),
+        make_size(360, 40),
         String::from(" Unselected Radio Button"),
         24,
         String::from("assets/radio_unselected.png"),
     );
     let widget3 = ImageButtonWidget::new(
-        20,
-        120,
-        360,
-        40,
+        make_points(20, 120),
+        make_size(360, 40),
         String::from(" Unchecked Button"),
         24,
         String::from("assets/checkbox_unselected.png"),

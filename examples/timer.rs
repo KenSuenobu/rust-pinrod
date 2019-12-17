@@ -5,6 +5,7 @@ use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
 use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::timer_widget::*;
 use sdl2::pixels::Color;
@@ -31,15 +32,15 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 180, 30);
-    let mut widget1 = ProgressWidget::new(20, 20, 360, 40, 25);
+    let mut widget1 = ProgressWidget::new(make_points(20, 20), make_size(360, 40), 25);
 
     widget1.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
-    let mut widget2 = ProgressWidget::new(20, 70, 360, 40, 50);
+    let mut widget2 = ProgressWidget::new(make_points(20, 70), make_size(360, 40), 50);
 
     widget2.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
-    let mut widget3 = ProgressWidget::new(20, 120, 360, 40, 75);
+    let mut widget3 = ProgressWidget::new(make_points(20, 120), make_size(360, 40), 75);
 
     widget3.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
 
