@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, Size, POINT_X, POINT_Y, SIZE_WIDTH, SIZE_HEIGHT};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -57,10 +57,8 @@ impl CheckboxWidget {
     /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
     /// being checked, `false` otherwise.
     pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
+        points: Points,
+        size: Size,
         text: String,
         font_size: i32,
         selected: bool,
@@ -71,27 +69,27 @@ impl CheckboxWidget {
             font_size,
             TextJustify::Left,
             text.clone(),
-            x + h as i32 + 6,
-            y + 2,
-            w - h - 10,
-            h - 4,
+            points[POINT_X].clone() + size[SIZE_HEIGHT].clone() as i32 + 6,
+            points[POINT_Y].clone() + 2,
+            size[SIZE_WIDTH].clone() - size[SIZE_HEIGHT].clone() - 10,
+            size[SIZE_HEIGHT].clone() - 4,
         );
 
-        let mut config = WidgetConfig::new(x, y, w, h);
+        let mut config = WidgetConfig::new(points, size);
         let mut unchecked_widget = ImageWidget::new(
             String::from("assets/checkbox_unselected.png"),
-            x + 2,
-            y + 2,
-            h - 4,
-            h - 4,
+            points[POINT_X].clone() + 2,
+            points[POINT_Y].clone() + 2,
+            size[SIZE_HEIGHT].clone() - 4,
+            size[SIZE_HEIGHT].clone() - 4,
             true,
         );
         let mut checked_widget = ImageWidget::new(
             String::from("assets/checkbox_selected.png"),
-            x + 2,
-            y + 2,
-            h - 4,
-            h - 4,
+            points[POINT_X].clone() + 2,
+            points[POINT_Y].clone() + 2,
+            size[SIZE_HEIGHT].clone() - 4,
+            size[SIZE_HEIGHT].clone() - 4,
             true,
         );
 
