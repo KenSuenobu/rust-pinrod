@@ -25,6 +25,13 @@ use crate::render::{make_points_origin, make_size};
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
+/// This function is called when when the application requests to quit.  It accepts the currently
+/// running engine, and the return value will indicate whether or not to quit.  Returning a `true`
+/// tells the engine to quit, `false` otherwise.  If this function is _not_ set, the application
+/// will quit when asked.
+pub type OnExitCallbackType =
+Option<Box<dyn FnMut(&mut Engine) -> bool>>;
+
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
     widget_cache: WidgetCache,
@@ -32,6 +39,7 @@ pub struct Engine {
     current_widget_id: i32,
     frame_rate: u8,
     running: bool,
+    on_exit: OnExitCallbackType,
 }
 
 /// This is the heart of the Pushrod event engine, and is what is used to drive the interaction
@@ -76,6 +84,7 @@ impl Engine {
             current_widget_id: 0,
             frame_rate,
             running: true,
+            on_exit: None,
         }
     }
 
@@ -93,6 +102,27 @@ impl Engine {
     /// Sets running flag: `false` shuts down the engine.
     pub fn set_running(&mut self, state: bool) {
         self.running = state;
+    }
+
+    /// Assigns the callback closure that will be used the application close/quit is triggered.
+    pub fn on_exit<F>(&mut self, callback: F)
+        where
+            F: FnMut(&mut Engine) -> bool + 'static,
+    {
+        self.on_exit = Some(Box::new(callback));
+    }
+
+    /// Internal function that triggers the `on_exit` callback.
+    fn call_exit_callback(&mut self) -> bool {
+        if let Some(mut cb) = self.on_exit.take() {
+            let return_value = cb(self);
+            self.on_exit = Some(cb);
+
+            return_value
+        } else {
+            eprintln!("No exit callback defined: returning true, application exiting.");
+            true
+        }
     }
 
     /// Main application run loop, controls interaction between the user and the application.
@@ -167,7 +197,9 @@ impl Engine {
                     }
 
                     Event::Quit { .. } => {
-                        break 'running;
+                        if self.call_exit_callback() {
+                            break 'running;
+                        }
                     }
 
                     remaining_event => {

@@ -82,5 +82,10 @@ pub fn main() {
 
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 
+    engine.on_exit(|engine| {
+        eprintln!("Application exiting.");
+        true
+    });
+
     engine.run(sdl_context, window);
 }
