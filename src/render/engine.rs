@@ -29,8 +29,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 /// running engine, and the return value will indicate whether or not to quit.  Returning a `true`
 /// tells the engine to quit, `false` otherwise.  If this function is _not_ set, the application
 /// will quit when asked.
-pub type OnExitCallbackType =
-Option<Box<dyn FnMut(&mut Engine) -> bool>>;
+pub type OnExitCallbackType = Option<Box<dyn FnMut(&mut Engine) -> bool>>;
 
 /// This is a storage container for the Pushrod event engine.
 pub struct Engine {
@@ -106,8 +105,8 @@ impl Engine {
 
     /// Assigns the callback closure that will be used the application close/quit is triggered.
     pub fn on_exit<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut Engine) -> bool + 'static,
+    where
+        F: FnMut(&mut Engine) -> bool + 'static,
     {
         self.on_exit = Some(Box::new(callback));
     }
