@@ -7,6 +7,7 @@
 - Converted `xywh` coordinates to `Point` and `Size` (#266)
 - Add callback when Event::Quit is detected (#210)
 - Added default of `true` to exit the application if no quit callback is set. (#210)
+- Added `exit` application to demo exiting with a prompt. (#210)
 
 ## 0.4.20
 
