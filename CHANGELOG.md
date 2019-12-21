@@ -1,5 +1,7 @@
 # Pushrod Change Log
 
+## 0.4.22
+
 ## 0.4.21
 
 - Fixed typo in mod.rs (#263)
