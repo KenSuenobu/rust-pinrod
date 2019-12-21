@@ -19,6 +19,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::WidgetConfig;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::{make_points_origin, make_size};
 use std::any::Any;
 use std::collections::HashMap;
 use std::time::{SystemTime, UNIX_EPOCH};
@@ -55,7 +56,7 @@ impl TimerWidget {
     /// `false` will add the timer, but it will not be enabled.
     pub fn new(timeout: u64, enabled: bool) -> Self {
         Self {
-            config: WidgetConfig::new(0, 0, 0, 0),
+            config: WidgetConfig::new(make_points_origin(), make_size(0, 0)),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             enabled,

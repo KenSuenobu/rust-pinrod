@@ -22,7 +22,7 @@ use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
-use crate::render::{Points, POINT_Y};
+use crate::render::{Points, Size, POINT_Y};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use std::any::Any;
@@ -50,9 +50,9 @@ pub struct ListWidget {
 /// selected.
 impl ListWidget {
     /// Creates a new `ListWidget` given the `x, y, w, h` coordinates.
-    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
+    pub fn new(points: Points, size: Size) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             list_items: vec![],

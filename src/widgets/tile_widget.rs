@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, Size};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -27,66 +27,32 @@ use std::any::Any;
 use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
-/// `Widget`.
-//pub type OnClickCallbackType =
-//Option<Box<dyn FnMut(&mut ImageButtonWidget, &[WidgetContainer], &[LayoutContainer])>>;
+/// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
+pub type OnSelectedCallbackType =
+    Option<Box<dyn FnMut(&mut TileWidget, &[WidgetContainer], &[LayoutContainer], bool)>>;
 
 /// This is the storage object for the `TileWidget`.  It stores the config, properties, callback registry.
 pub struct TileWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    //    base_widget: BaseWidget,
-    //    text_widget: TextWidget,
-    //    image_widget: ImageWidget,
-    //    active: bool,
-    //    in_bounds: bool,
-    //    originated: bool,
-    //    on_click: OnClickCallbackType,
+    on_selected: OnSelectedCallbackType,
+    image_filename: String,
+    tile_text: String,
 }
 
 /// This is the implementation of the `TileWidget`, which displays an image next to some text.
 impl TileWidget {
     /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
     /// `font_size` to use, and the `image_name` to load and display.
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        //        text: String,
-        //        font_size: i32,
-        //        image_name: String,
-    ) -> Self {
-        //        let mut base_widget = BaseWidget::new(x, y, w, h);
-        //        let mut text_widget = TextWidget::new(
-        //            String::from("assets/OpenSans-Regular.ttf"),
-        //            sdl2::ttf::FontStyle::NORMAL,
-        //            font_size,
-        //            TextJustify::Left,
-        //            text.clone(),
-        //            x + h as i32 + 6,
-        //            y + 2,
-        //            w - h - 10,
-        //            h - 4,
-        //        );
-        //        let mut image_widget = ImageWidget::new(image_name, x + 2, y + 2, h - 4, h - 4, false);
-        //
-        //        base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-        //        text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
-        //        image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
-
+    pub fn new(points: Points, size: Size, image_filename: String, tile_text: String) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            //            base_widget,
-            //            text_widget,
-            //            image_widget,
-            //            active: false,
-            //            in_bounds: false,
-            //            originated: false,
-            //            on_click: None,
+            on_selected: None,
+            image_filename: image_filename.clone(),
+            tile_text: tile_text.clone(),
         }
     }
 

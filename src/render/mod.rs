@@ -31,6 +31,21 @@ pub const SIZE_WIDTH: usize = 0;
 /// Quick reference in `Size` `Vec` for height.
 pub const SIZE_HEIGHT: usize = 1;
 
+/// Convenience method to create a `Points` type.
+pub fn make_points(x: i32, y: i32) -> Points {
+    vec![x, y]
+}
+
+/// Convenience method to create a `Points` type at origin coordinates (0, 0)
+pub fn make_points_origin() -> Points {
+    vec![0, 0]
+}
+
+/// Convenience method to create a `Size` type.
+pub fn make_size(w: u32, h: u32) -> Size {
+    vec![w, h]
+}
+
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.
 pub mod engine;

@@ -6,6 +6,7 @@ use pushrod::render::widget::{BaseWidget, Widget};
 use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER};
 use pushrod::render::{make_points, make_size};
 use sdl2::pixels::Color;
+use sdl2::messagebox::*;
 
 /*
  * This demo just tests the rendering functionality of the `BaseWidget`.  It only tests the
@@ -16,7 +17,7 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("pushrod-render demo", 800, 600)
+        .window("pushrod-render exit demo", 800, 600)
         .position_centered()
         .opengl()
         .build()
@@ -83,8 +84,36 @@ pub fn main() {
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 
     engine.on_exit(|engine| {
-        eprintln!("Application exiting.");
-        true
+        let buttons: Vec<_> = vec![
+            ButtonData {
+                flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
+                button_id: 1,
+                text: "Yes",
+            },
+            ButtonData {
+                flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
+                button_id: 2,
+                text: "No",
+            },
+        ];
+
+        let res = show_message_box(
+            MessageBoxFlag::WARNING,
+            buttons.as_slice(),
+            "Quit",
+            "Are you sure?",
+            None,
+            None,
+        )
+            .unwrap();
+
+        if let ClickedButton::CustomButton(x) = res {
+            if x.button_id == 1 {
+                return true;
+            }
+        }
+
+        false
     });
 
     engine.run(sdl_context, window);

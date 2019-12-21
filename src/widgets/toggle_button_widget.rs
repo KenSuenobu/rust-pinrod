@@ -17,7 +17,9 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{
+    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -53,26 +55,16 @@ impl ToggleButtonWidget {
     /// Creates a new `ToggleButtonWidget` given the `x, y, w, h` coordinates, the `text` to display
     /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
     /// being selected, `false` otherwise.
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        text: String,
-        font_size: i32,
-        selected: bool,
-    ) -> Self {
-        let mut base_widget = BaseWidget::new(x, y, w, h);
+    pub fn new(points: Points, size: Size, text: String, font_size: i32, selected: bool) -> Self {
+        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Center,
             text.clone(),
-            x + 2,
-            y + 2,
-            w - 4,
-            h - 4,
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_WIDTH].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
         );
 
         let base_color = if selected {
@@ -86,7 +78,7 @@ impl ToggleButtonWidget {
             Color::RGB(0, 0, 0)
         };
 
-        let mut config = WidgetConfig::new(x, y, w, h);
+        let mut config = WidgetConfig::new(points.clone(), size.clone());
 
         base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));

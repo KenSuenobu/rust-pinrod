@@ -18,7 +18,7 @@ use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, Size};
 
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -44,8 +44,8 @@ impl ProgressWidget {
     /// `Widget` given the `xywh` coordinates, and the `percentage` of fill from 0-100.  The
     /// base color and border colors are set to white and black, respectively.  Use the
     /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, progress: u8) -> Self {
-        let mut base_widget = BaseWidget::new(x, y, w, h);
+    pub fn new(points: Points, size: Size, progress: u8) -> Self {
+        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
 
         base_widget
             .get_config()
@@ -58,7 +58,7 @@ impl ProgressWidget {
         base_widget.get_config().set_numeric(CONFIG_BORDER_WIDTH, 1);
 
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,

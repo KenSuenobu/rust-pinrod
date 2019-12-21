@@ -327,9 +327,9 @@ pub struct BaseWidget {
 /// Base top-level implementation of the `BaseWidget`, which other classes can extend.
 impl BaseWidget {
     /// Constructs a new base widget, given the points of origin and size.
-    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
+    pub fn new(points: Points, size: Size) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
         }

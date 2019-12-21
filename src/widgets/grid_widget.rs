@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, SIZE_HEIGHT, SIZE_WIDTH};
+use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -39,9 +39,9 @@ pub struct GridWidget {
 /// This is the implementation of the `GridWidget`, a control that displays a grid inside its bounds.
 impl GridWidget {
     /// Creates a new `GridWidget` given the `x, y, w, h` coordinates, sets the grid size.
-    pub fn new(x: i32, y: i32, w: u32, h: u32, grid_size: u32) -> Self {
+    pub fn new(points: Points, size: Size, grid_size: u32) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             grid_size,

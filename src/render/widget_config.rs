@@ -176,11 +176,11 @@ pub struct WidgetConfig {
 impl WidgetConfig {
     /// Constructor - takes the X, Y, W, and H coordinates of the `Widget`, physically in the
     /// main `Canvas`.
-    pub fn new(x: i32, y: i32, w: u32, h: u32) -> Self {
+    pub fn new(points: Points, size: Size) -> Self {
         Self {
             config: [
-                (CONFIG_ORIGIN, Config::Points(vec![x, y])),
-                (CONFIG_SIZE, Config::Size(vec![w, h])),
+                (CONFIG_ORIGIN, Config::Points(points.clone())),
+                (CONFIG_SIZE, Config::Size(size.clone())),
                 (CONFIG_COLOR_BASE, Config::Color(Color::RGB(255, 255, 255))),
                 (CONFIG_BORDER_WIDTH, Config::Numeric(0)),
             ]

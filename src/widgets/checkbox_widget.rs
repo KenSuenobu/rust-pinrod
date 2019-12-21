@@ -17,7 +17,9 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{
+    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -56,42 +58,34 @@ impl CheckboxWidget {
     /// Creates a new `CheckboxWidget` given the `x, y, w, h` coordinates, the `text` to display
     /// inside the button, `font_size` of the font to display, and the initial `selected` state: `true`
     /// being checked, `false` otherwise.
-    pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        text: String,
-        font_size: i32,
-        selected: bool,
-    ) -> Self {
+    pub fn new(points: Points, size: Size, text: String, font_size: i32, selected: bool) -> Self {
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Left,
             text.clone(),
-            x + h as i32 + 6,
-            y + 2,
-            w - h - 10,
-            h - 4,
+            make_points(
+                points[POINT_X].clone() + size[SIZE_HEIGHT].clone() as i32 + 6,
+                points[POINT_Y].clone() + 2,
+            ),
+            make_size(
+                size[SIZE_WIDTH].clone() - size[SIZE_HEIGHT].clone() - 10,
+                size[SIZE_HEIGHT].clone() - 4,
+            ),
         );
 
-        let mut config = WidgetConfig::new(x, y, w, h);
+        let mut config = WidgetConfig::new(points.clone(), size.clone());
         let mut unchecked_widget = ImageWidget::new(
             String::from("assets/checkbox_unselected.png"),
-            x + 2,
-            y + 2,
-            h - 4,
-            h - 4,
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
             true,
         );
         let mut checked_widget = ImageWidget::new(
             String::from("assets/checkbox_selected.png"),
-            x + 2,
-            y + 2,
-            h - 4,
-            h - 4,
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
             true,
         );
 

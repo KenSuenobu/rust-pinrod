@@ -18,7 +18,7 @@ use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::Points;
+use crate::render::{Points, Size};
 
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::ttf::FontStyle;
@@ -67,13 +67,11 @@ impl TextWidget {
         font_size: i32,
         justification: TextJustify,
         msg: String,
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
+        points: Points,
+        size: Size,
     ) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             font_name,

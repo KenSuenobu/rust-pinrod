@@ -20,7 +20,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{
     CompassPosition, Config, WidgetConfig, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION, CONFIG_SIZE,
 };
-use crate::render::Points;
+use crate::render::{Points, Size};
 
 use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
@@ -52,9 +52,9 @@ impl ImageWidget {
     /// `ImagePosition` will be ignored.  Likewise, if set to `false`, the image will be displayed for
     /// the size of the image, and will be placed in the bounds of the `Widget` based on the position
     /// specified in the `ImagePosition`.
-    pub fn new(image_name: String, x: i32, y: i32, w: u32, h: u32, scaled: bool) -> Self {
+    pub fn new(image_name: String, points: Points, size: Size, scaled: bool) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             image_name,

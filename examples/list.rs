@@ -7,6 +7,7 @@ use pushrod::render::widget_config::{
     CONFIG_BORDER_WIDTH, CONFIG_COLOR_BASE, CONFIG_COLOR_BORDER, CONFIG_COLOR_HOVER,
     CONFIG_COLOR_SECONDARY,
 };
+use pushrod::render::{make_points, make_size};
 use pushrod::widgets::list_widget::*;
 use sdl2::pixels::Color;
 
@@ -20,7 +21,7 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 300, 60);
-    let mut widget1 = ListWidget::new(20, 20, 200, 260);
+    let mut widget1 = ListWidget::new(make_points(20, 20), make_size(200, 260));
 
     widget1.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
     widget1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));

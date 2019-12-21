@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
+use crate::render::{Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -65,17 +65,15 @@ impl SliderWidget {
     /// Creates a new `SliderWidget` given the `x, y, w, h` coordinates, sets the `min` and `max` values,
     /// the `current` value, and the `orientation` of the slider as drawn.
     pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
+        points: Points,
+        size: Size,
         min: u32,
         max: u32,
         current: u32,
         orientation: SliderOrientation,
     ) -> Self {
         Self {
-            config: WidgetConfig::new(x, y, w, h),
+            config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             min,
