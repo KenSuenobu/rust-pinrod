@@ -17,7 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, Size};
+use crate::render::{Points, Size, make_points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH, make_size};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -25,6 +25,10 @@ use sdl2::video::Window;
 use crate::render::layout_cache::LayoutContainer;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::widgets::text_widget::{TextWidget, TextJustify};
+use crate::widgets::image_widget::ImageWidget;
+use crate::render::widget_config::CompassPosition::Center;
+use sdl2::pixels::Color;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
@@ -38,21 +42,57 @@ pub struct TileWidget {
     callback_registry: CallbackRegistry,
     on_selected: OnSelectedCallbackType,
     image_filename: String,
+    image_size: Size,
     tile_text: String,
+    base_widget: BaseWidget,
+    text_widget: TextWidget,
+    image_widget: ImageWidget,
 }
 
 /// This is the implementation of the `TileWidget`, which displays an image next to some text.
 impl TileWidget {
     /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
     /// `font_size` to use, and the `image_name` to load and display.
-    pub fn new(points: Points, size: Size, image_filename: String, tile_text: String) -> Self {
+    pub fn new(points: Points, size: Size, image_filename: String, image_size: Size, tile_text: String) -> Self {
+        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
+        let mut text_widget = TextWidget::new(
+            String::from("assets/OpenSans-Regular.ttf"),
+            sdl2::ttf::FontStyle::NORMAL,
+            16,
+            TextJustify::Left,
+            tile_text.clone(),
+            make_points(
+                points[POINT_X].clone(),
+                points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 20,
+            ),
+            make_size(
+                size[SIZE_WIDTH].clone(),
+                20,
+            ),
+        );
+        let mut image_widget = ImageWidget::new(
+            image_filename.clone(),
+            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
+            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            false,
+        );
+
+        base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+        text_widget.set_color(CONFIG_COLOR_BASE, Color::RGBA(255, 255, 255, 0));
+        text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
+        image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
+
         Self {
             config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             on_selected: None,
             image_filename: image_filename.clone(),
+            image_size,
             tile_text: tile_text.clone(),
+            base_widget,
+            text_widget,
+            image_widget,
         }
     }
 
@@ -95,12 +135,12 @@ impl TileWidget {
 
 /// This is the `Widget` implementation of the `TileWidget`.
 impl Widget for TileWidget {
-    fn draw(&mut self, _c: &mut Canvas<Window>) {
-        //        // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
-        //        // Invalidation is controlled by the top level widget (this box).
-        //        self.base_widget.draw(c);
-        //        self.text_widget.draw(c);
-        //        self.image_widget.draw(c);
+    fn draw(&mut self, c: &mut Canvas<Window>) {
+        // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
+        // Invalidation is controlled by the top level widget (this box).
+        self.base_widget.draw(c);
+        self.text_widget.draw(c);
+        self.image_widget.draw(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
