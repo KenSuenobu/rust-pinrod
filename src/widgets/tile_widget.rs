@@ -47,6 +47,8 @@ pub struct TileWidget {
     base_widget: BaseWidget,
     text_widget: TextWidget,
     image_widget: ImageWidget,
+    selected: bool,
+    hovered: bool,
 }
 
 /// This is the implementation of the `TileWidget`, which displays an image next to some text.
@@ -58,27 +60,30 @@ impl TileWidget {
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
             sdl2::ttf::FontStyle::NORMAL,
-            16,
-            TextJustify::Left,
+            14,
+            TextJustify::Center,
             tile_text.clone(),
             make_points(
-                points[POINT_X].clone(),
-                points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 20,
+                points[POINT_X].clone() + 1,
+                points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 19,
             ),
             make_size(
-                size[SIZE_WIDTH].clone(),
-                20,
+                size[SIZE_WIDTH].clone() - 2,
+                18,
             ),
         );
         let mut image_widget = ImageWidget::new(
             image_filename.clone(),
-            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
-            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            make_points(points[POINT_X].clone() + size[SIZE_WIDTH] as i32 / 2 - image_size[SIZE_WIDTH] as i32 / 2,
+                        points[POINT_Y].clone() + image_size[SIZE_HEIGHT] as i32 / 2 + 1),
+            make_size(image_size[SIZE_WIDTH].clone(), image_size[SIZE_HEIGHT].clone()),
             false,
         );
 
+        base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
+        base_widget.set_numeric(CONFIG_BORDER_WIDTH, 1);
         base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-        text_widget.set_color(CONFIG_COLOR_BASE, Color::RGBA(255, 255, 255, 0));
+        text_widget.set_color(CONFIG_COLOR_BASE, Color::RGBA(255, 255, 255, 255));
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
         image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
@@ -93,6 +98,8 @@ impl TileWidget {
             base_widget,
             text_widget,
             image_widget,
+            selected: false,
+            hovered: false,
         }
     }
 
@@ -139,8 +146,8 @@ impl Widget for TileWidget {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         self.base_widget.draw(c);
-        self.text_widget.draw(c);
         self.image_widget.draw(c);
+        self.text_widget.draw(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
