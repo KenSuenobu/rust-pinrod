@@ -4,6 +4,7 @@
 
 - Created TileWidget (#256)
 - Added ability to connect or disconnect grid lines (#269)
+- Created a canvas drawing helper trait (#278) 
 
 ## 0.4.21
 
