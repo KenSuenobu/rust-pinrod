@@ -6,6 +6,7 @@
 - Added ability to connect or disconnect grid lines (#269)
 - Created a canvas drawing helper trait (#278)
 - Modified `GridWidget` to use `CanvasHelper`.
+- Added point draw helper function (#279)
 
 ## 0.4.21
 
