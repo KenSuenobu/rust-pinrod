@@ -2,6 +2,9 @@
 
 ## 0.4.22
 
+- Created TileWidget (#256)
+- Added ability to connect or disconnect grid lines (#269)
+
 ## 0.4.21
 
 - Fixed typo in mod.rs (#263)
