@@ -27,6 +27,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the storage object for the `GridWidget`.  It stores the config, properties, callback registry.
 pub struct GridWidget {
@@ -36,6 +37,8 @@ pub struct GridWidget {
     grid_size: u32,
     grid_connections: bool,
 }
+
+impl CanvasHelper for GridWidget { }
 
 /// This is the implementation of the `GridWidget`, a control that displays a grid inside its bounds.
 impl GridWidget {
@@ -83,10 +86,7 @@ impl GridWidget {
 
             for x in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
                 for y in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-                    c.draw_point(Point::new(
-                        self.get_config().to_x(x as i32),
-                        self.get_config().to_y(y as i32)
-                    )).unwrap();
+                    self.draw_point(c, x as i32, y as i32);
                 }
             }
         }
