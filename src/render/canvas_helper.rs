@@ -15,12 +15,19 @@
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use sdl2::rect::Point;
+use sdl2::rect::{Point, Rect};
 use crate::render::widget::Widget;
+use crate::render::widget_config::{CONFIG_SIZE, CONFIG_BORDER_WIDTH};
+use crate::render::{SIZE_WIDTH, SIZE_HEIGHT};
 
 /// This trait is used in conjunction with `Widget`s or anything else that draws to a `Canvas` object.
 /// It provides convenience methods to provide drawing functions common to `Widget`s.  All points and
 /// dimensions are relative to the position of the `Widget`, so no translation is necessary.
+///
+/// To implement this trait in your `Widget`, all you have to do is:
+/// ```ignore
+/// impl CanvasHelper for (myWidget) { }
+/// ```
 pub trait CanvasHelper: Widget {
 
     /// Draws a point in the `Canvas`.
@@ -28,6 +35,18 @@ pub trait CanvasHelper: Widget {
         let point = Point::new(self.get_config().to_x(x), self.get_config().to_y(y));
 
         c.draw_point(point).unwrap();
+    }
+
+    /// Draws a box around the bounding area of the `Widget`.
+    fn draw_bounding_box(&mut self, c: &mut Canvas<Window>) {
+        let border = self.get_config().get_numeric(CONFIG_BORDER_WIDTH);
+
+        for i in 0..border {
+            c.draw_rect(Rect::new(self.get_config().to_x(i as i32),
+                                  self.get_config().to_y(i as i32),
+                                  self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH] - (i * 2) as u32,
+                                  self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT] - (i * 2) as u32)).unwrap();
+        }
     }
 
 }

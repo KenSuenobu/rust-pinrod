@@ -31,6 +31,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -127,6 +128,8 @@ impl CheckboxWidget {
     }
 }
 
+impl CanvasHelper for CheckboxWidget { }
+
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
@@ -156,6 +159,7 @@ impl Widget for CheckboxWidget {
         }
 
         self.text_widget.draw(c);
+        self.draw_bounding_box(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

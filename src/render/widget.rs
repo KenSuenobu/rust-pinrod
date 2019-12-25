@@ -26,6 +26,7 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::canvas_helper::CanvasHelper;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -336,6 +337,8 @@ impl BaseWidget {
     }
 }
 
+impl CanvasHelper for BaseWidget { }
+
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
     fn draw(&mut self, mut _canvas: &mut Canvas<Window>) {
@@ -346,20 +349,8 @@ impl Widget for BaseWidget {
 
         _canvas.fill_rect(self.get_drawing_area()).unwrap();
 
-        if self.get_config().get_numeric(CONFIG_BORDER_WIDTH) > 0 && base_color != border_color {
-            _canvas.set_draw_color(border_color);
-
-            for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
-                _canvas
-                    .draw_rect(Rect::new(
-                        self.config.to_x(border),
-                        self.config.to_y(border),
-                        self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
-                        self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
-                    ))
-                    .unwrap();
-            }
-        }
+        _canvas.set_draw_color(border_color);
+        self.draw_bounding_box(_canvas);
     }
 
     default_widget_functions!();

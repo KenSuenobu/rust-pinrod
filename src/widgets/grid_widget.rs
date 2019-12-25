@@ -126,17 +126,7 @@ impl Widget for GridWidget {
             self.get_config().get_size(CONFIG_SIZE)[1],
         )).unwrap();
 
-        if self.get_config().get_numeric(CONFIG_BORDER_WIDTH) > 0 && base_color != border_color {
-            for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
-                c.draw_rect(Rect::new(
-                    self.config.to_x(border),
-                    self.config.to_y(border),
-                    self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
-                    self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
-                ))
-                    .unwrap();
-            }
-        }
+        self.draw_bounding_box(c);
     }
 
     default_widget_functions!();

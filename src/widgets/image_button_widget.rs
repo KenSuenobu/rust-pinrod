@@ -31,6 +31,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.

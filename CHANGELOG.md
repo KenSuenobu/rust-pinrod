@@ -7,6 +7,8 @@
 - Created a canvas drawing helper trait (#278)
 - Modified `GridWidget` to use `CanvasHelper`.
 - Added point draw helper function (#279)
+- Added bounding box drawing helper function (#280)
+- Modified widgets to use the bounding box.
 
 ## 0.4.21
 

@@ -28,6 +28,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -107,6 +108,8 @@ impl SliderWidget {
         }
     }
 }
+
+impl CanvasHelper for SliderWidget { }
 
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
@@ -261,6 +264,8 @@ impl Widget for SliderWidget {
             ))
             .unwrap();
         }
+
+        self.draw_bounding_box(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
