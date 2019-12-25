@@ -21,6 +21,7 @@ use crate::render::widget_config::*;
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::{Points, Size, POINT_Y};
 use sdl2::pixels::Color;
@@ -28,7 +29,6 @@ use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_selected` callback is triggered from this
 /// `Widget`.
@@ -174,7 +174,7 @@ impl ListWidget {
     }
 }
 
-impl CanvasHelper for ListWidget { }
+impl CanvasHelper for ListWidget {}
 
 /// This is the `Widget` implementation of the `ListWidget`.
 impl Widget for ListWidget {

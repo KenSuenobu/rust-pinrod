@@ -18,6 +18,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::render::callbacks::*;
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
@@ -26,7 +27,6 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -337,7 +337,7 @@ impl BaseWidget {
     }
 }
 
-impl CanvasHelper for BaseWidget { }
+impl CanvasHelper for BaseWidget {}
 
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {

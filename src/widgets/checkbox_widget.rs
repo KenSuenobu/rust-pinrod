@@ -24,6 +24,7 @@ use crate::render::{
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
@@ -31,7 +32,6 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -128,7 +128,7 @@ impl CheckboxWidget {
     }
 }
 
-impl CanvasHelper for CheckboxWidget { }
+impl CanvasHelper for CheckboxWidget {}
 
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {

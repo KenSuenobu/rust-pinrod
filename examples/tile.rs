@@ -3,10 +3,12 @@ extern crate sdl2;
 
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::{CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_HOVER, CONFIG_COLOR_SELECTED};
+use pushrod::render::widget_config::{
+    CONFIG_BORDER_WIDTH, CONFIG_COLOR_BORDER, CONFIG_COLOR_HOVER, CONFIG_COLOR_SELECTED,
+};
 use pushrod::render::{make_points, make_size};
-use sdl2::pixels::Color;
 use pushrod::widgets::tile_widget::TileWidget;
+use sdl2::pixels::Color;
 
 pub fn main() {
     let hover_color = Color::RGBA(0, 0, 0, 175);
@@ -46,9 +48,9 @@ pub fn main() {
     tile2.set_color(CONFIG_COLOR_HOVER, hover_color.clone());
     tile2.set_color(CONFIG_COLOR_SELECTED, selected_color.clone());
 
-//    button2.on_toggle(|_, _widgets, _layouts, _state| {
-//        eprintln!("2 Toggled: {}", _state);
-//    });
+    //    button2.on_toggle(|_, _widgets, _layouts, _state| {
+    //        eprintln!("2 Toggled: {}", _state);
+    //    });
 
     let mut tile3 = TileWidget::new(
         make_points(190, 10),

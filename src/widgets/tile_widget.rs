@@ -17,19 +17,21 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{Points, Size, make_points, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH, make_size};
+use crate::render::{
+    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+};
 
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
-use std::any::Any;
-use std::collections::HashMap;
-use crate::widgets::text_widget::{TextWidget, TextJustify};
-use crate::widgets::image_widget::ImageWidget;
 use crate::render::widget_config::CompassPosition::Center;
+use crate::widgets::image_widget::ImageWidget;
+use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use std::any::Any;
+use std::collections::HashMap;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
@@ -56,7 +58,13 @@ pub struct TileWidget {
 impl TileWidget {
     /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
     /// `font_size` to use, and the `image_name` to load and display.
-    pub fn new(points: Points, size: Size, image_filename: String, image_size: Size, tile_text: String) -> Self {
+    pub fn new(
+        points: Points,
+        size: Size,
+        image_filename: String,
+        image_size: Size,
+        tile_text: String,
+    ) -> Self {
         let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
@@ -68,16 +76,19 @@ impl TileWidget {
                 points[POINT_X].clone() + 1,
                 points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 19,
             ),
-            make_size(
-                size[SIZE_WIDTH].clone() - 2,
-                18,
-            ),
+            make_size(size[SIZE_WIDTH].clone() - 2, 18),
         );
         let mut image_widget = ImageWidget::new(
             image_filename.clone(),
-            make_points(points[POINT_X].clone() + size[SIZE_WIDTH] as i32 / 2 - image_size[SIZE_WIDTH] as i32 / 2,
-                        points[POINT_Y].clone() + image_size[SIZE_HEIGHT] as i32 / 2 + 1),
-            make_size(image_size[SIZE_WIDTH].clone(), image_size[SIZE_HEIGHT].clone()),
+            make_points(
+                points[POINT_X].clone() + size[SIZE_WIDTH] as i32 / 2
+                    - image_size[SIZE_WIDTH] as i32 / 2,
+                points[POINT_Y].clone() + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
+            ),
+            make_size(
+                image_size[SIZE_WIDTH].clone(),
+                image_size[SIZE_HEIGHT].clone(),
+            ),
             false,
         );
 
@@ -106,14 +117,19 @@ impl TileWidget {
 
     /// Assigns the callback closure that will be used when a button click is triggered.
     pub fn on_click<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut TileWidget, &[WidgetContainer], &[LayoutContainer], bool) + 'static,
+    where
+        F: FnMut(&mut TileWidget, &[WidgetContainer], &[LayoutContainer], bool) + 'static,
     {
         self.on_click = Some(Box::new(callback));
     }
 
     /// Internal function that triggers the `on_click` callback.
-    fn call_click_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer], state: bool) {
+    fn call_click_callback(
+        &mut self,
+        widgets: &[WidgetContainer],
+        layouts: &[LayoutContainer],
+        state: bool,
+    ) {
         if let Some(mut cb) = self.on_click.take() {
             cb(self, widgets, layouts, state);
             self.on_click = Some(cb);
@@ -128,12 +144,14 @@ impl Widget for TileWidget {
         // Invalidation is controlled by the top level widget (this box).
         if self.selected {
             let selected_color = self.get_color(CONFIG_COLOR_SELECTED);
-            self.base_widget.set_color(CONFIG_COLOR_BASE, selected_color);
+            self.base_widget
+                .set_color(CONFIG_COLOR_BASE, selected_color);
         } else if self.hovered {
             let hover_color = self.get_color(CONFIG_COLOR_HOVER);
             self.base_widget.set_color(CONFIG_COLOR_BASE, hover_color);
         } else {
-            self.base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+            self.base_widget
+                .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         }
 
         self.base_widget.draw(c);

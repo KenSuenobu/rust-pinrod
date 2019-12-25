@@ -22,12 +22,12 @@ use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the storage object for the `GridWidget`.  It stores the config, properties, callback registry.
 pub struct GridWidget {
@@ -38,7 +38,7 @@ pub struct GridWidget {
     grid_connections: bool,
 }
 
-impl CanvasHelper for GridWidget { }
+impl CanvasHelper for GridWidget {}
 
 /// This is the implementation of the `GridWidget`, a control that displays a grid inside its bounds.
 impl GridWidget {
@@ -68,7 +68,7 @@ impl GridWidget {
                         self.get_config().to_y(size[SIZE_HEIGHT] as i32),
                     ),
                 )
-                    .unwrap();
+                .unwrap();
             }
 
             for i in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
@@ -79,7 +79,7 @@ impl GridWidget {
                         self.get_config().to_y(i as i32),
                     ),
                 )
-                    .unwrap();
+                .unwrap();
             }
         } else {
             c.set_draw_color(Color::RGB(0, 0, 0));
@@ -124,7 +124,8 @@ impl Widget for GridWidget {
             self.config.to_y(0),
             self.get_config().get_size(CONFIG_SIZE)[0],
             self.get_config().get_size(CONFIG_SIZE)[1],
-        )).unwrap();
+        ))
+        .unwrap();
 
         self.draw_bounding_box(c);
     }

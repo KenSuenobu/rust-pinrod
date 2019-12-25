@@ -22,13 +22,13 @@ use crate::render::{Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -109,7 +109,7 @@ impl SliderWidget {
     }
 }
 
-impl CanvasHelper for SliderWidget { }
+impl CanvasHelper for SliderWidget {}
 
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
