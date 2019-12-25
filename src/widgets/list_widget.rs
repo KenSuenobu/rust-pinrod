@@ -21,6 +21,7 @@ use crate::render::widget_config::*;
 use sdl2::render::{Canvas, TextureQuery};
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::{Points, Size, POINT_Y};
 use sdl2::pixels::Color;
@@ -173,6 +174,8 @@ impl ListWidget {
     }
 }
 
+impl CanvasHelper for ListWidget {}
+
 /// This is the `Widget` implementation of the `ListWidget`.
 impl Widget for ListWidget {
     /// Draws the `ListWidget` contents.
@@ -186,19 +189,8 @@ impl Widget for ListWidget {
 
         let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
 
-        if self.get_config().get_numeric(CONFIG_BORDER_WIDTH) > 0 && base_color != border_color {
-            c.set_draw_color(border_color);
-
-            for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
-                c.draw_rect(Rect::new(
-                    self.config.to_x(border),
-                    self.config.to_y(border),
-                    self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
-                    self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
-                ))
-                .unwrap();
-            }
-        }
+        c.set_draw_color(border_color);
+        self.draw_bounding_box(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

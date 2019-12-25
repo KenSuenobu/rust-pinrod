@@ -24,6 +24,7 @@ use crate::render::{
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;

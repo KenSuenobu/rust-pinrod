@@ -22,6 +22,7 @@ use crate::render::{Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use sdl2::pixels::Color;
@@ -107,6 +108,8 @@ impl SliderWidget {
         }
     }
 }
+
+impl CanvasHelper for SliderWidget {}
 
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
@@ -261,6 +264,8 @@ impl Widget for SliderWidget {
             ))
             .unwrap();
         }
+
+        self.draw_bounding_box(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

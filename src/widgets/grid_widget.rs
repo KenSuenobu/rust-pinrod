@@ -22,6 +22,7 @@ use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
@@ -34,17 +35,21 @@ pub struct GridWidget {
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
     grid_size: u32,
+    grid_connections: bool,
 }
+
+impl CanvasHelper for GridWidget {}
 
 /// This is the implementation of the `GridWidget`, a control that displays a grid inside its bounds.
 impl GridWidget {
     /// Creates a new `GridWidget` given the `x, y, w, h` coordinates, sets the grid size.
-    pub fn new(points: Points, size: Size, grid_size: u32) -> Self {
+    pub fn new(points: Points, size: Size, grid_size: u32, grid_connections: bool) -> Self {
         Self {
             config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             grid_size,
+            grid_connections,
         }
     }
 
@@ -52,34 +57,50 @@ impl GridWidget {
     fn draw_grid(&mut self, c: &mut Canvas<Window>) {
         let size = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(Color::RGB(192, 192, 192));
+        if self.grid_connections {
+            c.set_draw_color(Color::RGB(192, 192, 192));
 
-        for i in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
-            c.draw_line(
-                Point::new(self.get_config().to_x(i as i32), self.get_config().to_y(0)),
-                Point::new(
-                    self.get_config().to_x(i as i32),
-                    self.get_config().to_y(size[SIZE_HEIGHT] as i32),
-                ),
-            )
-            .unwrap();
-        }
+            for i in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
+                c.draw_line(
+                    Point::new(self.get_config().to_x(i as i32), self.get_config().to_y(0)),
+                    Point::new(
+                        self.get_config().to_x(i as i32),
+                        self.get_config().to_y(size[SIZE_HEIGHT] as i32),
+                    ),
+                )
+                .unwrap();
+            }
 
-        for i in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-            c.draw_line(
-                Point::new(self.get_config().to_x(0), self.get_config().to_y(i as i32)),
-                Point::new(
-                    self.get_config().to_x(size[SIZE_WIDTH] as i32),
-                    self.get_config().to_y(i as i32),
-                ),
-            )
-            .unwrap();
+            for i in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
+                c.draw_line(
+                    Point::new(self.get_config().to_x(0), self.get_config().to_y(i as i32)),
+                    Point::new(
+                        self.get_config().to_x(size[SIZE_WIDTH] as i32),
+                        self.get_config().to_y(i as i32),
+                    ),
+                )
+                .unwrap();
+            }
+        } else {
+            c.set_draw_color(Color::RGB(0, 0, 0));
+
+            for x in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
+                for y in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
+                    self.draw_point(c, x as i32, y as i32);
+                }
+            }
         }
     }
 
     /// Adjusts the size of the grid, redrawing the object.
     pub fn set_grid_size(&mut self, grid_size: u32) {
         self.grid_size = grid_size;
+        self.get_config().set_invalidated(true);
+    }
+
+    /// Turns on or off the grid, showing a grid or dots.
+    pub fn set_grid_connections(&mut self, grid_connections: bool) {
+        self.grid_connections = grid_connections;
         self.get_config().set_invalidated(true);
     }
 }
@@ -97,19 +118,16 @@ impl Widget for GridWidget {
 
         let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
 
-        if self.get_config().get_numeric(CONFIG_BORDER_WIDTH) > 0 && base_color != border_color {
-            c.set_draw_color(border_color);
+        c.set_draw_color(border_color);
+        c.draw_rect(Rect::new(
+            self.config.to_x(0),
+            self.config.to_y(0),
+            self.get_config().get_size(CONFIG_SIZE)[0],
+            self.get_config().get_size(CONFIG_SIZE)[1],
+        ))
+        .unwrap();
 
-            for border in 0..self.get_config().get_numeric(CONFIG_BORDER_WIDTH) {
-                c.draw_rect(Rect::new(
-                    self.config.to_x(border),
-                    self.config.to_y(border),
-                    self.get_config().get_size(CONFIG_SIZE)[0] - (border as u32 * 2),
-                    self.get_config().get_size(CONFIG_SIZE)[1] - (border as u32 * 2),
-                ))
-                .unwrap();
-            }
-        }
+        self.draw_bounding_box(c);
     }
 
     default_widget_functions!();

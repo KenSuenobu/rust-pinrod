@@ -1,5 +1,15 @@
 # Pushrod Change Log
 
+## 0.4.22
+
+- Created TileWidget (#256)
+- Added ability to connect or disconnect grid lines (#269)
+- Created a canvas drawing helper trait (#278)
+- Modified `GridWidget` to use `CanvasHelper`.
+- Added point draw helper function (#279)
+- Added bounding box drawing helper function (#280)
+- Modified widgets to use the bounding box.
+
 ## 0.4.21
 
 - Fixed typo in mod.rs (#263)

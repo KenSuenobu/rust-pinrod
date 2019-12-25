@@ -50,6 +50,9 @@ pub fn make_size(w: u32, h: u32) -> Size {
 /// of `Widget`s in a `Window`.  This is the main event loop.
 pub mod engine;
 
+/// This is the `CanvasHelper` trait that is used to help draw against a `Canvas`.
+pub mod canvas_helper;
+
 /// This is the `Callbacks` mechanism for each `Widget`, providing a way to perform a function when
 /// an action is intercepted (ie. mouse enter, exit, move, etc.)
 pub mod callbacks;

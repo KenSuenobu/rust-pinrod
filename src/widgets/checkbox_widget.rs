@@ -24,6 +24,7 @@ use crate::render::{
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
@@ -127,6 +128,8 @@ impl CheckboxWidget {
     }
 }
 
+impl CanvasHelper for CheckboxWidget {}
+
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
@@ -156,6 +159,7 @@ impl Widget for CheckboxWidget {
         }
 
         self.text_widget.draw(c);
+        self.draw_bounding_box(c);
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
