@@ -3,6 +3,7 @@
 ## 0.4.23
 
 - Improved drawing loop by using hardware acceleration with vsync
+- Modified `draw_loop` in the `WidgetCache` to return true/false for display swap/refresh
 
 ## 0.4.22
 

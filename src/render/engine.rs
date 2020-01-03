@@ -127,7 +127,7 @@ impl Engine {
 
     /// Main application run loop, controls interaction between the user and the application.
     pub fn run(&mut self, sdl: Sdl, window: Window) {
-        let mut canvas = window.into_canvas().target_texture().present_vsync().accelerated().build().unwrap();
+        let mut canvas = window.into_canvas().target_texture().accelerated().build().unwrap();
 
         canvas.set_draw_color(Color::RGB(255, 255, 255));
         canvas.clear();
@@ -216,7 +216,11 @@ impl Engine {
             self.widget_cache.tick(self.layout_cache.get_layout_cache());
             self.layout_cache
                 .do_layout(self.widget_cache.borrow_cache());
-            self.widget_cache.draw_loop(&mut canvas);
+
+            // Flip screen display canvas only if the draw loop requires a refresh.
+            if self.widget_cache.draw_loop(&mut canvas) {
+                canvas.present();
+            }
 
             // This obeys thread sleep time.
             let now = SystemTime::now()
