@@ -24,6 +24,7 @@ use crate::render::widget_cache::WidgetCache;
 use crate::render::{make_points_origin, make_size};
 use std::thread::sleep;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use sdl2::pixels::Color;
 
 /// This function is called when when the application requests to quit.  It accepts the currently
 /// running engine, and the return value will indicate whether or not to quit.  Returning a `true`
@@ -126,8 +127,9 @@ impl Engine {
 
     /// Main application run loop, controls interaction between the user and the application.
     pub fn run(&mut self, sdl: Sdl, window: Window) {
-        let mut canvas = window.into_canvas().software().build().unwrap();
+        let mut canvas = window.into_canvas().target_texture().present_vsync().accelerated().build().unwrap();
 
+        canvas.set_draw_color(Color::RGB(255, 255, 255));
         canvas.clear();
         canvas.present();
 

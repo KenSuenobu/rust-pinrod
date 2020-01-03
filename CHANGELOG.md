@@ -1,5 +1,9 @@
 # Pushrod Change Log
 
+## 0.4.23
+
+- Improved drawing loop by using hardware acceleration with vsync
+
 ## 0.4.22
 
 - Created TileWidget (#256)
