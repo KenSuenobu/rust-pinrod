@@ -80,14 +80,10 @@ impl TileWidget {
         let mut image_widget = ImageWidget::new(
             image_filename,
             make_points(
-                points[POINT_X] + size[SIZE_WIDTH] as i32 / 2
-                    - image_size[SIZE_WIDTH] as i32 / 2,
+                points[POINT_X] + size[SIZE_WIDTH] as i32 / 2 - image_size[SIZE_WIDTH] as i32 / 2,
                 points[POINT_Y] + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
             ),
-            make_size(
-                image_size[SIZE_WIDTH],
-                image_size[SIZE_HEIGHT],
-            ),
+            make_size(image_size[SIZE_WIDTH], image_size[SIZE_HEIGHT]),
             false,
         );
 
