@@ -14,7 +14,7 @@
 // limitations under the License.
 
 use sdl2::rect::Rect;
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::callbacks::*;
@@ -23,6 +23,7 @@ use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
+use core::ptr;
 use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
@@ -45,7 +46,12 @@ pub trait Widget {
     /// Draws the widget.  If you wish to modify the canvas object, you must declare it as `mut` in
     /// your implementation (ie `fn draw(&mut self, mut canvas: Canvas<Window>)`).  The `_canvas`
     /// is the currently active drawing canvas at the time this function is called.  This called
-    /// during the draw loop of the `Engine`.
+    /// during the draw loop of the `Engine`.  This returns a reference to the stored `Texture` object
+    /// within the `Widget`.  It is then copied to the canvas, and displayed in the display loop.
+    /// In this function, you can just return a reference to the `Texture` if no invalidation state
+    /// was set, otherwise, the draw can be re-performed, and the `Texture` returned.  If the drawing
+    /// function returns no texture, return a `None`, and it will not be rendered during the display
+    /// loop, but it will still be called.
     fn draw(&mut self, _c: &mut Canvas<Window>) {}
 
     /// Retrieves the `WidgetConfig` object for this `Widget`.
@@ -323,6 +329,7 @@ pub struct BaseWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    canvas_texture: Option<Texture>,
 }
 
 /// Base top-level implementation of the `BaseWidget`, which other classes can extend.
@@ -333,6 +340,25 @@ impl BaseWidget {
             config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            canvas_texture: None,
+        }
+    }
+
+    fn create_texture(&mut self, c: &mut Canvas<Window>) {
+        match self.canvas_texture {
+            None => {
+                let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
+                let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
+                self.canvas_texture = Some(
+                    c.create_texture_target(None, widget_width, widget_height)
+                        .unwrap(),
+                );
+                eprintln!(
+                    "Creating canvas texture: {}x{}",
+                    widget_width, widget_height
+                );
+            }
+            _ => (),
         }
     }
 }
@@ -341,16 +367,37 @@ impl CanvasHelper for BaseWidget {}
 
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
-    fn draw(&mut self, mut _canvas: &mut Canvas<Window>) {
-        let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
-        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+    fn draw(&mut self, mut c: &mut Canvas<Window>) {
+        self.create_texture(c);
 
-        _canvas.set_draw_color(base_color);
+        if self.get_config().invalidated() {
+            let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        _canvas.fill_rect(self.get_drawing_area()).unwrap();
+            match &mut self.canvas_texture {
+                Some(ref mut ref_texture) => {
+                    c.with_texture_canvas(ref_texture, |texture| {
+                        texture.set_draw_color(base_color);
+                        texture.clear();
 
-        _canvas.set_draw_color(border_color);
-        self.draw_bounding_box(_canvas);
+                        texture.set_draw_color(border_color);
+                        texture
+                            .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
+                            .unwrap();
+                    })
+                        .unwrap();
+                }
+                None => (),
+            }
+
+            let draw_rect = self.get_rect_dest();
+
+            match &self.canvas_texture {
+                Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
+                None => {},
+            };
+        }
     }
 
     default_widget_functions!();
