@@ -1,5 +1,12 @@
 # Pushrod Change Log
 
+## 0.4.23
+
+- Improved drawing loop by using hardware acceleration with vsync
+- Modified `draw_loop` in the `WidgetCache` to return true/false for display swap/refresh
+- Modified `BaseWidget` to use `Texture` for drawing (Part of work for #29)
+- Modified `CanvasWidget` to use `Texture` for drawing (Part of work for #29)
+
 ## 0.4.22
 
 - Created TileWidget (#256)

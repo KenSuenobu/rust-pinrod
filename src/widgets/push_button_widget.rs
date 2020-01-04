@@ -63,9 +63,9 @@ impl PushButtonWidget {
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Center,
-            text.clone(),
-            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
-            make_size(size[SIZE_WIDTH].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            text,
+            make_points(points[POINT_X] + 2, points[POINT_Y] + 2),
+            make_size(size[SIZE_WIDTH] - 4, size[SIZE_HEIGHT] - 4),
         );
 
         base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
@@ -75,7 +75,7 @@ impl PushButtonWidget {
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
 
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,

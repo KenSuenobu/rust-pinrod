@@ -53,7 +53,7 @@ impl ListWidget {
     /// Creates a new `ListWidget` given the `x, y, w, h` coordinates.
     pub fn new(points: Points, size: Size) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             list_items: vec![],
@@ -68,7 +68,7 @@ impl ListWidget {
     pub fn add_item(&mut self, item: String) -> usize {
         let item_size = self.list_items.len() + 1;
 
-        self.list_items.push(item.clone());
+        self.list_items.push(item);
 
         item_size
     }

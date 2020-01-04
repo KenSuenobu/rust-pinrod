@@ -71,20 +71,20 @@ impl TextWidget {
         size: Size,
     ) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             font_name,
             font_style,
             font_size,
             justification,
-            msg: msg.clone(),
+            msg,
         }
     }
 
     /// Changes the text displayed in the body of the `Widget`.
     pub fn set_text(&mut self, msg: String) {
-        self.msg = msg.clone();
+        self.msg = msg;
         self.get_config().set_invalidated(true);
     }
 
@@ -158,7 +158,7 @@ impl Widget for TextWidget {
             }
             CONFIG_TEXT => {
                 if let Config::Text(text) = _v {
-                    self.msg = text.clone();
+                    self.msg = text;
                     self.get_config().set_invalidated(true);
                 }
             }

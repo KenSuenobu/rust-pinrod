@@ -48,8 +48,8 @@ impl WidgetContainer {
     ) -> Self {
         Self {
             widget: RefCell::new(widget),
-            widget_name: widget_name.clone(),
-            origin: origin.clone(),
+            widget_name,
+            origin,
             widget_id,
             parent_id,
         }
@@ -96,7 +96,7 @@ impl WidgetCache {
 
         self.cache.push(WidgetContainer::new(
             widget,
-            widget_name.clone(),
+            widget_name,
             origin,
             widget_id as i32,
             0,
@@ -268,17 +268,20 @@ impl WidgetCache {
     /// This function performs the draw loop for all of the `Widget`s stored in the `cache`.  Each
     /// `Widget` receives a mutable reference to the `Canvas` so that the `Widget` can be drawn on
     /// the screen during the draw loop of the `Engine`.  This `draw_loop` function automatically
-    /// clips the screen area so that the `Widget` cannot draw outside of its bounds.
-    pub fn draw_loop(&mut self, canvas: &mut Canvas<Window>) {
+    /// clips the screen area so that the `Widget` cannot draw outside of its bounds.  Returns `true`
+    /// if the display loop needs to refresh the top-level canvas, `false` otherwise.
+    pub fn draw_loop(&mut self, canvas: &mut Canvas<Window>) -> bool {
         let cache_size = self.cache.len();
 
         for i in 0..cache_size {
             if self.cache[i].widget.borrow_mut().is_invalidated() {
                 self.draw(0, canvas);
 
-                return;
+                return true;
             }
         }
+
+        false
     }
 
     /// Returns a borrowed slice of the `WidgetContainer` `Vec` object, which can be passed on to

@@ -1,6 +1,6 @@
 [package]
 name = "rust-pushrod"
-version = "0.4.22"
+version = "0.4.23"
 authors = ["Ken Suenobu <ksuenobu@fastmail.com>"]
 edition = "2018"
 description = "Pushrod UI Library"
@@ -21,4 +21,4 @@ path = "src/lib.rs"
 
 [dependencies.sdl2]
 version = "^0.32"
-features = ["ttf", "image"]
+features = ["ttf", "image", "unsafe_textures"]

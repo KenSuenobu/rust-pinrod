@@ -4,7 +4,7 @@ extern crate sdl2;
 use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::CONFIG_COLOR_SECONDARY;
+use pushrod::render::widget_config::{CONFIG_COLOR_BORDER, CONFIG_COLOR_SECONDARY};
 use pushrod::render::{make_points, make_size};
 use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::timer_widget::*;
@@ -35,14 +35,17 @@ pub fn main() {
     let mut widget1 = ProgressWidget::new(make_points(20, 20), make_size(360, 40), 25);
 
     widget1.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
+    widget1.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 255));
 
     let mut widget2 = ProgressWidget::new(make_points(20, 70), make_size(360, 40), 50);
 
     widget2.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
+    widget2.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 255, 0));
 
     let mut widget3 = ProgressWidget::new(make_points(20, 120), make_size(360, 40), 75);
 
     widget3.set_color(CONFIG_COLOR_SECONDARY, Color::RGB(255, 0, 0));
+    widget3.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 255, 255));
 
     let mut timer = TimerWidget::new(100, true);
     timer.on_timeout(|_, _widgets, _layouts| {

@@ -66,12 +66,12 @@ impl Layout for VerticalLayout {
     }
 
     fn set_padding(&mut self, padding: PaddingConstraint) {
-        self.padding = padding.clone();
+        self.padding = padding;
         self.invalidated = true;
     }
 
     fn get_padding(&self) -> PaddingConstraint {
-        self.padding.clone()
+        self.padding
     }
 
     /// Adjusts the layout of the `Widget`s managed by this `Layout` manager.  Currently only obeys

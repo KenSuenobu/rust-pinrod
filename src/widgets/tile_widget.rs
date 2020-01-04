@@ -29,7 +29,6 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 
@@ -44,9 +43,9 @@ pub struct TileWidget {
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
     on_click: OnClickedCallbackType,
-    image_filename: String,
-    image_size: Size,
-    tile_text: String,
+    //    image_filename: String,
+    //    image_size: Size,
+    //    tile_text: String,
     base_widget: BaseWidget,
     text_widget: TextWidget,
     image_widget: ImageWidget,
@@ -71,24 +70,20 @@ impl TileWidget {
             sdl2::ttf::FontStyle::NORMAL,
             14,
             TextJustify::Center,
-            tile_text.clone(),
+            tile_text,
             make_points(
-                points[POINT_X].clone() + 1,
-                points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 19,
+                points[POINT_X] + 1,
+                points[POINT_Y] + size[SIZE_HEIGHT] as i32 - 19,
             ),
-            make_size(size[SIZE_WIDTH].clone() - 2, 18),
+            make_size(size[SIZE_WIDTH] - 2, 18),
         );
         let mut image_widget = ImageWidget::new(
-            image_filename.clone(),
+            image_filename,
             make_points(
-                points[POINT_X].clone() + size[SIZE_WIDTH] as i32 / 2
-                    - image_size[SIZE_WIDTH] as i32 / 2,
-                points[POINT_Y].clone() + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
+                points[POINT_X] + size[SIZE_WIDTH] as i32 / 2 - image_size[SIZE_WIDTH] as i32 / 2,
+                points[POINT_Y] + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
             ),
-            make_size(
-                image_size[SIZE_WIDTH].clone(),
-                image_size[SIZE_HEIGHT].clone(),
-            ),
+            make_size(image_size[SIZE_WIDTH], image_size[SIZE_HEIGHT]),
             false,
         );
 
@@ -100,13 +95,13 @@ impl TileWidget {
         image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             on_click: None,
-            image_filename: image_filename.clone(),
-            image_size,
-            tile_text: tile_text.clone(),
+            //            image_filename: image_filename.clone(),
+            //            image_size,
+            //            tile_text: tile_text.clone(),
             base_widget,
             text_widget,
             image_widget,
