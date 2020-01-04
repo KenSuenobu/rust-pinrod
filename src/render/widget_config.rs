@@ -72,7 +72,7 @@ pub const CONFIG_SELECTED_STATE: u8 = 13;
 
 /// This enum is used by the `ImageWidget`, which controls the positioning of the image being
 /// rendered within the bounds of the `Widget`.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Copy)]
 pub enum CompassPosition {
     /// Upper left-hand corner of the bounds.
     NW,
@@ -103,7 +103,7 @@ pub enum CompassPosition {
 }
 
 /// This struct stores padding constraints.
-#[derive(Clone, Default, Debug)]
+#[derive(Clone, Default, Debug, Copy)]
 pub struct PaddingConstraint {
     pub top: i32,
     pub bottom: i32,
@@ -179,8 +179,8 @@ impl WidgetConfig {
     pub fn new(points: Points, size: Size) -> Self {
         Self {
             config: [
-                (CONFIG_ORIGIN, Config::Points(points.clone())),
-                (CONFIG_SIZE, Config::Size(size.clone())),
+                (CONFIG_ORIGIN, Config::Points(points)),
+                (CONFIG_SIZE, Config::Size(size)),
                 (CONFIG_COLOR_BASE, Config::Color(Color::RGB(255, 255, 255))),
                 (CONFIG_BORDER_WIDTH, Config::Numeric(0)),
             ]
@@ -280,7 +280,7 @@ impl WidgetConfig {
 
     /// Sets a text value for a configuration key.
     pub fn set_text(&mut self, config: u8, text: String) {
-        self.config.insert(config, Config::Text(text.clone()));
+        self.config.insert(config, Config::Text(text));
     }
 
     /// Sets a toggle for a configuration key.
@@ -349,7 +349,7 @@ impl WidgetConfig {
     /// Retrieves a `CompassPosition` toggle for a configuration key.  Returns `CompassPosition::W` if not set.
     pub fn get_compass(&self, k: u8) -> CompassPosition {
         match self.config.get(&k) {
-            Some(Config::CompassPosition(position)) => position.clone(),
+            Some(Config::CompassPosition(position)) => *position,
             _ => CompassPosition::W,
         }
     }
@@ -357,7 +357,7 @@ impl WidgetConfig {
     /// Retrieves a `PaddingConstraint` toggle for a configuration key.  Returns empty `PaddingConstraint` if not set.
     pub fn get_padding(&self, k: u8) -> PaddingConstraint {
         match self.config.get(&k) {
-            Some(Config::PaddingConstraint(constraint)) => constraint.clone(),
+            Some(Config::PaddingConstraint(constraint)) => *constraint,
             _ => PaddingConstraint::default(),
         }
     }

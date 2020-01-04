@@ -74,7 +74,7 @@ impl SliderWidget {
         orientation: SliderOrientation,
     ) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             min,

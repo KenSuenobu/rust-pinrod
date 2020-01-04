@@ -62,9 +62,9 @@ impl ToggleButtonWidget {
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Center,
-            text.clone(),
-            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
-            make_size(size[SIZE_WIDTH].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            text,
+            make_points(points[POINT_X] + 2, points[POINT_Y] + 2),
+            make_size(size[SIZE_WIDTH] - 4, size[SIZE_HEIGHT] - 4),
         );
 
         let base_color = if selected {
@@ -78,7 +78,7 @@ impl ToggleButtonWidget {
             Color::RGB(0, 0, 0)
         };
 
-        let mut config = WidgetConfig::new(points.clone(), size.clone());
+        let mut config = WidgetConfig::new(points, size);
 
         base_widget.set_color(CONFIG_COLOR_BASE, base_color);
         base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));

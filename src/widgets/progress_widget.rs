@@ -47,7 +47,7 @@ impl ProgressWidget {
     /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
     pub fn new(points: Points, size: Size, progress: u8) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             progress,
@@ -73,20 +73,17 @@ impl ProgressWidget {
     }
 
     fn create_texture(&mut self, c: &mut Canvas<Window>) {
-        match self.canvas_texture {
-            None => {
-                let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
-                let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
-                self.canvas_texture = Some(
-                    c.create_texture_target(None, widget_width, widget_height)
-                        .unwrap(),
-                );
-                eprintln!(
-                    "Creating canvas texture: {}x{}",
-                    widget_width, widget_height
-                );
-            }
-            _ => (),
+        if self.canvas_texture.is_none() {
+            let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
+            let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
+            self.canvas_texture = Some(
+                c.create_texture_target(None, widget_width, widget_height)
+                    .unwrap(),
+            );
+            eprintln!(
+                "Creating canvas texture: {}x{}",
+                widget_width, widget_height
+            );
         }
     }
 }

@@ -224,7 +224,7 @@ pub trait Widget {
     /// Sets a text value for a configuration key.
     fn set_text(&mut self, config: u8, text: String) {
         self.get_config().set_text(config, text.clone());
-        self.on_config_changed(config, Config::Text(text.clone()));
+        self.on_config_changed(config, Config::Text(text));
     }
 
     /// Sets a toggle for a configuration key.
@@ -235,8 +235,8 @@ pub trait Widget {
 
     /// Sets a compass position for a configuration key.
     fn set_compass(&mut self, config: u8, value: CompassPosition) {
-        self.get_config().set_compass(config, value.clone());
-        self.on_config_changed(config, Config::CompassPosition(value.clone()));
+        self.get_config().set_compass(config, value);
+        self.on_config_changed(config, Config::CompassPosition(value));
     }
 
     /// Retrieves a `Points` for a configuration key.  Returns `Points::default` if not set.
@@ -336,7 +336,7 @@ impl BaseWidget {
     /// Constructs a new base widget, given the points of origin and size.
     pub fn new(points: Points, size: Size) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             canvas_texture: None,
@@ -344,20 +344,17 @@ impl BaseWidget {
     }
 
     fn create_texture(&mut self, c: &mut Canvas<Window>) {
-        match self.canvas_texture {
-            None => {
-                let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
-                let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
-                self.canvas_texture = Some(
-                    c.create_texture_target(None, widget_width, widget_height)
-                        .unwrap(),
-                );
-                eprintln!(
-                    "Creating canvas texture: {}x{}",
-                    widget_width, widget_height
-                );
-            }
-            _ => (),
+        if self.canvas_texture.is_none() {
+            let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
+            let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
+            self.canvas_texture = Some(
+                c.create_texture_target(None, widget_width, widget_height)
+                    .unwrap(),
+            );
+            eprintln!(
+                "Creating canvas texture: {}x{}",
+                widget_width, widget_height
+            );
         }
     }
 }

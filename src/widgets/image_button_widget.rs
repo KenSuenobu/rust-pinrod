@@ -68,20 +68,20 @@ impl ImageButtonWidget {
             sdl2::ttf::FontStyle::NORMAL,
             font_size,
             TextJustify::Left,
-            text.clone(),
+            text,
             make_points(
-                points[POINT_X].clone() + size[SIZE_HEIGHT].clone() as i32 + 6,
-                points[POINT_Y].clone() + 2,
+                points[POINT_X] + size[SIZE_HEIGHT] as i32 + 6,
+                points[POINT_Y] + 2,
             ),
             make_size(
-                size[SIZE_WIDTH].clone() - size[SIZE_HEIGHT].clone() - 10,
-                size[SIZE_HEIGHT].clone() - 4,
+                size[SIZE_WIDTH] - size[SIZE_HEIGHT] - 10,
+                size[SIZE_HEIGHT] - 4,
             ),
         );
         let mut image_widget = ImageWidget::new(
             image_name,
-            make_points(points[POINT_X].clone() + 2, points[POINT_Y].clone() + 2),
-            make_size(size[SIZE_HEIGHT].clone() - 4, size[SIZE_HEIGHT].clone() - 4),
+            make_points(points[POINT_X] + 2, points[POINT_Y] + 2),
+            make_size(size[SIZE_HEIGHT] - 4, size[SIZE_HEIGHT] - 4),
             false,
         );
 
@@ -90,7 +90,7 @@ impl ImageButtonWidget {
         image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             base_widget,

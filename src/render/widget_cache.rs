@@ -48,8 +48,8 @@ impl WidgetContainer {
     ) -> Self {
         Self {
             widget: RefCell::new(widget),
-            widget_name: widget_name.clone(),
-            origin: origin.clone(),
+            widget_name,
+            origin,
             widget_id,
             parent_id,
         }
@@ -96,7 +96,7 @@ impl WidgetCache {
 
         self.cache.push(WidgetContainer::new(
             widget,
-            widget_name.clone(),
+            widget_name,
             origin,
             widget_id as i32,
             0,

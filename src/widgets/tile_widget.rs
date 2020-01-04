@@ -70,23 +70,23 @@ impl TileWidget {
             sdl2::ttf::FontStyle::NORMAL,
             14,
             TextJustify::Center,
-            tile_text.clone(),
+            tile_text,
             make_points(
-                points[POINT_X].clone() + 1,
-                points[POINT_Y].clone() + size[SIZE_HEIGHT] as i32 - 19,
+                points[POINT_X] + 1,
+                points[POINT_Y] + size[SIZE_HEIGHT] as i32 - 19,
             ),
-            make_size(size[SIZE_WIDTH].clone() - 2, 18),
+            make_size(size[SIZE_WIDTH] - 2, 18),
         );
         let mut image_widget = ImageWidget::new(
-            image_filename.clone(),
+            image_filename,
             make_points(
-                points[POINT_X].clone() + size[SIZE_WIDTH] as i32 / 2
+                points[POINT_X] + size[SIZE_WIDTH] as i32 / 2
                     - image_size[SIZE_WIDTH] as i32 / 2,
-                points[POINT_Y].clone() + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
+                points[POINT_Y] + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
             ),
             make_size(
-                image_size[SIZE_WIDTH].clone(),
-                image_size[SIZE_HEIGHT].clone(),
+                image_size[SIZE_WIDTH],
+                image_size[SIZE_HEIGHT],
             ),
             false,
         );
@@ -99,7 +99,7 @@ impl TileWidget {
         image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             on_click: None,

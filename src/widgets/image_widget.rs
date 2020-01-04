@@ -54,7 +54,7 @@ impl ImageWidget {
     /// specified in the `ImagePosition`.
     pub fn new(image_name: String, points: Points, size: Size, scaled: bool) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             image_name,

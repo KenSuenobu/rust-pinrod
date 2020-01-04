@@ -45,7 +45,7 @@ impl GridWidget {
     /// Creates a new `GridWidget` given the `x, y, w, h` coordinates, sets the grid size.
     pub fn new(points: Points, size: Size, grid_size: u32, grid_connections: bool) -> Self {
         Self {
-            config: WidgetConfig::new(points.clone(), size.clone()),
+            config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             grid_size,
