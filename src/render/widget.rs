@@ -343,6 +343,8 @@ impl BaseWidget {
         }
     }
 
+    /// Creates a drawable `Texture` that can be drawn against, instead of drawing directly to the
+    /// canvas.  This way, the canvas is not refreshed, only the `Texture` is drawn.
     fn create_texture(&mut self, c: &mut Canvas<Window>) {
         if self.canvas_texture.is_none() {
             let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
@@ -386,14 +388,14 @@ impl Widget for BaseWidget {
                 }
                 None => (),
             }
-
-            let draw_rect = self.get_rect_dest();
-
-            match &self.canvas_texture {
-                Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-                None => {}
-            };
         }
+
+        let draw_rect = self.get_rect_dest();
+
+        match &self.canvas_texture {
+            Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
+            None => {}
+        };
     }
 
     default_widget_functions!();
