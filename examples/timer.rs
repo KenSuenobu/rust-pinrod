@@ -4,7 +4,7 @@ extern crate sdl2;
 use pushrod::render::callbacks::widget_id_for_name;
 use pushrod::render::engine::Engine;
 use pushrod::render::widget::Widget;
-use pushrod::render::widget_config::{CONFIG_COLOR_SECONDARY, CONFIG_COLOR_BORDER};
+use pushrod::render::widget_config::{CONFIG_COLOR_BORDER, CONFIG_COLOR_SECONDARY};
 use pushrod::render::{make_points, make_size};
 use pushrod::widgets::progress_widget::*;
 use pushrod::widgets::timer_widget::*;

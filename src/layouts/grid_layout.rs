@@ -15,16 +15,16 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{PaddingConstraint};
+use crate::render::widget_config::PaddingConstraint;
 
 /// This is the `GridLayout` storage structure for the `GridLayout` implementation.
 pub struct GridLayout {
     widget_ids: Vec<i32>,
-//    widget_positions: Vec<LayoutPosition>,
-//    origin: Points,
-//    size: Size,
+    //    widget_positions: Vec<LayoutPosition>,
+    //    origin: Points,
+    //    size: Size,
     padding: PaddingConstraint,
-//    layout: Vec<i32>,
+    //    layout: Vec<i32>,
     invalidated: bool,
 }
 
@@ -40,11 +40,11 @@ impl GridLayout {
     ) -> Self {
         Self {
             widget_ids: Vec::new(),
-//            widget_positions: Vec::new(),
-//            origin: vec![x, y],
-//            size: vec![w, h],
+            //            widget_positions: Vec::new(),
+            //            origin: vec![x, y],
+            //            size: vec![w, h],
             padding,
-//            layout,
+            //            layout,
             invalidated: false,
         }
     }

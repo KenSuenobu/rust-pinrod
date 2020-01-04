@@ -53,10 +53,11 @@ pub trait CanvasHelper: Widget {
 
     /// Returns a `Rect` destination object
     fn get_rect_dest(&mut self) -> Rect {
-        Rect::new(self.get_config().to_x(0),
-        self.get_config().to_y(0),
-        self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
-        self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
+        Rect::new(
+            self.get_config().to_x(0),
+            self.get_config().to_y(0),
+            self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
+            self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
         )
     }
 }

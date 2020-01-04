@@ -24,10 +24,10 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::video::Window;
 
+use crate::render::canvas_helper::CanvasHelper;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::canvas_helper::CanvasHelper;
 
 /// This is the storage object for the `ProgressWidget`.  It stores the config, properties, callback registry,
 /// the base widget, and progress from 0 to 100.
@@ -101,8 +101,9 @@ impl Widget for ProgressWidget {
 
         if self.get_config().invalidated() {
             let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
-            let progress_width =
-                (f64::from(self.get_size(CONFIG_SIZE)[0]) * (f64::from(self.progress)) / 100.0) as u32;
+            let progress_width = (f64::from(self.get_size(CONFIG_SIZE)[0])
+                * (f64::from(self.progress))
+                / 100.0) as u32;
             let progress_height = self.get_size(CONFIG_SIZE)[1] - 2;
             let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
             let bounds = self.get_config().get_size(CONFIG_SIZE);
@@ -114,14 +115,16 @@ impl Widget for ProgressWidget {
                         texture.clear();
 
                         texture.set_draw_color(base_color);
-                        texture.fill_rect(Rect::new(1, 1, progress_width, progress_height)).unwrap();
+                        texture
+                            .fill_rect(Rect::new(1, 1, progress_width, progress_height))
+                            .unwrap();
 
                         texture.set_draw_color(border_color);
                         texture
                             .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                             .unwrap();
                     })
-                        .unwrap();
+                    .unwrap();
                 }
                 None => (),
             }
@@ -130,7 +133,7 @@ impl Widget for ProgressWidget {
 
             match &self.canvas_texture {
                 Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-                None => {},
+                None => {}
             };
         }
     }

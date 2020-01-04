@@ -385,7 +385,7 @@ impl Widget for BaseWidget {
                             .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                             .unwrap();
                     })
-                        .unwrap();
+                    .unwrap();
                 }
                 None => (),
             }
@@ -394,7 +394,7 @@ impl Widget for BaseWidget {
 
             match &self.canvas_texture {
                 Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-                None => {},
+                None => {}
             };
         }
     }
