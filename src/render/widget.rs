@@ -23,7 +23,6 @@ use crate::render::layout_cache::LayoutContainer;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
-use core::ptr;
 use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
@@ -367,7 +366,7 @@ impl CanvasHelper for BaseWidget {}
 
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
-    fn draw(&mut self, mut c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) {
         self.create_texture(c);
 
         if self.get_config().invalidated() {

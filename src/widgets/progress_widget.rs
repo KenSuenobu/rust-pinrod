@@ -35,7 +35,6 @@ pub struct ProgressWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    base_widget: BaseWidget,
     progress: u8,
     canvas_texture: Option<Texture>,
 }
@@ -47,23 +46,10 @@ impl ProgressWidget {
     /// base color and border colors are set to white and black, respectively.  Use the
     /// `COLOR_SECONDARY` setting to change the color of the fill for the progress bar.
     pub fn new(points: Points, size: Size, progress: u8) -> Self {
-        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
-
-        base_widget
-            .get_config()
-            .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-
-        base_widget
-            .get_config()
-            .set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
-
-        base_widget.get_config().set_numeric(CONFIG_BORDER_WIDTH, 1);
-
         Self {
             config: WidgetConfig::new(points.clone(), size.clone()),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            base_widget,
             progress,
             canvas_texture: None,
         }

@@ -15,37 +15,36 @@
 
 use crate::render::layout::{Layout, LayoutPosition};
 use crate::render::widget_cache::WidgetContainer;
-use crate::render::widget_config::{PaddingConstraint, CONFIG_ORIGIN, CONFIG_SIZE};
-use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
+use crate::render::widget_config::{PaddingConstraint};
 
 /// This is the `GridLayout` storage structure for the `GridLayout` implementation.
 pub struct GridLayout {
     widget_ids: Vec<i32>,
-    widget_positions: Vec<LayoutPosition>,
-    origin: Points,
-    size: Size,
+//    widget_positions: Vec<LayoutPosition>,
+//    origin: Points,
+//    size: Size,
     padding: PaddingConstraint,
-    layout: Vec<i32>,
+//    layout: Vec<i32>,
     invalidated: bool,
 }
 
 /// Creates a new `GridLayout` manager.
 impl GridLayout {
     pub fn new(
-        x: i32,
-        y: i32,
-        w: u32,
-        h: u32,
-        layout: Vec<i32>,
+        _x: i32,
+        _y: i32,
+        _w: u32,
+        _h: u32,
+        _layout: Vec<i32>,
         padding: PaddingConstraint,
     ) -> Self {
         Self {
             widget_ids: Vec::new(),
-            widget_positions: Vec::new(),
-            origin: vec![x, y],
-            size: vec![w, h],
+//            widget_positions: Vec::new(),
+//            origin: vec![x, y],
+//            size: vec![w, h],
             padding,
-            layout,
+//            layout,
             invalidated: false,
         }
     }
@@ -56,14 +55,14 @@ impl GridLayout {
 /// added to the bounds of the `Layout`.
 impl Layout for GridLayout {
     /// Adds a widget to the `HorizontalLayout` managed stack.
-    fn insert_widget(&mut self, widget_id: i32, widget_position: LayoutPosition) {
+    fn insert_widget(&mut self, _widget_id: i32, _widget_position: LayoutPosition) {
         //        self.widget_ids.push(widget_id);
         //        self.widget_positions.push(widget_position);
         //        self.invalidated = true;
     }
 
     /// Appends a widget to the `HorizontalLayout` managed stack.
-    fn append_widget(&mut self, widget_id: i32) {
+    fn append_widget(&mut self, _widget_id: i32) {
         //        let positions = self.widget_positions.len();
         //        let widget_position = if self.widget_positions.is_empty() {
         //            LayoutPosition::new(0, 0)

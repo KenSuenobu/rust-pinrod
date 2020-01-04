@@ -29,7 +29,6 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 
@@ -44,9 +43,9 @@ pub struct TileWidget {
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
     on_click: OnClickedCallbackType,
-    image_filename: String,
-    image_size: Size,
-    tile_text: String,
+//    image_filename: String,
+//    image_size: Size,
+//    tile_text: String,
     base_widget: BaseWidget,
     text_widget: TextWidget,
     image_widget: ImageWidget,
@@ -104,9 +103,9 @@ impl TileWidget {
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             on_click: None,
-            image_filename: image_filename.clone(),
-            image_size,
-            tile_text: tile_text.clone(),
+//            image_filename: image_filename.clone(),
+//            image_size,
+//            tile_text: tile_text.clone(),
             base_widget,
             text_widget,
             image_widget,
