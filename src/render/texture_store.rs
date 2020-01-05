@@ -36,6 +36,20 @@ impl TextureStore {
     }
 
     /// Retrieves a `&mut Texture` reference to the stored `Texture` object.
+    ///
+    /// Example use:
+    /// ```rust,no_run
+    /// c.with_texture_canvas(texture_store.get_mut_ref(), |texture| {
+    ///   texture.set_draw_color(base_color);
+    ///   texture.clear();
+    ///
+    ///   texture.set_draw_color(border_color);
+    ///   texture
+    ///     .draw_rect(Rect::new(0, 0, 200, 200))
+    ///     .unwrap();
+    /// })
+    ///   .unwrap();
+    /// ```
     pub fn get_mut_ref(&mut self) -> &mut Texture {
         self.store.as_mut().unwrap()
     }
