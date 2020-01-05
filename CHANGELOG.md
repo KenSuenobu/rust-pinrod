@@ -1,5 +1,9 @@
 # Pushrod Change Log
 
+## 0.4.24
+
+- Changed signature of `draw` function to return a reference to the internal `Texture`.
+
 ## 0.4.23
 
 - Improved drawing loop by using hardware acceleration with vsync

@@ -18,7 +18,7 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
@@ -179,7 +179,7 @@ impl CanvasHelper for ListWidget {}
 /// This is the `Widget` implementation of the `ListWidget`.
 impl Widget for ListWidget {
     /// Draws the `ListWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);
@@ -191,6 +191,8 @@ impl Widget for ListWidget {
 
         c.set_draw_color(border_color);
         self.draw_bounding_box(c);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

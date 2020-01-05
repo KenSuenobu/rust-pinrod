@@ -19,7 +19,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
@@ -108,7 +108,7 @@ impl GridWidget {
 /// This is the `Widget` implementation of the `GridWidget`.
 impl Widget for GridWidget {
     /// Draws the `GridWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);
@@ -128,6 +128,8 @@ impl Widget for GridWidget {
         .unwrap();
 
         self.draw_bounding_box(c);
+
+        None
     }
 
     default_widget_functions!();

@@ -95,7 +95,7 @@ impl CanvasHelper for ProgressWidget {}
 /// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
 /// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         self.create_texture(c);
 
         if self.get_config().invalidated() {
@@ -135,6 +135,8 @@ impl Widget for ProgressWidget {
             Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
             None => {}
         };
+
+        None
     }
 
     default_widget_functions!();

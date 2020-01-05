@@ -19,7 +19,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH};
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
@@ -114,7 +114,7 @@ impl CanvasHelper for SliderWidget {}
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
     /// Draws the `SliderWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         if self.orientation == SliderHorizontal {
             let base_color = self.get_color(CONFIG_COLOR_BASE);
 
@@ -266,6 +266,8 @@ impl Widget for SliderWidget {
         }
 
         self.draw_bounding_box(c);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

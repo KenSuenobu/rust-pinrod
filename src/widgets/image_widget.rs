@@ -24,7 +24,7 @@ use crate::render::{Points, Size};
 
 use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
 
 use std::any::Any;
@@ -66,7 +66,7 @@ impl ImageWidget {
 /// This is the `Widget` implementation of the `ImageWidget`.  Image is rendered onto a 3D texture, then
 /// copied to the canvas after rendering.
 impl Widget for ImageWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);
@@ -128,6 +128,8 @@ impl Widget for ImageWidget {
             )
             .unwrap();
         }
+
+        None
     }
 
     /// Responds to a screen redraw only if the `CONFIG_IMAGE_POSITION` key was changed.

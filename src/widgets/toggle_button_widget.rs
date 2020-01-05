@@ -21,7 +21,7 @@ use crate::render::{
     make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
 };
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
@@ -172,11 +172,13 @@ impl ToggleButtonWidget {
 /// This is the `Widget` implementation of the `ToggleButtonWidget`.
 impl Widget for ToggleButtonWidget {
     /// Draws the `ToggleButtonWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         self.base_widget.draw(c);
         self.text_widget.draw(c);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

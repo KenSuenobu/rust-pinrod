@@ -20,7 +20,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
 
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
@@ -98,7 +98,7 @@ impl TextWidget {
 /// copied to the canvas after rendering.  It uses blended mode texture mapping, which may be slow (as
 /// described by the SDL2 documentation), so this might change later to use 8 bit color mapping.
 impl Widget for TextWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
         let text_max_width =
             self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
@@ -143,6 +143,8 @@ impl Widget for TextWidget {
             Rect::new(texture_x, texture_y, width, height),
         )
         .unwrap();
+
+        None
     }
 
     /// Monitors for changes in the text, color changes, or font sizes.

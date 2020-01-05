@@ -51,7 +51,9 @@ pub trait Widget {
     /// was set, otherwise, the draw can be re-performed, and the `Texture` returned.  If the drawing
     /// function returns no texture, return a `None`, and it will not be rendered during the display
     /// loop, but it will still be called.
-    fn draw(&mut self, _c: &mut Canvas<Window>) {}
+    fn draw(&mut self, _c: &mut Canvas<Window>) -> Option<&Texture> {
+        None
+    }
 
     /// Retrieves the `WidgetConfig` object for this `Widget`.
     fn get_config(&mut self) -> &mut WidgetConfig;
@@ -365,7 +367,7 @@ impl CanvasHelper for BaseWidget {}
 
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         self.create_texture(c);
 
         if self.get_config().invalidated() {
@@ -390,12 +392,7 @@ impl Widget for BaseWidget {
             }
         }
 
-        let draw_rect = self.get_rect_dest();
-
-        match &self.canvas_texture {
-            Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-            None => {}
-        };
+        Some(self.canvas_texture.as_ref().unwrap())
     }
 
     default_widget_functions!();
