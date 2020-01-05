@@ -28,6 +28,7 @@ use crate::render::canvas_helper::CanvasHelper;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the storage object for the `ProgressWidget`.  It stores the config, properties, callback registry,
 /// the base widget, and progress from 0 to 100.
@@ -35,6 +36,7 @@ pub struct ProgressWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     progress: u8,
     canvas_texture: Option<Texture>,
 }
@@ -50,6 +52,7 @@ impl ProgressWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             progress,
             canvas_texture: None,
         }

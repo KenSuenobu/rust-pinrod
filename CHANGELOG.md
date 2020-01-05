@@ -4,6 +4,7 @@
 
 - Changed signature of `draw` function to return a reference to the internal `Texture`.
 - Created `TextureStore` for `Widget`s to handle stored `Texture` objects.
+- Added `TextureStore` to all `Widget`s
 
 ## 0.4.23
 

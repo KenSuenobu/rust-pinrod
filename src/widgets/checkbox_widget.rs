@@ -32,6 +32,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -43,6 +44,7 @@ pub struct CheckboxWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     text_widget: TextWidget,
     unchecked_widget: ImageWidget,
     checked_widget: ImageWidget,
@@ -100,6 +102,7 @@ impl CheckboxWidget {
             config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             text_widget,
             unchecked_widget,
             checked_widget,

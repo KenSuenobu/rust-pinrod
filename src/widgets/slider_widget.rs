@@ -29,6 +29,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -50,6 +51,7 @@ pub struct SliderWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     min: u32,
     max: u32,
     current: u32,
@@ -77,6 +79,7 @@ impl SliderWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             min,
             max,
             current,

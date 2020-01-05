@@ -31,6 +31,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.
@@ -42,6 +43,7 @@ pub struct PushButtonWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     base_widget: BaseWidget,
     text_widget: TextWidget,
     active: bool,
@@ -78,6 +80,7 @@ impl PushButtonWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             base_widget,
             text_widget,
             active: false,

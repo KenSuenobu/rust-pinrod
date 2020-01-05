@@ -30,6 +30,7 @@ use sdl2::video::Window;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
+use crate::render::texture_store::TextureStore;
 
 /// This is the storage object for the `ImageWidget`.  It stores the config, properties, callback registry,
 /// the image name, and a scale flag.
@@ -37,6 +38,7 @@ pub struct ImageWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     image_name: String,
     scaled: bool,
 }
@@ -57,6 +59,7 @@ impl ImageWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             image_name,
             scaled,
         }

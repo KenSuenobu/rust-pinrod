@@ -29,6 +29,7 @@ use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
+use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_selected` callback is triggered from this
 /// `Widget`.
@@ -40,6 +41,7 @@ pub struct ListWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     list_items: Vec<String>,
     highlighted_item: i32,
     selected_item: i32,
@@ -56,6 +58,7 @@ impl ListWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             list_items: vec![],
             highlighted_item: -1,
             selected_item: -1,

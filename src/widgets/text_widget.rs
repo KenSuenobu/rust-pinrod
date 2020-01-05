@@ -28,6 +28,7 @@ use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
+use crate::render::texture_store::TextureStore;
 
 /// This enum is used by the `TextWidget`, which controls the justification of the text being
 /// rendered within the bounds of the `Widget`.
@@ -48,6 +49,7 @@ pub struct TextWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     font_name: String,
     font_style: FontStyle,
     font_size: i32,
@@ -74,6 +76,7 @@ impl TextWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             font_name,
             font_style,
             font_size,

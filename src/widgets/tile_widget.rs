@@ -31,6 +31,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
@@ -42,6 +43,7 @@ pub struct TileWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     on_click: OnClickedCallbackType,
     //    image_filename: String,
     //    image_size: Size,
@@ -98,6 +100,7 @@ impl TileWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             on_click: None,
             //            image_filename: image_filename.clone(),
             //            image_size,

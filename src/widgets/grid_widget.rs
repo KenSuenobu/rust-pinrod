@@ -28,12 +28,14 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This is the storage object for the `GridWidget`.  It stores the config, properties, callback registry.
 pub struct GridWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     grid_size: u32,
     grid_connections: bool,
 }
@@ -48,6 +50,7 @@ impl GridWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::new(),
             grid_size,
             grid_connections,
         }
