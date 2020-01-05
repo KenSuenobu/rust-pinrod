@@ -27,6 +27,7 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_store::TextureStore;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -330,7 +331,7 @@ pub struct BaseWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    canvas_texture: Option<Texture>,
+    texture_store: TextureStore,
 }
 
 /// Base top-level implementation of the `BaseWidget`, which other classes can extend.
@@ -341,24 +342,7 @@ impl BaseWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            canvas_texture: None,
-        }
-    }
-
-    /// Creates a drawable `Texture` that can be drawn against, instead of drawing directly to the
-    /// canvas.  This way, the canvas is not refreshed, only the `Texture` is drawn.
-    fn create_texture(&mut self, c: &mut Canvas<Window>) {
-        if self.canvas_texture.is_none() {
-            let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
-            let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
-            self.canvas_texture = Some(
-                c.create_texture_target(None, widget_width, widget_height)
-                    .unwrap(),
-            );
-            eprintln!(
-                "Creating canvas texture: {}x{}",
-                widget_width, widget_height
-            );
+            texture_store: TextureStore::new(),
         }
     }
 }
@@ -368,31 +352,27 @@ impl CanvasHelper for BaseWidget {}
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 impl Widget for BaseWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
-        self.create_texture(c);
+        let bounds = self.get_config().get_size(CONFIG_SIZE);
+
+        self.texture_store.create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
         if self.get_config().invalidated() {
             let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
             let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
-            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-            match &mut self.canvas_texture {
-                Some(ref mut ref_texture) => {
-                    c.with_texture_canvas(ref_texture, |texture| {
-                        texture.set_draw_color(base_color);
-                        texture.clear();
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
 
-                        texture.set_draw_color(border_color);
-                        texture
-                            .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
-                            .unwrap();
-                    })
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                     .unwrap();
-                }
-                None => (),
-            }
+            })
+                .unwrap();
         }
 
-        Some(self.canvas_texture.as_ref().unwrap())
+        self.texture_store.get_optional_ref()
     }
 
     default_widget_functions!();

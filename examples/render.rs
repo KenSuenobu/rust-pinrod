@@ -82,7 +82,7 @@ pub fn main() {
 
     engine.add_widget(Box::new(new_base_widget), String::from("widget1"));
 
-    engine.on_exit(|engine| {
+    engine.on_exit(|_| {
         eprintln!("Application exiting.");
         true
     });
