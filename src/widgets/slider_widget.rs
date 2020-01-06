@@ -24,12 +24,12 @@ use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_store::TextureStore;
 use crate::widgets::slider_widget::SliderOrientation::{SliderHorizontal, SliderVertical};
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.

@@ -24,11 +24,11 @@ use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_store::TextureStore;
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_store::TextureStore;
 
 /// This is the storage object for the `GridWidget`.  It stores the config, properties, callback registry.
 pub struct GridWidget {

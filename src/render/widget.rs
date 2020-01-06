@@ -20,6 +20,7 @@ use sdl2::video::Window;
 use crate::render::callbacks::*;
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_store::TextureStore;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
@@ -27,7 +28,6 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_store::TextureStore;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -354,7 +354,8 @@ impl Widget for BaseWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        self.texture_store.create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+        self.texture_store
+            .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
         // You _can_ remove this `if` statement here, and just let the code run each time.  It will
         // eventually make your application less efficient if this is constantly called.
@@ -371,7 +372,7 @@ impl Widget for BaseWidget {
                     .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()

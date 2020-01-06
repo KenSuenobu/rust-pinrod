@@ -331,8 +331,13 @@ impl WidgetCache {
             if !is_hidden && is_invalidated {
                 match paint_widget.widget.borrow_mut().draw(c) {
                     Some(texture) => {
-                        c.copy(texture, None, Rect::new(widget_x, widget_y, widget_w, widget_h)).unwrap();
-                    },
+                        c.copy(
+                            texture,
+                            None,
+                            Rect::new(widget_x, widget_y, widget_w, widget_h),
+                        )
+                        .unwrap();
+                    }
                     None => eprintln!("No texture presented: ID={}", paint_id),
                 };
 

@@ -25,11 +25,11 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_store::TextureStore;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_store::TextureStore;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.

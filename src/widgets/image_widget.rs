@@ -27,10 +27,10 @@ use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
 
+use crate::render::texture_store::TextureStore;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use crate::render::texture_store::TextureStore;
 
 /// This is the storage object for the `ImageWidget`.  It stores the config, properties, callback registry,
 /// the image name, and a scale flag.

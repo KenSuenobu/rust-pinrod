@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use sdl2::render::{Texture, Canvas};
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 /// This is a store used by the `TextureStore`.
@@ -69,13 +69,9 @@ impl TextureStore {
             self.width = width;
             self.height = height;
 
-            self.store = Some(
-                c.create_texture_target(None, width, height)
-                    .unwrap(),
-            );
+            self.store = Some(c.create_texture_target(None, width, height).unwrap());
 
             eprintln!("Created texture: size={}x{}", width, height);
         }
     }
-
 }
