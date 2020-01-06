@@ -5,6 +5,8 @@
 - Changed signature of `draw` function to return a reference to the internal `Texture`.
 - Created `TextureStore` for `Widget`s to handle stored `Texture` objects.
 - Added `TextureStore` to all `Widget`s
+- Removed clipping and canvas presenting in drawing loop, since textures are now returned.
+- Modified draw function in `WidgetCache` to use texture copying to canvas.
 
 ## 0.4.23
 

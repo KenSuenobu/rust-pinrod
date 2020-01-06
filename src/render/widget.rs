@@ -356,6 +356,8 @@ impl Widget for BaseWidget {
 
         self.texture_store.create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
+        // You _can_ remove this `if` statement here, and just let the code run each time.  It will
+        // eventually make your application less efficient if this is constantly called.
         if self.get_config().invalidated() {
             let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
             let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);

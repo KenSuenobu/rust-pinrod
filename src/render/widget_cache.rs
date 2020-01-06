@@ -270,12 +270,12 @@ impl WidgetCache {
     /// the screen during the draw loop of the `Engine`.  This `draw_loop` function automatically
     /// clips the screen area so that the `Widget` cannot draw outside of its bounds.  Returns `true`
     /// if the display loop needs to refresh the top-level canvas, `false` otherwise.
-    pub fn draw_loop(&mut self, canvas: &mut Canvas<Window>) -> bool {
+    pub fn draw_loop(&mut self, c: &mut Canvas<Window>) -> bool {
         let cache_size = self.cache.len();
 
         for i in 0..cache_size {
             if self.cache[i].widget.borrow_mut().is_invalidated() {
-                self.draw(0, canvas);
+                self.draw(0, c);
 
                 return true;
             }
@@ -329,10 +329,14 @@ impl WidgetCache {
                 .get_size(CONFIG_SIZE)[1];
 
             if !is_hidden && is_invalidated {
-                c.set_clip_rect(paint_widget.widget.borrow_mut().get_drawing_area());
-                paint_widget.widget.borrow_mut().draw(c);
+                match paint_widget.widget.borrow_mut().draw(c) {
+                    Some(texture) => {
+                        c.copy(texture, None, Rect::new(widget_x, widget_y, widget_w, widget_h)).unwrap();
+                    },
+                    None => eprintln!("No texture presented: ID={}", paint_id),
+                };
+
                 paint_widget.widget.borrow_mut().set_invalidated(false);
-                c.set_clip_rect(top_level_rect);
 
                 needs_present = true;
             }
@@ -346,10 +350,6 @@ impl WidgetCache {
                 c.draw_rect(Rect::new(widget_x, widget_y, widget_w, widget_h))
                     .unwrap();
             }
-        }
-
-        if needs_present {
-            c.present();
         }
     }
 
