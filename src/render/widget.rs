@@ -52,6 +52,12 @@ pub trait Widget {
     /// was set, otherwise, the draw can be re-performed, and the `Texture` returned.  If the drawing
     /// function returns no texture, return a `None`, and it will not be rendered during the display
     /// loop, but it will still be called.
+    ///
+    /// So, why not just call `draw` each time, if the `Engine` already handles the calling of the
+    /// draw for you when an object needs invalidation?  This is to avoid excess CPU usage.  You
+    /// **can** call the draw method each time: all it will do is return the reference to the already
+    /// drawn `Texture` if you do this.  It's only at the time the contents needs to be redrawn will
+    /// the logic for the draw take place (so long the `invalidated` state is obeyed)
     fn draw(&mut self, _c: &mut Canvas<Window>) -> Option<&Texture> {
         None
     }
@@ -350,6 +356,10 @@ impl BaseWidget {
 impl CanvasHelper for BaseWidget {}
 
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
+/// This code can be used as a base implementation, or an example of how to create a `Widget` in
+/// `Pushrod`.  The base set of `Widget`s show off a multitude of different uses for handling events,
+/// display contents, and so on.  Look through the code in the `pushrod::widgets` module to get
+/// more of an idea of what is possible.
 impl Widget for BaseWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
         // You _can_ remove this `if` statement here, and just let the code run each time.  It will
