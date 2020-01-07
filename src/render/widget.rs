@@ -353,8 +353,6 @@ impl BaseWidget {
     }
 }
 
-impl CanvasHelper for BaseWidget {}
-
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
 /// This code can be used as a base implementation, or an example of how to create a `Widget` in
 /// `Pushrod`.  The base set of `Widget`s show off a multitude of different uses for handling events,

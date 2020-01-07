@@ -74,8 +74,6 @@ impl ProgressWidget {
     }
 }
 
-impl CanvasHelper for ProgressWidget {}
-
 /// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
 /// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
