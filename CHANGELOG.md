@@ -7,13 +7,14 @@
 - Added `TextureStore` to all `Widget`s
 - Removed clipping and canvas presenting in drawing loop, since textures are now returned.
 - Modified draw function in `WidgetCache` to use texture copying to canvas.
+- Modified `ProgressWidget` to use `TextureStore`.
 
 ## 0.4.23
 
 - Improved drawing loop by using hardware acceleration with vsync
 - Modified `draw_loop` in the `WidgetCache` to return true/false for display swap/refresh
 - Modified `BaseWidget` to use `Texture` for drawing (Part of work for #29)
-- Modified `CanvasWidget` to use `Texture` for drawing (Part of work for #29)
+- Modified `ProgressWidget` to use `Texture` for drawing (Part of work for #29)
 
 ## 0.4.22
 
