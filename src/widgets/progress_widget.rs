@@ -80,12 +80,12 @@ impl CanvasHelper for ProgressWidget {}
 /// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
     fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
-        let bounds = self.get_config().get_size(CONFIG_SIZE);
-
-        self.texture_store
-            .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
-
         if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
+
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
             let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
             let progress_width = (f64::from(self.get_size(CONFIG_SIZE)[0])
                 * (f64::from(self.progress))
