@@ -112,27 +112,68 @@ impl GridWidget {
 impl Widget for GridWidget {
     /// Draws the `GridWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-        self.draw_grid(c);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let size = self.get_config().get_size(CONFIG_SIZE);
+            let grid_connections = self.grid_connections;
+            let grid_size = self.grid_size as usize;
 
-        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
 
-        c.set_draw_color(border_color);
-        c.draw_rect(Rect::new(
-            self.config.to_x(0),
-            self.config.to_y(0),
-            self.get_config().get_size(CONFIG_SIZE)[0],
-            self.get_config().get_size(CONFIG_SIZE)[1],
-        ))
-        .unwrap();
+                if grid_connections {
+                    texture.set_draw_color(Color::RGB(192, 192, 192));
 
-        self.draw_bounding_box(c);
+                    for i in (0..size[SIZE_WIDTH]).step_by(grid_size) {
+                        texture.draw_line(
+                            Point::new(i as i32, 0),
+                            Point::new(
+                                i as i32,
+                                size[SIZE_HEIGHT] as i32
+                            ),
+                        )
+                            .unwrap();
+                    }
 
-        None
+                    for i in (0..size[SIZE_HEIGHT]).step_by(grid_size) {
+                        texture.draw_line(
+                            Point::new(0, i as i32),
+                            Point::new(
+                                size[SIZE_WIDTH] as i32,
+                                i as i32,
+                            ),
+                        )
+                            .unwrap();
+                    }
+                } else {
+                    texture.set_draw_color(Color::RGB(0, 0, 0));
+
+                    for x in (0..size[SIZE_WIDTH]).step_by(grid_size) {
+                        for y in (0..size[SIZE_HEIGHT]).step_by(grid_size) {
+                            texture.draw_point(Point::new(x as i32, y as i32)).unwrap();
+                        }
+                    }
+                }
+
+                texture.set_draw_color(border_color);
+                texture.draw_rect(Rect::new(
+                    0,
+                    0,
+                    size[0],
+                    size[1],
+                ))
+                    .unwrap();
+            }).unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     default_widget_functions!();
