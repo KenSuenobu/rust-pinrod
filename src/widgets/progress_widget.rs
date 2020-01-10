@@ -24,7 +24,6 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::video::Window;
 
-use crate::render::canvas_helper::CanvasHelper;
 use crate::render::texture_store::TextureStore;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;

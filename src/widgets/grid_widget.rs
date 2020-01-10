@@ -56,45 +56,6 @@ impl GridWidget {
         }
     }
 
-    /// Private function that draws the grid.
-    fn draw_grid(&mut self, c: &mut Canvas<Window>) {
-        let size = self.get_config().get_size(CONFIG_SIZE);
-
-        if self.grid_connections {
-            c.set_draw_color(Color::RGB(192, 192, 192));
-
-            for i in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
-                c.draw_line(
-                    Point::new(self.get_config().to_x(i as i32), self.get_config().to_y(0)),
-                    Point::new(
-                        self.get_config().to_x(i as i32),
-                        self.get_config().to_y(size[SIZE_HEIGHT] as i32),
-                    ),
-                )
-                .unwrap();
-            }
-
-            for i in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-                c.draw_line(
-                    Point::new(self.get_config().to_x(0), self.get_config().to_y(i as i32)),
-                    Point::new(
-                        self.get_config().to_x(size[SIZE_WIDTH] as i32),
-                        self.get_config().to_y(i as i32),
-                    ),
-                )
-                .unwrap();
-            }
-        } else {
-            c.set_draw_color(Color::RGB(0, 0, 0));
-
-            for x in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
-                for y in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-                    self.draw_point(c, x as i32, y as i32);
-                }
-            }
-        }
-    }
-
     /// Adjusts the size of the grid, redrawing the object.
     pub fn set_grid_size(&mut self, grid_size: u32) {
         self.grid_size = grid_size;

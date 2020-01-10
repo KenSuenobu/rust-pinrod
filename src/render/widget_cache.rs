@@ -307,9 +307,6 @@ impl WidgetCache {
             return;
         }
 
-        let top_level_rect = self.cache[0].widget.borrow_mut().get_drawing_area();
-        let mut needs_present = false;
-
         for paint_id in &parents_of_widget {
             let paint_widget = &mut self.cache[*paint_id as usize];
             let is_hidden = paint_widget.widget.borrow_mut().get_config().is_hidden();
@@ -342,8 +339,6 @@ impl WidgetCache {
                 };
 
                 paint_widget.widget.borrow_mut().set_invalidated(false);
-
-                needs_present = true;
             }
 
             if *paint_id != widget_id {

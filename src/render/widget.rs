@@ -18,7 +18,6 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::callbacks::*;
-use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_store::TextureStore;
 use crate::render::widget_cache::WidgetContainer;
