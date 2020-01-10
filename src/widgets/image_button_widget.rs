@@ -32,6 +32,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.
@@ -145,12 +146,12 @@ impl ImageButtonWidget {
 
 /// This is the `Widget` implementation of the `ImageButtonWidget`.
 impl Widget for ImageButtonWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
-        self.base_widget.draw(c);
-        self.text_widget.draw(c);
-        self.image_widget.draw(c);
+        self.base_widget.draw(c, _t);
+        self.text_widget.draw(c, _t);
+        self.image_widget.draw(c, _t);
 
         None
     }

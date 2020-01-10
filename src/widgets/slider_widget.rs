@@ -30,6 +30,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the callback type that is used when an `on_value_changed` callback is triggered from this
 /// `Widget`.
@@ -117,7 +118,7 @@ impl CanvasHelper for SliderWidget {}
 /// This is the `Widget` implementation of the `SliderWidget`.
 impl Widget for SliderWidget {
     /// Draws the `SliderWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         if self.orientation == SliderHorizontal {
             let base_color = self.get_color(CONFIG_COLOR_BASE);
 

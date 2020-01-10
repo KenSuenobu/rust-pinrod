@@ -33,6 +33,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -136,32 +137,32 @@ impl CanvasHelper for CheckboxWidget {}
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         if self.active {
             if self.in_bounds {
                 if self.selected {
-                    self.unchecked_widget.draw(c);
+                    self.unchecked_widget.draw(c, _t);
                 } else {
-                    self.checked_widget.draw(c);
+                    self.checked_widget.draw(c, _t);
                 }
             } else if !self.in_bounds {
                 if self.selected {
-                    self.checked_widget.draw(c);
+                    self.checked_widget.draw(c, _t);
                 } else {
-                    self.unchecked_widget.draw(c);
+                    self.unchecked_widget.draw(c, _t);
                 }
             }
         } else if !self.active {
             if self.selected {
-                self.checked_widget.draw(c);
+                self.checked_widget.draw(c, _t);
             } else {
-                self.unchecked_widget.draw(c);
+                self.unchecked_widget.draw(c, _t);
             }
         }
 
-        self.text_widget.draw(c);
+        self.text_widget.draw(c, _t);
         self.draw_bounding_box(c);
 
         None

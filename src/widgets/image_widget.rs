@@ -31,6 +31,7 @@ use crate::render::texture_store::TextureStore;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the storage object for the `ImageWidget`.  It stores the config, properties, callback registry,
 /// the image name, and a scale flag.
@@ -69,7 +70,7 @@ impl ImageWidget {
 /// This is the `Widget` implementation of the `ImageWidget`.  Image is rendered onto a 3D texture, then
 /// copied to the canvas after rendering.
 impl Widget for ImageWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);

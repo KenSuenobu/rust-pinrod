@@ -23,6 +23,7 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
+use crate::render::texture_cache::TextureCache;
 
 /// This is a container that stores information about a `Widget` that will be drawn on the screen.
 /// It stores the `Widget` object, the actual point of origin inside the `Window` (as a `Vec<i32>`
@@ -80,6 +81,7 @@ impl WidgetContainer {
 #[derive(Default)]
 pub struct WidgetCache {
     cache: Vec<WidgetContainer>,
+    texture_cache: TextureCache,
 }
 
 /// This is the `WidgetCache` implementation.  This cache object manages the `Widget` list for use by the
@@ -326,7 +328,7 @@ impl WidgetCache {
                 .get_size(CONFIG_SIZE)[1];
 
             if !is_hidden && is_invalidated {
-                match paint_widget.widget.borrow_mut().draw(c) {
+                match paint_widget.widget.borrow_mut().draw(c, &mut self.texture_cache) {
                     Some(texture) => {
                         c.copy(
                             texture,

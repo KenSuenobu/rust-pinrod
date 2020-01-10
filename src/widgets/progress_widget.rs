@@ -28,6 +28,7 @@ use crate::render::texture_store::TextureStore;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the storage object for the `ProgressWidget`.  It stores the config, properties, callback registry,
 /// the base widget, and progress from 0 to 100.
@@ -76,7 +77,7 @@ impl ProgressWidget {
 /// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
 /// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         if self.get_config().invalidated() {
             let bounds = self.get_config().get_size(CONFIG_SIZE);
 

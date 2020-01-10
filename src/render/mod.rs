@@ -78,3 +78,6 @@ pub mod layout;
 /// This is a caching object that stores a container of `Layout` objects, managed by the Pushrod
 /// engine.
 pub mod layout_cache;
+
+/// This is a caching object that stores Textures for fonts and images.
+pub mod texture_cache;

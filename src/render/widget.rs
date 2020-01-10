@@ -27,6 +27,7 @@ use sdl2::event::Event;
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This trait is shared by all `Widget` objects that have a presence on the screen.  Functions that
 /// must be implemented are documented in the trait.
@@ -50,14 +51,15 @@ pub trait Widget {
     /// In this function, you can just return a reference to the `Texture` if no invalidation state
     /// was set, otherwise, the draw can be re-performed, and the `Texture` returned.  If the drawing
     /// function returns no texture, return a `None`, and it will not be rendered during the display
-    /// loop, but it will still be called.
+    /// loop, but it will still be called.  A `TextureCache` is provided in case your `Widget` needs
+    /// to cache an image or a font store.
     ///
     /// So, why not just call `draw` each time, if the `Engine` already handles the calling of the
     /// draw for you when an object needs invalidation?  This is to avoid excess CPU usage.  You
     /// **can** call the draw method each time: all it will do is return the reference to the already
     /// drawn `Texture` if you do this.  It's only at the time the contents needs to be redrawn will
     /// the logic for the draw take place (so long the `invalidated` state is obeyed)
-    fn draw(&mut self, _c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, _c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         None
     }
 
@@ -358,7 +360,7 @@ impl BaseWidget {
 /// display contents, and so on.  Look through the code in the `pushrod::widgets` module to get
 /// more of an idea of what is possible.
 impl Widget for BaseWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // You _can_ remove this `if` statement here, and just let the code run each time.  It will
         // eventually make your application less efficient if this is constantly called.
         if self.get_config().invalidated() {

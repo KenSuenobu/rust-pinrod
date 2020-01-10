@@ -32,6 +32,7 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
+use crate::render::texture_cache::TextureCache;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
@@ -137,7 +138,7 @@ impl TileWidget {
 
 /// This is the `Widget` implementation of the `TileWidget`.
 impl Widget for TileWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) -> Option<&Texture> {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         if self.selected {
@@ -152,9 +153,9 @@ impl Widget for TileWidget {
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         }
 
-        self.base_widget.draw(c);
-        self.image_widget.draw(c);
-        self.text_widget.draw(c);
+        self.base_widget.draw(c, _t);
+        self.image_widget.draw(c, _t);
+        self.text_widget.draw(c, _t);
 
         None
     }
