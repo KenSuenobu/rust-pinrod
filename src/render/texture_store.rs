@@ -17,6 +17,7 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 /// This is a store used by the `TextureStore`.
+#[derive(Default)]
 pub struct TextureStore {
     store: Option<Texture>,
     width: u32,
@@ -26,15 +27,6 @@ pub struct TextureStore {
 /// This is a `TextureStore` that is used by `Widget`s to draw against.  It serves as a GPU-based
 /// `Texture` store that can be changed at any time during the drawing loop.
 impl TextureStore {
-    /// Creates a new `TextureStore` object.
-    pub fn new() -> Self {
-        TextureStore {
-            store: None,
-            width: 0,
-            height: 0,
-        }
-    }
-
     /// Retrieves a `&mut Texture` reference to the stored `Texture` object.
     ///
     /// Example use:
@@ -68,7 +60,6 @@ impl TextureStore {
         if self.store.is_none() || self.width != width || self.height != height {
             self.width = width;
             self.height = height;
-
             self.store = Some(c.create_texture_target(None, width, height).unwrap());
 
             eprintln!("Created texture: size={}x{}", width, height);

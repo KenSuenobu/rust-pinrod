@@ -51,7 +51,7 @@ impl GridWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            texture_store: TextureStore::new(),
+            texture_store: TextureStore::default(),
             grid_size,
             grid_connections,
         }

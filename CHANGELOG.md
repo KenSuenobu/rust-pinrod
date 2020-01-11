@@ -12,6 +12,7 @@
   - GridWidget
   - ImageWidget
   - ProgressWidget
+- Clippy optimizations for code and cleanup
 
 ## 0.4.23
 

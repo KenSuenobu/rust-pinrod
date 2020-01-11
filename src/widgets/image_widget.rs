@@ -58,7 +58,7 @@ impl ImageWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            texture_store: TextureStore::new(),
+            texture_store: TextureStore::default(),
             image_name,
             scaled,
         }
