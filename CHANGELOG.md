@@ -10,6 +10,7 @@
 - Implemented a `TextureCache` for `get_image` to grab an image `Texture` and cache it.
 - Now using `TextureStore`:
   - GridWidget
+  - ImageWidget
   - ProgressWidget
 
 ## 0.4.23

@@ -22,7 +22,6 @@ use crate::render::widget_config::{
 };
 use crate::render::{Points, Size};
 
-use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
@@ -31,7 +30,6 @@ use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use std::any::Any;
 use std::collections::HashMap;
-use std::path::Path;
 
 /// This is the storage object for the `ImageWidget`.  It stores the config, properties, callback registry,
 /// the image name, and a scale flag.
@@ -71,66 +69,69 @@ impl ImageWidget {
 /// copied to the canvas after rendering.
 impl Widget for ImageWidget {
     fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-        let texture = t.get_image(c, self.image_name.clone());
-        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
-        let widget_h = self.get_size(CONFIG_SIZE)[1] as i32;
-        let TextureQuery { width, height, .. } = texture.query();
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let image_texture = t.get_image(c, self.image_name.clone());
+            let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
+            let widget_h = self.get_size(CONFIG_SIZE)[1] as i32;
+            let TextureQuery { width, height, .. } = image_texture.query();
+            let scaled = self.scaled;
 
-        let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
-            CompassPosition::NW | CompassPosition::W | CompassPosition::SW => {
-                self.get_config().to_x(0)
-            }
+            let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
+                CompassPosition::NW | CompassPosition::W | CompassPosition::SW => 0,
 
-            CompassPosition::N | CompassPosition::Center | CompassPosition::S => {
-                self.get_config().to_x((widget_w - width as i32) / 2)
-            }
+                CompassPosition::N | CompassPosition::Center | CompassPosition::S => {
+                    (widget_w - width as i32) / 2
+                }
 
-            CompassPosition::NE | CompassPosition::E | CompassPosition::SE => {
-                self.get_config().to_x(widget_w - width as i32)
-            }
-        };
+                CompassPosition::NE | CompassPosition::E | CompassPosition::SE => {
+                    widget_w - width as i32
+                }
+            };
 
-        let texture_y = match self.get_compass(CONFIG_IMAGE_POSITION) {
-            CompassPosition::NW | CompassPosition::N | CompassPosition::NE => {
-                self.get_config().to_y(0)
-            }
+            let texture_y = match self.get_compass(CONFIG_IMAGE_POSITION) {
+                CompassPosition::NW | CompassPosition::N | CompassPosition::NE => 0,
 
-            CompassPosition::W | CompassPosition::Center | CompassPosition::E => {
-                self.get_config().to_y((widget_h - height as i32) / 2)
-            }
+                CompassPosition::W | CompassPosition::Center | CompassPosition::E => {
+                    (widget_h - height as i32) / 2
+                }
 
-            CompassPosition::SW | CompassPosition::S | CompassPosition::SE => {
-                self.get_config().to_y(widget_h - height as i32)
-            }
-        };
+                CompassPosition::SW | CompassPosition::S | CompassPosition::SE => {
+                    widget_h - height as i32
+                }
+            };
 
-        if !self.scaled {
-            c.copy(
-                &texture,
-                None,
-                Rect::new(texture_x, texture_y, width, height),
-            )
-            .unwrap();
-        } else {
-            c.copy(
-                &texture,
-                None,
-                Rect::new(
-                    self.get_config().to_x(0),
-                    self.get_config().to_y(0),
-                    widget_w as u32,
-                    widget_h as u32,
-                ),
-            )
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                if !scaled {
+                    texture
+                        .copy(
+                            image_texture,
+                            None,
+                            Rect::new(texture_x, texture_y, width, height),
+                        )
+                        .unwrap();
+                } else {
+                    texture
+                        .copy(
+                            image_texture,
+                            None,
+                            Rect::new(0, 0, widget_w as u32, widget_h as u32),
+                        )
+                        .unwrap();
+                }
+            })
             .unwrap();
         }
 
-        None
+        self.texture_store.get_optional_ref()
     }
 
     /// Responds to a screen redraw only if the `CONFIG_IMAGE_POSITION` key was changed.

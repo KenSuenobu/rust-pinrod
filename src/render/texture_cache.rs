@@ -20,6 +20,7 @@ use std::collections::HashMap;
 use std::path::Path;
 
 /// This is the structure for the `TextureCache`.
+#[derive(Default)]
 pub struct TextureCache {
     images: HashMap<String, Texture>,
 }
