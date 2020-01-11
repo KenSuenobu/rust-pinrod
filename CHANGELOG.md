@@ -1,11 +1,25 @@
 # Pushrod Change Log
 
+## 0.4.24
+
+- Changed signature of `draw` function to return a reference to the internal `Texture`.
+- Created `TextureStore` for `Widget`s to handle stored `Texture` objects.
+- Added `TextureStore` to all `Widget`s
+- Removed clipping and canvas presenting in drawing loop, since textures are now returned.
+- Modified draw function in `WidgetCache` to use texture copying to canvas.
+- Implemented a `TextureCache` for `get_image` to grab an image `Texture` and cache it. (#284)
+- Now using `TextureStore`:
+  - GridWidget
+  - ImageWidget
+  - ProgressWidget
+- Clippy optimizations for code and cleanup
+
 ## 0.4.23
 
 - Improved drawing loop by using hardware acceleration with vsync
 - Modified `draw_loop` in the `WidgetCache` to return true/false for display swap/refresh
 - Modified `BaseWidget` to use `Texture` for drawing (Part of work for #29)
-- Modified `CanvasWidget` to use `Texture` for drawing (Part of work for #29)
+- Modified `ProgressWidget` to use `Texture` for drawing (Part of work for #29)
 
 ## 0.4.22
 

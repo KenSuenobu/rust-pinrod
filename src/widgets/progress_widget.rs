@@ -24,7 +24,8 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::video::Window;
 
-use crate::render::canvas_helper::CanvasHelper;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;
 use std::collections::HashMap;
@@ -35,8 +36,8 @@ pub struct ProgressWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     progress: u8,
-    canvas_texture: Option<Texture>,
 }
 
 /// Creates a new `ProgressWidget`, which draws a progress bar inside a `BaseWidget`.
@@ -50,8 +51,8 @@ impl ProgressWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::default(),
             progress,
-            canvas_texture: None,
         }
     }
 
@@ -71,34 +72,18 @@ impl ProgressWidget {
     pub fn get_progress(&mut self) -> u8 {
         self.progress
     }
-
-    /// Creates a drawable `Texture` that can be drawn against, instead of drawing directly to the
-    /// canvas.  This way, the canvas is not refreshed, only the `Texture` is drawn.
-    fn create_texture(&mut self, c: &mut Canvas<Window>) {
-        if self.canvas_texture.is_none() {
-            let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
-            let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
-            self.canvas_texture = Some(
-                c.create_texture_target(None, widget_width, widget_height)
-                    .unwrap(),
-            );
-            eprintln!(
-                "Creating canvas texture: {}x{}",
-                widget_width, widget_height
-            );
-        }
-    }
 }
-
-impl CanvasHelper for ProgressWidget {}
 
 /// This is the `Widget` implementation of the `ProgressWidget`.  It contains a `BaseWidget` within
 /// its bounds to draw the base background, then draws the progress fill over the top.
 impl Widget for ProgressWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
-        self.create_texture(c);
-
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
+
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
             let base_color = self.get_color(CONFIG_COLOR_SECONDARY);
             let progress_width = (f64::from(self.get_size(CONFIG_SIZE)[0])
                 * (f64::from(self.progress))
@@ -107,34 +92,24 @@ impl Widget for ProgressWidget {
             let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
             let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-            match &mut self.canvas_texture {
-                Some(ref mut ref_texture) => {
-                    c.with_texture_canvas(ref_texture, |texture| {
-                        texture.set_draw_color(Color::RGB(255, 255, 255));
-                        texture.clear();
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(Color::RGB(255, 255, 255));
+                texture.clear();
 
-                        texture.set_draw_color(base_color);
-                        texture
-                            .fill_rect(Rect::new(1, 1, progress_width, progress_height))
-                            .unwrap();
-
-                        texture.set_draw_color(border_color);
-                        texture
-                            .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
-                            .unwrap();
-                    })
+                texture.set_draw_color(base_color);
+                texture
+                    .fill_rect(Rect::new(1, 1, progress_width, progress_height))
                     .unwrap();
-                }
-                None => (),
-            }
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
+                    .unwrap();
+            })
+            .unwrap();
         }
 
-        let draw_rect = self.get_rect_dest();
-
-        match &self.canvas_texture {
-            Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-            None => {}
-        };
+        self.texture_store.get_optional_ref()
     }
 
     default_widget_functions!();

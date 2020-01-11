@@ -18,11 +18,13 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 
-use sdl2::render::{Canvas, TextureQuery};
+use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use crate::render::{Points, Size, POINT_Y};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -40,6 +42,7 @@ pub struct ListWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    _texture_store: TextureStore,
     list_items: Vec<String>,
     highlighted_item: i32,
     selected_item: i32,
@@ -56,6 +59,7 @@ impl ListWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            _texture_store: TextureStore::default(),
             list_items: vec![],
             highlighted_item: -1,
             selected_item: -1,
@@ -179,7 +183,7 @@ impl CanvasHelper for ListWidget {}
 /// This is the `Widget` implementation of the `ListWidget`.
 impl Widget for ListWidget {
     /// Draws the `ListWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         let base_color = self.get_color(CONFIG_COLOR_BASE);
 
         c.set_draw_color(base_color);
@@ -191,6 +195,8 @@ impl Widget for ListWidget {
 
         c.set_draw_color(border_color);
         self.draw_bounding_box(c);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

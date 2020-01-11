@@ -21,10 +21,12 @@ use crate::render::{
     make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
 };
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
@@ -42,6 +44,7 @@ pub struct TileWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    _texture_store: TextureStore,
     on_click: OnClickedCallbackType,
     //    image_filename: String,
     //    image_size: Size,
@@ -98,6 +101,7 @@ impl TileWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            _texture_store: TextureStore::default(),
             on_click: None,
             //            image_filename: image_filename.clone(),
             //            image_size,
@@ -134,7 +138,7 @@ impl TileWidget {
 
 /// This is the `Widget` implementation of the `TileWidget`.
 impl Widget for TileWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         if self.selected {
@@ -149,9 +153,11 @@ impl Widget for TileWidget {
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         }
 
-        self.base_widget.draw(c);
-        self.image_widget.draw(c);
-        self.text_widget.draw(c);
+        self.base_widget.draw(c, _t);
+        self.image_widget.draw(c, _t);
+        self.text_widget.draw(c, _t);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function

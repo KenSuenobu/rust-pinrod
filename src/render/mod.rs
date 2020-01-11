@@ -46,6 +46,10 @@ pub fn make_size(w: u32, h: u32) -> Size {
     vec![w, h]
 }
 
+/// This is a store used by `Widget`s for drawing against.  Once the drawing is complete, the
+/// `Texture` stored within is used for blitting to the screen.
+pub mod texture_store;
+
 /// This is the `Engine` that is used to dispatch events from the screen to a corresponding list
 /// of `Widget`s in a `Window`.  This is the main event loop.
 pub mod engine;
@@ -74,3 +78,6 @@ pub mod layout;
 /// This is a caching object that stores a container of `Layout` objects, managed by the Pushrod
 /// engine.
 pub mod layout_cache;
+
+/// This is a caching object that stores Textures for fonts and images.
+pub mod texture_cache;

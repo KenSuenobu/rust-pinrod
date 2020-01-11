@@ -21,11 +21,13 @@ use crate::render::{
     make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
 };
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
@@ -43,6 +45,7 @@ pub struct CheckboxWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    _texture_store: TextureStore,
     text_widget: TextWidget,
     unchecked_widget: ImageWidget,
     checked_widget: ImageWidget,
@@ -100,6 +103,7 @@ impl CheckboxWidget {
             config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            _texture_store: TextureStore::default(),
             text_widget,
             unchecked_widget,
             checked_widget,
@@ -133,33 +137,35 @@ impl CanvasHelper for CheckboxWidget {}
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
         if self.active {
             if self.in_bounds {
                 if self.selected {
-                    self.unchecked_widget.draw(c);
+                    self.unchecked_widget.draw(c, _t);
                 } else {
-                    self.checked_widget.draw(c);
+                    self.checked_widget.draw(c, _t);
                 }
             } else if !self.in_bounds {
                 if self.selected {
-                    self.checked_widget.draw(c);
+                    self.checked_widget.draw(c, _t);
                 } else {
-                    self.unchecked_widget.draw(c);
+                    self.unchecked_widget.draw(c, _t);
                 }
             }
         } else if !self.active {
             if self.selected {
-                self.checked_widget.draw(c);
+                self.checked_widget.draw(c, _t);
             } else {
-                self.unchecked_widget.draw(c);
+                self.unchecked_widget.draw(c, _t);
             }
         }
 
-        self.text_widget.draw(c);
+        self.text_widget.draw(c, _t);
         self.draw_bounding_box(c);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

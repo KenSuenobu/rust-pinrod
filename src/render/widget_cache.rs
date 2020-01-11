@@ -16,6 +16,7 @@
 use std::cell::RefCell;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
 use crate::render::widget::Widget;
 use crate::render::widget_config::{CONFIG_ORIGIN, CONFIG_SIZE};
 use sdl2::event::Event;
@@ -80,6 +81,7 @@ impl WidgetContainer {
 #[derive(Default)]
 pub struct WidgetCache {
     cache: Vec<WidgetContainer>,
+    texture_cache: TextureCache,
 }
 
 /// This is the `WidgetCache` implementation.  This cache object manages the `Widget` list for use by the
@@ -270,12 +272,12 @@ impl WidgetCache {
     /// the screen during the draw loop of the `Engine`.  This `draw_loop` function automatically
     /// clips the screen area so that the `Widget` cannot draw outside of its bounds.  Returns `true`
     /// if the display loop needs to refresh the top-level canvas, `false` otherwise.
-    pub fn draw_loop(&mut self, canvas: &mut Canvas<Window>) -> bool {
+    pub fn draw_loop(&mut self, c: &mut Canvas<Window>) -> bool {
         let cache_size = self.cache.len();
 
         for i in 0..cache_size {
             if self.cache[i].widget.borrow_mut().is_invalidated() {
-                self.draw(0, canvas);
+                self.draw(0, c);
 
                 return true;
             }
@@ -307,9 +309,6 @@ impl WidgetCache {
             return;
         }
 
-        let top_level_rect = self.cache[0].widget.borrow_mut().get_drawing_area();
-        let mut needs_present = false;
-
         for paint_id in &parents_of_widget {
             let paint_widget = &mut self.cache[*paint_id as usize];
             let is_hidden = paint_widget.widget.borrow_mut().get_config().is_hidden();
@@ -329,12 +328,23 @@ impl WidgetCache {
                 .get_size(CONFIG_SIZE)[1];
 
             if !is_hidden && is_invalidated {
-                c.set_clip_rect(paint_widget.widget.borrow_mut().get_drawing_area());
-                paint_widget.widget.borrow_mut().draw(c);
-                paint_widget.widget.borrow_mut().set_invalidated(false);
-                c.set_clip_rect(top_level_rect);
+                match paint_widget
+                    .widget
+                    .borrow_mut()
+                    .draw(c, &mut self.texture_cache)
+                {
+                    Some(texture) => {
+                        c.copy(
+                            texture,
+                            None,
+                            Rect::new(widget_x, widget_y, widget_w, widget_h),
+                        )
+                        .unwrap();
+                    }
+                    None => eprintln!("No texture presented: ID={}", paint_id),
+                };
 
-                needs_present = true;
+                paint_widget.widget.borrow_mut().set_invalidated(false);
             }
 
             if *paint_id != widget_id {
@@ -346,10 +356,6 @@ impl WidgetCache {
                 c.draw_rect(Rect::new(widget_x, widget_y, widget_w, widget_h))
                     .unwrap();
             }
-        }
-
-        if needs_present {
-            c.present();
         }
     }
 

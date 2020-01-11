@@ -18,8 +18,9 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::callbacks::*;
-use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size};
@@ -50,8 +51,17 @@ pub trait Widget {
     /// In this function, you can just return a reference to the `Texture` if no invalidation state
     /// was set, otherwise, the draw can be re-performed, and the `Texture` returned.  If the drawing
     /// function returns no texture, return a `None`, and it will not be rendered during the display
-    /// loop, but it will still be called.
-    fn draw(&mut self, _c: &mut Canvas<Window>) {}
+    /// loop, but it will still be called.  A `TextureCache` is provided in case your `Widget` needs
+    /// to cache an image or a font store.
+    ///
+    /// So, why not just call `draw` each time, if the `Engine` already handles the calling of the
+    /// draw for you when an object needs invalidation?  This is to avoid excess CPU usage.  You
+    /// **can** call the draw method each time: all it will do is return the reference to the already
+    /// drawn `Texture` if you do this.  It's only at the time the contents needs to be redrawn will
+    /// the logic for the draw take place (so long the `invalidated` state is obeyed)
+    fn draw(&mut self, _c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
+        None
+    }
 
     /// Retrieves the `WidgetConfig` object for this `Widget`.
     fn get_config(&mut self) -> &mut WidgetConfig;
@@ -328,7 +338,7 @@ pub struct BaseWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    canvas_texture: Option<Texture>,
+    texture_store: TextureStore,
 }
 
 /// Base top-level implementation of the `BaseWidget`, which other classes can extend.
@@ -339,63 +349,42 @@ impl BaseWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            canvas_texture: None,
-        }
-    }
-
-    /// Creates a drawable `Texture` that can be drawn against, instead of drawing directly to the
-    /// canvas.  This way, the canvas is not refreshed, only the `Texture` is drawn.
-    fn create_texture(&mut self, c: &mut Canvas<Window>) {
-        if self.canvas_texture.is_none() {
-            let widget_width = self.get_config().get_size(CONFIG_SIZE)[0];
-            let widget_height = self.get_config().get_size(CONFIG_SIZE)[1];
-            self.canvas_texture = Some(
-                c.create_texture_target(None, widget_width, widget_height)
-                    .unwrap(),
-            );
-            eprintln!(
-                "Creating canvas texture: {}x{}",
-                widget_width, widget_height
-            );
+            texture_store: TextureStore::default(),
         }
     }
 }
 
-impl CanvasHelper for BaseWidget {}
-
 /// Implementation for drawing a `BaseWidget`, with the `Widget` trait objects applied.
+/// This code can be used as a base implementation, or an example of how to create a `Widget` in
+/// `Pushrod`.  The base set of `Widget`s show off a multitude of different uses for handling events,
+/// display contents, and so on.  Look through the code in the `pushrod::widgets` module to get
+/// more of an idea of what is possible.
 impl Widget for BaseWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
-        self.create_texture(c);
-
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
+        // You _can_ remove this `if` statement here, and just let the code run each time.  It will
+        // eventually make your application less efficient if this is constantly called.
         if self.get_config().invalidated() {
-            let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
-            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
             let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-            match &mut self.canvas_texture {
-                Some(ref mut ref_texture) => {
-                    c.with_texture_canvas(ref_texture, |texture| {
-                        texture.set_draw_color(base_color);
-                        texture.clear();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-                        texture.set_draw_color(border_color);
-                        texture
-                            .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
-                            .unwrap();
-                    })
+            let base_color = self.get_config().get_color(CONFIG_COLOR_BASE);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                     .unwrap();
-                }
-                None => (),
-            }
+            })
+            .unwrap();
         }
 
-        let draw_rect = self.get_rect_dest();
-
-        match &self.canvas_texture {
-            Some(ref x) => c.copy(x, None, draw_rect).unwrap(),
-            None => {}
-        };
+        self.texture_store.get_optional_ref()
     }
 
     default_widget_functions!();

@@ -21,10 +21,12 @@ use crate::render::{
     make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
 };
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
@@ -42,6 +44,7 @@ pub struct ImageButtonWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    _texture_store: TextureStore,
     base_widget: BaseWidget,
     text_widget: TextWidget,
     image_widget: ImageWidget,
@@ -93,6 +96,7 @@ impl ImageButtonWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            _texture_store: TextureStore::default(),
             base_widget,
             text_widget,
             image_widget,
@@ -142,12 +146,14 @@ impl ImageButtonWidget {
 
 /// This is the `Widget` implementation of the `ImageButtonWidget`.
 impl Widget for ImageButtonWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>) {
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
         // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
         // Invalidation is controlled by the top level widget (this box).
-        self.base_widget.draw(c);
-        self.text_widget.draw(c);
-        self.image_widget.draw(c);
+        self.base_widget.draw(c, _t);
+        self.text_widget.draw(c, _t);
+        self.image_widget.draw(c, _t);
+
+        None
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function

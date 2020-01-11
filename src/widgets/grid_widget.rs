@@ -19,11 +19,13 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{Points, Size, SIZE_HEIGHT, SIZE_WIDTH};
 
-use sdl2::render::Canvas;
+use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
+use crate::render::texture_store::TextureStore;
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
@@ -34,6 +36,7 @@ pub struct GridWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
+    texture_store: TextureStore,
     grid_size: u32,
     grid_connections: bool,
 }
@@ -48,47 +51,9 @@ impl GridWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
+            texture_store: TextureStore::default(),
             grid_size,
             grid_connections,
-        }
-    }
-
-    /// Private function that draws the grid.
-    fn draw_grid(&mut self, c: &mut Canvas<Window>) {
-        let size = self.get_config().get_size(CONFIG_SIZE);
-
-        if self.grid_connections {
-            c.set_draw_color(Color::RGB(192, 192, 192));
-
-            for i in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
-                c.draw_line(
-                    Point::new(self.get_config().to_x(i as i32), self.get_config().to_y(0)),
-                    Point::new(
-                        self.get_config().to_x(i as i32),
-                        self.get_config().to_y(size[SIZE_HEIGHT] as i32),
-                    ),
-                )
-                .unwrap();
-            }
-
-            for i in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-                c.draw_line(
-                    Point::new(self.get_config().to_x(0), self.get_config().to_y(i as i32)),
-                    Point::new(
-                        self.get_config().to_x(size[SIZE_WIDTH] as i32),
-                        self.get_config().to_y(i as i32),
-                    ),
-                )
-                .unwrap();
-            }
-        } else {
-            c.set_draw_color(Color::RGB(0, 0, 0));
-
-            for x in (0..size[SIZE_WIDTH]).step_by(self.grid_size as usize) {
-                for y in (0..size[SIZE_HEIGHT]).step_by(self.grid_size as usize) {
-                    self.draw_point(c, x as i32, y as i32);
-                }
-            }
         }
     }
 
@@ -108,26 +73,62 @@ impl GridWidget {
 /// This is the `Widget` implementation of the `GridWidget`.
 impl Widget for GridWidget {
     /// Draws the `GridWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>) {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-        self.draw_grid(c);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let size = self.get_config().get_size(CONFIG_SIZE);
+            let grid_connections = self.grid_connections;
+            let grid_size = self.grid_size as usize;
 
-        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
 
-        c.set_draw_color(border_color);
-        c.draw_rect(Rect::new(
-            self.config.to_x(0),
-            self.config.to_y(0),
-            self.get_config().get_size(CONFIG_SIZE)[0],
-            self.get_config().get_size(CONFIG_SIZE)[1],
-        ))
-        .unwrap();
+                if grid_connections {
+                    texture.set_draw_color(Color::RGB(192, 192, 192));
 
-        self.draw_bounding_box(c);
+                    for i in (0..size[SIZE_WIDTH]).step_by(grid_size) {
+                        texture
+                            .draw_line(
+                                Point::new(i as i32, 0),
+                                Point::new(i as i32, size[SIZE_HEIGHT] as i32),
+                            )
+                            .unwrap();
+                    }
+
+                    for i in (0..size[SIZE_HEIGHT]).step_by(grid_size) {
+                        texture
+                            .draw_line(
+                                Point::new(0, i as i32),
+                                Point::new(size[SIZE_WIDTH] as i32, i as i32),
+                            )
+                            .unwrap();
+                    }
+                } else {
+                    texture.set_draw_color(Color::RGB(0, 0, 0));
+
+                    for x in (0..size[SIZE_WIDTH]).step_by(grid_size) {
+                        for y in (0..size[SIZE_HEIGHT]).step_by(grid_size) {
+                            texture.draw_point(Point::new(x as i32, y as i32)).unwrap();
+                        }
+                    }
+                }
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, size[0], size[1]))
+                    .unwrap();
+            })
+            .unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     default_widget_functions!();
