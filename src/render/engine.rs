@@ -74,13 +74,13 @@ impl Engine {
     /// could lower responsiveness if you have a very active UI.
     pub fn new(w: u32, h: u32, frame_rate: u8) -> Self {
         let base_widget = BaseWidget::new(make_points_origin(), make_size(w, h));
-        let mut cache = WidgetCache::default();
+        let mut cache = WidgetCache::new();
 
         cache.add_widget(Box::new(base_widget), "base".to_string());
 
         Self {
             widget_cache: cache,
-            layout_cache: LayoutCache::default(),
+            layout_cache: LayoutCache::new(),
             current_widget_id: 0,
             frame_rate,
             running: true,

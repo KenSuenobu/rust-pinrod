@@ -1,5 +1,10 @@
 # Pushrod Change Log
 
+## 0.4.25
+
+- `TextureStore` changes:
+  - TextWidget
+
 ## 0.4.24
 
 - Changed signature of `draw` function to return a reference to the internal `Texture`.

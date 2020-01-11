@@ -18,11 +18,12 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 use std::collections::HashMap;
 use std::path::Path;
+use sdl2::ttf::Sdl2TtfContext;
 
 /// This is the structure for the `TextureCache`.
-#[derive(Default)]
 pub struct TextureCache {
     images: HashMap<String, Texture>,
+    ttf_context: Sdl2TtfContext,
 }
 
 /// This is a `Texture` cache object that is used by the `WidgetCache`.  This is responsible for loading
@@ -33,7 +34,13 @@ impl TextureCache {
     pub fn new() -> Self {
         Self {
             images: HashMap::new(),
+            ttf_context: sdl2::ttf::init().map_err(|e| e.to_string()).unwrap(),
         }
+    }
+
+    /// Retrieves the current Text Rendering context (`Sdl2TtfContext`)
+    pub fn get_ttf_context(&self) -> &Sdl2TtfContext {
+        &self.ttf_context
     }
 
     /// Loads an image based on the `image_name`, which is the filename for the image to load.

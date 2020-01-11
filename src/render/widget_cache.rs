@@ -78,7 +78,6 @@ impl WidgetContainer {
 /// assigns the `Widget` ID at the time it's added to the cache.  Parent IDs must already exist,
 /// otherwise, an error is thrown at the time the `Widget` is attempted to be added.  `Widget` IDs
 /// always start at 1.
-#[derive(Default)]
 pub struct WidgetCache {
     cache: Vec<WidgetContainer>,
     texture_cache: TextureCache,
@@ -87,6 +86,13 @@ pub struct WidgetCache {
 /// This is the `WidgetCache` implementation.  This cache object manages the `Widget` list for use by the
 /// Pushrod `Engine`.
 impl WidgetCache {
+    pub fn new() -> Self {
+        Self {
+            cache: Vec::new(),
+            texture_cache: TextureCache::new(),
+        }
+    }
+
     /// This adds a `Widget` to the render list.  It requires that the `Widget` being added is in a `Box`,
     /// along with a `widget_name`.  Returns the ID of the `Widget` that was added.  Use this ID if
     /// you plan on adding further `Widget`s, with this `Widget` as the parent.  The point of
