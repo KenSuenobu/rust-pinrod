@@ -25,6 +25,7 @@ use sdl2::render::{Canvas, Texture};
 use sdl2::video::Window;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
@@ -32,7 +33,6 @@ use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_cache::TextureCache;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.

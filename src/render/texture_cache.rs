@@ -13,13 +13,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[derive(Default)]
-pub struct TextureCache {
+use sdl2::image::LoadTexture;
+use sdl2::render::{Canvas, Texture};
+use sdl2::video::Window;
+use std::collections::HashMap;
+use std::path::Path;
 
+/// This is the structure for the `TextureCache`.
+pub struct TextureCache {
+    images: HashMap<String, Texture>,
 }
 
+/// This is a `Texture` cache object that is used by the `WidgetCache`.  This is responsible for loading
+/// in images into a cache in memory so that it can be copied multiple times as required by the
+/// application.
 impl TextureCache {
+    /// Creates a new `TextureCache`.
     pub fn new() -> Self {
-        Self { }
+        Self {
+            images: HashMap::new(),
+        }
+    }
+
+    /// Loads an image based on the `image_name`, which is the filename for the image to load.
+    /// Returns a reference to the `Texture` that was loaded.
+    pub fn get_image(&mut self, c: &mut Canvas<Window>, image_name: String) -> &Texture {
+        if !self.images.contains_key(&image_name.clone()) {
+            eprintln!("Image loaded: {}", image_name.clone());
+            let texture_creator = c.texture_creator();
+            self.images.insert(
+                image_name.clone(),
+                texture_creator
+                    .load_texture(Path::new(&image_name))
+                    .unwrap(),
+            );
+        } else {
+            eprintln!("Image cached: {}", image_name.clone());
+        }
+
+        self.images.get(&image_name.clone()).unwrap()
     }
 }

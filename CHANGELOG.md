@@ -7,7 +7,7 @@
 - Added `TextureStore` to all `Widget`s
 - Removed clipping and canvas presenting in drawing loop, since textures are now returned.
 - Modified draw function in `WidgetCache` to use texture copying to canvas.
-- Implemented a `TextureCache`
+- Implemented a `TextureCache` for `get_image` to grab an image `Texture` and cache it.
 - Now using `TextureStore`:
   - GridWidget
   - ProgressWidget

@@ -16,6 +16,7 @@
 use std::cell::RefCell;
 
 use crate::render::layout_cache::LayoutContainer;
+use crate::render::texture_cache::TextureCache;
 use crate::render::widget::Widget;
 use crate::render::widget_config::{CONFIG_ORIGIN, CONFIG_SIZE};
 use sdl2::event::Event;
@@ -23,7 +24,6 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
-use crate::render::texture_cache::TextureCache;
 
 /// This is a container that stores information about a `Widget` that will be drawn on the screen.
 /// It stores the `Widget` object, the actual point of origin inside the `Window` (as a `Vec<i32>`
@@ -328,7 +328,11 @@ impl WidgetCache {
                 .get_size(CONFIG_SIZE)[1];
 
             if !is_hidden && is_invalidated {
-                match paint_widget.widget.borrow_mut().draw(c, &mut self.texture_cache) {
+                match paint_widget
+                    .widget
+                    .borrow_mut()
+                    .draw(c, &mut self.texture_cache)
+                {
                     Some(texture) => {
                         c.copy(
                             texture,

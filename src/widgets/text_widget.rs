@@ -24,12 +24,12 @@ use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::ttf::FontStyle;
 use sdl2::video::Window;
 
+use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
-use crate::render::texture_cache::TextureCache;
 
 /// This enum is used by the `TextWidget`, which controls the justification of the text being
 /// rendered within the bounds of the `Widget`.

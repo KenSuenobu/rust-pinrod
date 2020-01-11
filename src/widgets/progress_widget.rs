@@ -24,11 +24,11 @@ use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::video::Window;
 
+use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use sdl2::render::{Canvas, Texture};
 use std::any::Any;
 use std::collections::HashMap;
-use crate::render::texture_cache::TextureCache;
 
 /// This is the storage object for the `ProgressWidget`.  It stores the config, properties, callback registry,
 /// the base widget, and progress from 0 to 100.
