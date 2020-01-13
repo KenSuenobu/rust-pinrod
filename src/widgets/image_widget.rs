@@ -91,6 +91,8 @@ impl Widget for ImageWidget {
 
             self.texture_sizes = make_size(width, height);
 
+            eprintln!("Texture sizes: {}x{}", width, height);
+
             let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
                 CompassPosition::NW | CompassPosition::W | CompassPosition::SW => 0,
 
