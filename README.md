@@ -8,6 +8,8 @@
 
 **Cross Platform UI Widget Library for Rust that uses SDL2.**
 
+[Click here to view my Blog!](https://kensuenobu.github.io/)
+
 Draws inspiration from lots of GUI libraries.
 
 If you like this library, [please consider donating to this project!](https://www.patreon.com/KenSuenobu)
