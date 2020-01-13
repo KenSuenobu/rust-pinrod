@@ -26,10 +26,6 @@ These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 [Click here to view my Blog!](https://kensuenobu.github.io/)
 
-## (Ever Evolving) Screenshot of Sample
-
-[![](docs/sample-0.3.7.png)](docs/sample-0.3.7.png)
-
 ## 0.4.x Status
 
 Soon to follow will be:
