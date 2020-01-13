@@ -110,8 +110,8 @@ impl Widget for TextWidget {
                 .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
             let base_color = self.get_color(CONFIG_COLOR_BASE);
-            let text_max_width =
-                self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
+            let text_max_width = self.get_size(CONFIG_SIZE)[0]
+                - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
 
             let ttf_context = t.get_ttf_context();
             let texture_creator = c.texture_creator();
@@ -145,14 +145,15 @@ impl Widget for TextWidget {
                 texture.set_draw_color(base_color);
                 texture.clear();
 
-                texture.copy(
-                    &font_texture,
-                    None,
-                    Rect::new(texture_x, texture_y, width, height),
-                )
+                texture
+                    .copy(
+                        &font_texture,
+                        None,
+                        Rect::new(texture_x, texture_y, width, height),
+                    )
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()

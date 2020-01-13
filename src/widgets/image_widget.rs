@@ -20,7 +20,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{
     CompassPosition, Config, WidgetConfig, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION, CONFIG_SIZE,
 };
-use crate::render::{Points, Size, make_size};
+use crate::render::{make_size, Points, Size};
 
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureQuery};

@@ -47,9 +47,7 @@ pub struct LayoutCache {
 /// This is the implementation of the `LayoutCache`.
 impl LayoutCache {
     pub fn new() -> Self {
-        Self {
-            cache: Vec::new(),
-        }
+        Self { cache: Vec::new() }
     }
 
     /// Adds a `Box<Layout>` to the `Layout` stack.

@@ -15,10 +15,10 @@
 
 use sdl2::image::LoadTexture;
 use sdl2::render::{Canvas, Texture};
+use sdl2::ttf::Sdl2TtfContext;
 use sdl2::video::Window;
 use std::collections::HashMap;
 use std::path::Path;
-use sdl2::ttf::Sdl2TtfContext;
 
 /// This is the structure for the `TextureCache`.
 pub struct TextureCache {
