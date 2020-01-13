@@ -20,7 +20,7 @@ use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::{
     CompassPosition, Config, WidgetConfig, CONFIG_COLOR_BASE, CONFIG_IMAGE_POSITION, CONFIG_SIZE,
 };
-use crate::render::{Points, Size};
+use crate::render::{Points, Size, make_size};
 
 use sdl2::rect::Rect;
 use sdl2::render::{Canvas, Texture, TextureQuery};
@@ -40,6 +40,7 @@ pub struct ImageWidget {
     texture_store: TextureStore,
     image_name: String,
     scaled: bool,
+    texture_sizes: Size,
 }
 
 /// Creates a new `ImageWidget`, which draws an image in a supported image format for SDL2 at a specific
@@ -61,7 +62,13 @@ impl ImageWidget {
             texture_store: TextureStore::default(),
             image_name,
             scaled,
+            texture_sizes: make_size(0, 0),
         }
+    }
+
+    /// Returns the size of the texture.
+    pub fn get_texture_size(&self) -> Size {
+        self.texture_sizes.clone()
     }
 }
 
@@ -81,6 +88,8 @@ impl Widget for ImageWidget {
             let widget_h = self.get_size(CONFIG_SIZE)[1] as i32;
             let TextureQuery { width, height, .. } = image_texture.query();
             let scaled = self.scaled;
+
+            self.texture_sizes = make_size(width, height);
 
             let texture_x = match self.get_compass(CONFIG_IMAGE_POSITION) {
                 CompassPosition::NW | CompassPosition::W | CompassPosition::SW => 0,

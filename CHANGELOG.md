@@ -5,6 +5,7 @@
 - Removed default() derive from TextureCache, as it needs to create a TTL Context from SDL2.
 - `TextureStore` changes:
   - TextWidget
+- Added `get_texture_size` to get size of `ImageWidget` after loading.
 
 ## 0.4.24
 
