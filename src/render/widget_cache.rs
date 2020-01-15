@@ -333,7 +333,8 @@ impl WidgetCache {
                 .get_config()
                 .get_size(CONFIG_SIZE)[1];
 
-            if !is_hidden && is_invalidated {
+//            if !is_hidden && is_invalidated {
+            if !is_hidden {
                 match paint_widget
                     .widget
                     .borrow_mut()

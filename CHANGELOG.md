@@ -6,7 +6,9 @@
 - `TextureStore` changes:
   - TextWidget
   - PushButtonWidget
+  - ToggleButtonWidget
 - Added `get_texture_size` to get size of `ImageWidget` after loading.
+- Fixed refresh loop in engine.
 
 ## 0.4.24
 
