@@ -7,6 +7,8 @@
   - TextWidget
   - PushButtonWidget
   - ToggleButtonWidget
+  - ImageButtonWidget
+  - CheckboxWidget
 - Added `get_texture_size` to get size of `ImageWidget` after loading.
 - Fixed refresh loop in engine.
 

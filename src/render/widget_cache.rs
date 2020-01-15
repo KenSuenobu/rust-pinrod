@@ -319,7 +319,6 @@ impl WidgetCache {
             let paint_widget = &mut self.cache[*paint_id as usize];
             let is_hidden = paint_widget.widget.borrow_mut().get_config().is_hidden();
             let is_enabled = paint_widget.widget.borrow_mut().get_config().is_enabled();
-            let is_invalidated = paint_widget.widget.borrow_mut().get_config().invalidated();
             let widget_x = paint_widget.widget.borrow_mut().get_config().to_x(0);
             let widget_y = paint_widget.widget.borrow_mut().get_config().to_y(0);
             let widget_w = paint_widget
@@ -333,7 +332,6 @@ impl WidgetCache {
                 .get_config()
                 .get_size(CONFIG_SIZE)[1];
 
-//            if !is_hidden && is_invalidated {
             if !is_hidden {
                 match paint_widget
                     .widget
