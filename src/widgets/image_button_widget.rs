@@ -177,7 +177,7 @@ impl Widget for ImageButtonWidget {
                     .copy(
                         text_widget_texture,
                         None,
-                        Rect::new(2 + bounds[1] as i32 + 6, 2, bounds[0] - bounds[1], bounds[1] - 4),
+                        Rect::new(2 + bounds[1] as i32 + 6, 2, bounds[0] - bounds[1] - 10, bounds[1] - 4),
                     )
                     .unwrap();
 
