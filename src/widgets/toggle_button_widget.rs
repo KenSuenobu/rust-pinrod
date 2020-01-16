@@ -29,9 +29,9 @@ use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
-use sdl2::rect::Rect;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -210,7 +210,7 @@ impl Widget for ToggleButtonWidget {
                     )
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()

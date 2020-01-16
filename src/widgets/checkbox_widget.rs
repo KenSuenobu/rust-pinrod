@@ -32,9 +32,9 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
-use sdl2::rect::Rect;
 
 /// This is the callback type that is used when an `on_toggle` callback is triggered from this
 /// `Widget`.
@@ -139,7 +139,6 @@ impl CanvasHelper for CheckboxWidget {}
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
-
         self.text_widget.draw(c, t);
         self.draw_bounding_box(c);
 
@@ -185,7 +184,12 @@ impl Widget for CheckboxWidget {
                     .copy(
                         text_widget_texture,
                         None,
-                        Rect::new(2 + bounds[1] as i32 + 6, 0, bounds[0] - bounds[1], bounds[1] - 4),
+                        Rect::new(
+                            2 + bounds[1] as i32 + 6,
+                            0,
+                            bounds[0] - bounds[1],
+                            bounds[1] - 4,
+                        ),
                     )
                     .unwrap();
 
@@ -202,7 +206,7 @@ impl Widget for CheckboxWidget {
                     .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()

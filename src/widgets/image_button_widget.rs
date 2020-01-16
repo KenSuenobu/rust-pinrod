@@ -31,9 +31,9 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
-use sdl2::rect::Rect;
 
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.
@@ -177,7 +177,12 @@ impl Widget for ImageButtonWidget {
                     .copy(
                         text_widget_texture,
                         None,
-                        Rect::new(2 + bounds[1] as i32 + 6, 2, bounds[0] - bounds[1] - 10, bounds[1] - 4),
+                        Rect::new(
+                            2 + bounds[1] as i32 + 6,
+                            2,
+                            bounds[0] - bounds[1] - 10,
+                            bounds[1] - 4,
+                        ),
                     )
                     .unwrap();
 
@@ -189,7 +194,7 @@ impl Widget for ImageButtonWidget {
                     )
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()
