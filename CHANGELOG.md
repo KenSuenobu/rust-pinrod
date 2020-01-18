@@ -1,5 +1,8 @@
 # Pushrod Change Log
 
+## 0.4.26
+
+
 ## 0.4.25
 
 - Removed default() derive from TextureCache, as it needs to create a TTL Context from SDL2.
