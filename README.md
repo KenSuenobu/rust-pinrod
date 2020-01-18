@@ -24,9 +24,7 @@ I wanted to keep these specific design ideas in mind:
 
 These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
-## (Ever Evolving) Screenshot of Sample
-
-[![](docs/sample-0.3.7.png)](docs/sample-0.3.7.png)
+[Click here to view my Blog!](https://kensuenobu.github.io/)
 
 ## 0.4.x Status
 

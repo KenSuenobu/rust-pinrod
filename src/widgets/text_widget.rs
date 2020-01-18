@@ -50,7 +50,7 @@ pub struct TextWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     font_name: String,
     font_style: FontStyle,
     font_size: i32,
@@ -77,7 +77,7 @@ impl TextWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             font_name,
             font_style,
             font_size,
@@ -102,53 +102,61 @@ impl TextWidget {
 /// copied to the canvas after rendering.  It uses blended mode texture mapping, which may be slow (as
 /// described by the SDL2 documentation), so this might change later to use 8 bit color mapping.
 impl Widget for TextWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
-        let text_max_width =
-            self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
+    fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
-        let texture_creator = c.texture_creator();
-        let mut font = ttf_context
-            .load_font(Path::new(&self.font_name), self.font_size as u16)
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let text_max_width = self.get_size(CONFIG_SIZE)[0]
+                - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
+
+            let ttf_context = t.get_ttf_context();
+            let texture_creator = c.texture_creator();
+            let mut font = ttf_context
+                .load_font(Path::new(&self.font_name), self.font_size as u16)
+                .unwrap();
+            let font_color = self.get_color(CONFIG_COLOR_TEXT);
+
+            font.set_style(self.font_style);
+
+            let surface = font
+                .render(&self.msg)
+                .blended_wrapped(font_color, text_max_width)
+                .map_err(|e| e.to_string())
+                .unwrap();
+            let font_texture = texture_creator
+                .create_texture_from_surface(&surface)
+                .map_err(|e| e.to_string())
+                .unwrap();
+
+            let TextureQuery { width, height, .. } = font_texture.query();
+            let texture_y = 0;
+            let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
+            let texture_x = match self.justification {
+                TextJustify::Left => 0,
+                TextJustify::Right => widget_w - width as i32,
+                TextJustify::Center => (widget_w - width as i32) / 2,
+            };
+
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                texture
+                    .copy(
+                        &font_texture,
+                        None,
+                        Rect::new(texture_x, texture_y, width, height),
+                    )
+                    .unwrap();
+            })
             .unwrap();
-        let font_color = self.get_color(CONFIG_COLOR_TEXT);
+        }
 
-        font.set_style(self.font_style);
-
-        let surface = font
-            .render(&self.msg)
-            .blended_wrapped(font_color, text_max_width)
-            .map_err(|e| e.to_string())
-            .unwrap();
-        let texture = texture_creator
-            .create_texture_from_surface(&surface)
-            .map_err(|e| e.to_string())
-            .unwrap();
-
-        let TextureQuery { width, height, .. } = texture.query();
-
-        let texture_y = self.get_config().to_y(0);
-        let widget_w = self.get_size(CONFIG_SIZE)[0] as i32;
-        let texture_x = match self.justification {
-            TextJustify::Left => self.get_config().to_x(0),
-
-            TextJustify::Right => self.get_config().to_x(widget_w - width as i32),
-
-            TextJustify::Center => self.get_config().to_x((widget_w - width as i32) / 2),
-        };
-
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
-
-        c.copy(
-            &texture,
-            None,
-            Rect::new(texture_x, texture_y, width, height),
-        )
-        .unwrap();
-
-        None
+        self.texture_store.get_optional_ref()
     }
 
     /// Monitors for changes in the text, color changes, or font sizes.

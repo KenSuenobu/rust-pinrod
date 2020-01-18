@@ -32,6 +32,7 @@ use crate::render::widget_config::CompassPosition::Center;
 use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 
@@ -45,7 +46,7 @@ pub struct CheckboxWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     text_widget: TextWidget,
     unchecked_widget: ImageWidget,
     checked_widget: ImageWidget,
@@ -103,7 +104,7 @@ impl CheckboxWidget {
             config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             text_widget,
             unchecked_widget,
             checked_widget,
@@ -137,35 +138,78 @@ impl CanvasHelper for CheckboxWidget {}
 /// This is the `Widget` implementation of the `CheckboxWidget`.
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
-        // Invalidation is controlled by the top level widget (this box).
-        if self.active {
-            if self.in_bounds {
-                if self.selected {
-                    self.unchecked_widget.draw(c, _t);
-                } else {
-                    self.checked_widget.draw(c, _t);
-                }
-            } else if !self.in_bounds {
-                if self.selected {
-                    self.checked_widget.draw(c, _t);
-                } else {
-                    self.unchecked_widget.draw(c, _t);
-                }
-            }
-        } else if !self.active {
-            if self.selected {
-                self.checked_widget.draw(c, _t);
-            } else {
-                self.unchecked_widget.draw(c, _t);
-            }
-        }
-
-        self.text_widget.draw(c, _t);
+    fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
+        self.text_widget.draw(c, t);
         self.draw_bounding_box(c);
 
-        None
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
+            // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
+            // Invalidation is controlled by the top level widget (this box).
+            let checkbox_widget_texture = if self.active {
+                if self.in_bounds {
+                    if self.selected {
+                        self.unchecked_widget.draw(c, t).unwrap()
+                    } else {
+                        self.checked_widget.draw(c, t).unwrap()
+                    }
+                } else {
+                    if self.selected {
+                        self.checked_widget.draw(c, t).unwrap()
+                    } else {
+                        self.unchecked_widget.draw(c, t).unwrap()
+                    }
+                }
+            } else {
+                if self.selected {
+                    self.checked_widget.draw(c, t).unwrap()
+                } else {
+                    self.unchecked_widget.draw(c, t).unwrap()
+                }
+            };
+
+            let text_widget_texture = self.text_widget.draw(c, t).unwrap();
+
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                texture
+                    .copy(
+                        text_widget_texture,
+                        None,
+                        Rect::new(
+                            2 + bounds[1] as i32 + 6,
+                            0,
+                            bounds[0] - bounds[1],
+                            bounds[1] - 4,
+                        ),
+                    )
+                    .unwrap();
+
+                texture
+                    .copy(
+                        checkbox_widget_texture,
+                        None,
+                        Rect::new(2, 2, bounds[1] - 4, bounds[1] - 4),
+                    )
+                    .unwrap();
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
+                    .unwrap();
+            })
+            .unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

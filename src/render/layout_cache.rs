@@ -40,13 +40,16 @@ impl LayoutContainer {
 }
 
 /// This is a container object that stores a `Vec` of `LayoutContainer` objects for its cache.
-#[derive(Default)]
 pub struct LayoutCache {
     cache: Vec<LayoutContainer>,
 }
 
 /// This is the implementation of the `LayoutCache`.
 impl LayoutCache {
+    pub fn new() -> Self {
+        Self { cache: Vec::new() }
+    }
+
     /// Adds a `Box<Layout>` to the `Layout` stack.
     pub fn add_layout(&mut self, layout: Box<dyn Layout>) -> i32 {
         let layout_id = self.cache.len() as i32;

@@ -29,6 +29,7 @@ use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 
@@ -42,7 +43,7 @@ pub struct ToggleButtonWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     base_widget: BaseWidget,
     text_widget: TextWidget,
     active: bool,
@@ -96,7 +97,7 @@ impl ToggleButtonWidget {
             config,
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             base_widget,
             text_widget,
             active: false,
@@ -176,13 +177,43 @@ impl ToggleButtonWidget {
 /// This is the `Widget` implementation of the `ToggleButtonWidget`.
 impl Widget for ToggleButtonWidget {
     /// Draws the `ToggleButtonWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
-        // Invalidation is controlled by the top level widget (this box).
-        self.base_widget.draw(c, _t);
-        self.text_widget.draw(c, _t);
+    fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
 
-        None
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
+            // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
+            // Invalidation is controlled by the top level widget (this box).
+            let base_widget_texture = self.base_widget.draw(c, t).unwrap();
+            let text_widget_texture = self.text_widget.draw(c, t).unwrap();
+
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                texture
+                    .copy(
+                        base_widget_texture,
+                        None,
+                        Rect::new(0, 0, bounds[0], bounds[1]),
+                    )
+                    .unwrap();
+
+                texture
+                    .copy(
+                        text_widget_texture,
+                        None,
+                        Rect::new(2, 2, bounds[0] - 4, bounds[1] - 4),
+                    )
+                    .unwrap();
+            })
+            .unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

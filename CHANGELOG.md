@@ -1,5 +1,17 @@
 # Pushrod Change Log
 
+## 0.4.25
+
+- Removed default() derive from TextureCache, as it needs to create a TTL Context from SDL2.
+- `TextureStore` changes:
+  - TextWidget
+  - PushButtonWidget
+  - ToggleButtonWidget
+  - ImageButtonWidget
+  - CheckboxWidget
+- Added `get_texture_size` to get size of `ImageWidget` after loading.
+- Fixed refresh loop in engine.
+
 ## 0.4.24
 
 - Changed signature of `draw` function to return a reference to the internal `Texture`.

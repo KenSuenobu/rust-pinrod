@@ -74,13 +74,13 @@ impl Engine {
     /// could lower responsiveness if you have a very active UI.
     pub fn new(w: u32, h: u32, frame_rate: u8) -> Self {
         let base_widget = BaseWidget::new(make_points_origin(), make_size(w, h));
-        let mut cache = WidgetCache::default();
+        let mut cache = WidgetCache::new();
 
         cache.add_widget(Box::new(base_widget), "base".to_string());
 
         Self {
             widget_cache: cache,
-            layout_cache: LayoutCache::default(),
+            layout_cache: LayoutCache::new(),
             current_widget_id: 0,
             frame_rate,
             running: true,
@@ -221,11 +221,9 @@ impl Engine {
             self.widget_cache.tick(self.layout_cache.get_layout_cache());
             self.layout_cache
                 .do_layout(self.widget_cache.borrow_cache());
+            self.widget_cache.draw_loop(&mut canvas);
 
-            // Flip screen display canvas only if the draw loop requires a refresh.
-            if self.widget_cache.draw_loop(&mut canvas) {
-                canvas.present();
-            }
+            canvas.present();
 
             // This obeys thread sleep time.
             let now = SystemTime::now()
