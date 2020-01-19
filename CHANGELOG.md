@@ -2,6 +2,8 @@
 
 ## 0.4.26
 
+- `TextureStore` changes:
+  - SliderWidget
 
 ## 0.4.25
 
