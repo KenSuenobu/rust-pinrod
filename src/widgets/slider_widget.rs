@@ -143,7 +143,10 @@ impl Widget for SliderWidget {
                 if orientation == SliderHorizontal {
                     texture.set_draw_color(Color::RGB(192, 192, 192));
                     texture
-                        .draw_line(Point::new(10, half_height), Point::new(width - 10, half_height))
+                        .draw_line(
+                            Point::new(10, half_height),
+                            Point::new(width - 10, half_height),
+                        )
                         .unwrap();
 
                     texture
@@ -186,7 +189,10 @@ impl Widget for SliderWidget {
 
                     texture.set_draw_color(Color::RGB(192, 192, 192));
                     texture
-                        .draw_line(Point::new(half_width, 10), Point::new(half_width, height - 10))
+                        .draw_line(
+                            Point::new(half_width, 10),
+                            Point::new(half_width, height - 10),
+                        )
                         .unwrap();
 
                     texture
