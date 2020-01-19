@@ -139,9 +139,6 @@ impl CanvasHelper for CheckboxWidget {}
 impl Widget for CheckboxWidget {
     /// Draws the `CheckboxWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
-        self.text_widget.draw(c, t);
-        self.draw_bounding_box(c);
-
         if self.get_config().invalidated() {
             let bounds = self.get_config().get_size(CONFIG_SIZE);
             let base_color = self.get_color(CONFIG_COLOR_BASE);

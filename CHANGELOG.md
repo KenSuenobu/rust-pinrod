@@ -5,6 +5,7 @@
 - `TextureStore` changes:
   - SliderWidget
   - ListWidget
+- Removed unused code from `CheckboxWidget`.
 
 ## 0.4.25
 
