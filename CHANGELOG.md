@@ -4,6 +4,7 @@
 
 - `TextureStore` changes:
   - SliderWidget
+  - ListWidget
 
 ## 0.4.25
 
