@@ -25,7 +25,7 @@ use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
-use crate::render::{Points, Size, POINT_Y};
+use crate::render::{Points, Size, POINT_Y, SIZE_WIDTH};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use std::any::Any;
@@ -42,7 +42,7 @@ pub struct ListWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     list_items: Vec<String>,
     highlighted_item: i32,
     selected_item: i32,
@@ -59,7 +59,7 @@ impl ListWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             list_items: vec![],
             highlighted_item: -1,
             selected_item: -1,
@@ -132,34 +132,6 @@ impl ListWidget {
         .unwrap();
     }
 
-    fn draw_list(&mut self, c: &mut Canvas<Window>) {
-        let list_size = self.list_items.len();
-        let list_height: u32 = 30;
-
-        for i in 0..list_size {
-            let mut text_color = Color::RGB(0, 0, 0);
-            let mut color = if self.highlighted_item == i as i32 {
-                self.get_color(CONFIG_COLOR_HOVER)
-            } else {
-                Color::RGB(255, 255, 255)
-            };
-
-            if self.selected_item == i as i32 {
-                color = Color::RGB(0, 0, 0);
-                text_color = Color::RGB(255, 255, 255);
-            }
-
-            self.draw_text(
-                c,
-                self.list_items[i].clone(),
-                0,
-                list_height * i as u32 as u32,
-                color,
-                text_color,
-            );
-        }
-    }
-
     /// Assigns the callback closure that will be used when the `Widget` changes value, based on a selected
     /// item.
     pub fn on_selected<F>(&mut self, callback: F)
@@ -169,7 +141,9 @@ impl ListWidget {
         self.on_selected = Some(Box::new(callback));
     }
 
-    /// Internal function that triggers the `on_selected` callback.
+    /// Internal function that triggers the `on_selected` callback.  The selected item ID indicates the value
+    /// in the `ListWidget` that has been selected.  If the value is set to `-1`, it means the list items
+    /// have been de-selected.
     fn call_selected_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_selected.take() {
             cb(self, widgets, layouts, self.selected_item);
@@ -184,19 +158,66 @@ impl CanvasHelper for ListWidget {}
 impl Widget for ListWidget {
     /// Draws the `ListWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-        self.draw_list(c);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let hover_color = self.get_color(CONFIG_COLOR_HOVER);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let list_size = self.list_items.len();
+            let highlighted_item = self.highlighted_item;
+            let selected_item = self.selected_item;
 
-        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
 
-        c.set_draw_color(border_color);
-        self.draw_bounding_box(c);
+                let list_height: u32 = 30;
 
-        None
+                for i in 0..list_size {
+                    let mut _text_color = Color::RGB(0, 0, 0);
+                    let mut color = if highlighted_item == i as i32 {
+                        hover_color
+                    } else {
+                        Color::RGB(255, 255, 255)
+                    };
+
+                    if selected_item == i as i32 {
+                        color = Color::RGB(0, 0, 0);
+                        _text_color = Color::RGB(255, 255, 255);
+                    }
+
+                    texture.set_draw_color(color);
+                    texture.fill_rect(Rect::new(
+                        0,
+                        (list_height * i as u32) as i32,
+                        bounds[SIZE_WIDTH],
+                        30,
+                    ))
+                        .unwrap();
+
+//                    self.draw_text(
+//                        c,
+//                        self.list_items[i].clone(),
+//                        0,
+//                        list_height * i as u32 as u32,
+//                        color,
+//                        text_color,
+//                    );
+                }
+
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
+                    .unwrap();
+            }).unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
