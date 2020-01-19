@@ -143,20 +143,20 @@ impl Widget for SliderWidget {
                 if orientation == SliderHorizontal {
                     texture.set_draw_color(Color::RGB(192, 192, 192));
                     texture
-                        .draw_line(Point::new(0, half_height), Point::new(width, half_height))
+                        .draw_line(Point::new(10, half_height), Point::new(width - 10, half_height))
                         .unwrap();
 
                     texture
                         .draw_line(
-                            Point::new(0, half_height - 1),
-                            Point::new(width, half_height - 1),
+                            Point::new(10, half_height - 1),
+                            Point::new(width - 10, half_height - 1),
                         )
                         .unwrap();
 
                     texture
                         .draw_line(
-                            Point::new(0, half_height + 1),
-                            Point::new(width, half_height + 1),
+                            Point::new(10, half_height + 1),
+                            Point::new(width - 10, half_height + 1),
                         )
                         .unwrap();
 
@@ -186,20 +186,20 @@ impl Widget for SliderWidget {
 
                     texture.set_draw_color(Color::RGB(192, 192, 192));
                     texture
-                        .draw_line(Point::new(half_width, 0), Point::new(half_width, height))
+                        .draw_line(Point::new(half_width, 10), Point::new(half_width, height - 10))
                         .unwrap();
 
                     texture
                         .draw_line(
-                            Point::new(half_width - 1, 0),
-                            Point::new(half_width - 1, height),
+                            Point::new(half_width - 1, 10),
+                            Point::new(half_width - 1, height - 10),
                         )
                         .unwrap();
 
                     texture
                         .draw_line(
-                            Point::new(half_width + 1, 0),
-                            Point::new(half_width + 1, height),
+                            Point::new(half_width + 1, 10),
+                            Point::new(half_width + 1, height - 10),
                         )
                         .unwrap();
 
