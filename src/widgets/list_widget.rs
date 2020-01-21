@@ -25,7 +25,7 @@ use crate::render::canvas_helper::CanvasHelper;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
-use crate::render::{Points, Size, POINT_Y};
+use crate::render::{Points, Size, POINT_Y, SIZE_WIDTH};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use std::any::Any;
@@ -42,7 +42,7 @@ pub struct ListWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     list_items: Vec<String>,
     highlighted_item: i32,
     selected_item: i32,
@@ -59,7 +59,7 @@ impl ListWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             list_items: vec![],
             highlighted_item: -1,
             selected_item: -1,
@@ -77,89 +77,6 @@ impl ListWidget {
         item_size
     }
 
-    fn draw_text(
-        &mut self,
-        c: &mut Canvas<Window>,
-        msg: String,
-        x: u32,
-        y: u32,
-        back_color: Color,
-        text_color: Color,
-    ) {
-        let text_max_width =
-            self.get_size(CONFIG_SIZE)[0] - ((self.get_numeric(CONFIG_BORDER_WIDTH) * 2) as u32);
-
-        let ttf_context = sdl2::ttf::init().map_err(|e| e.to_string()).unwrap();
-        let texture_creator = c.texture_creator();
-        let mut font = ttf_context
-            .load_font(
-                Path::new(&String::from("assets/OpenSans-Regular.ttf")),
-                16 as u16,
-            )
-            .unwrap();
-
-        font.set_style(sdl2::ttf::FontStyle::NORMAL);
-
-        let surface = font
-            .render(&msg)
-            .blended_wrapped(text_color, text_max_width)
-            .map_err(|e| e.to_string())
-            .unwrap();
-        let texture = texture_creator
-            .create_texture_from_surface(&surface)
-            .map_err(|e| e.to_string())
-            .unwrap();
-
-        let TextureQuery { width, height, .. } = texture.query();
-
-        let texture_y = self.get_config().to_y(y as i32);
-        let texture_x = self.get_config().to_x(10);
-
-        c.set_draw_color(back_color);
-        c.fill_rect(Rect::new(
-            self.get_config().to_x(x as i32),
-            self.get_config().to_y(y as i32),
-            self.get_size(CONFIG_SIZE)[0],
-            30,
-        ))
-        .unwrap();
-
-        c.copy(
-            &texture,
-            None,
-            Rect::new(texture_x, texture_y, width, height),
-        )
-        .unwrap();
-    }
-
-    fn draw_list(&mut self, c: &mut Canvas<Window>) {
-        let list_size = self.list_items.len();
-        let list_height: u32 = 30;
-
-        for i in 0..list_size {
-            let mut text_color = Color::RGB(0, 0, 0);
-            let mut color = if self.highlighted_item == i as i32 {
-                self.get_color(CONFIG_COLOR_HOVER)
-            } else {
-                Color::RGB(255, 255, 255)
-            };
-
-            if self.selected_item == i as i32 {
-                color = Color::RGB(0, 0, 0);
-                text_color = Color::RGB(255, 255, 255);
-            }
-
-            self.draw_text(
-                c,
-                self.list_items[i].clone(),
-                0,
-                list_height * i as u32 as u32,
-                color,
-                text_color,
-            );
-        }
-    }
-
     /// Assigns the callback closure that will be used when the `Widget` changes value, based on a selected
     /// item.
     pub fn on_selected<F>(&mut self, callback: F)
@@ -169,7 +86,9 @@ impl ListWidget {
         self.on_selected = Some(Box::new(callback));
     }
 
-    /// Internal function that triggers the `on_selected` callback.
+    /// Internal function that triggers the `on_selected` callback.  The selected item ID indicates the value
+    /// in the `ListWidget` that has been selected.  If the value is set to `-1`, it means the list items
+    /// have been de-selected.
     fn call_selected_callback(&mut self, widgets: &[WidgetContainer], layouts: &[LayoutContainer]) {
         if let Some(mut cb) = self.on_selected.take() {
             cb(self, widgets, layouts, self.selected_item);
@@ -183,20 +102,90 @@ impl CanvasHelper for ListWidget {}
 /// This is the `Widget` implementation of the `ListWidget`.
 impl Widget for ListWidget {
     /// Draws the `ListWidget` contents.
-    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        let base_color = self.get_color(CONFIG_COLOR_BASE);
+    fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-        c.set_draw_color(base_color);
-        c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-        self.draw_list(c);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let hover_color = self.get_color(CONFIG_COLOR_HOVER);
+            let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let list_size = self.list_items.len();
+            let highlighted_item = self.highlighted_item;
+            let selected_item = self.selected_item;
+            let list_items = self.list_items.clone();
 
-        let border_color = self.get_config().get_color(CONFIG_COLOR_BORDER);
+            let ttf_context = t.get_ttf_context();
+            let texture_creator = c.texture_creator();
+            let mut font = ttf_context
+                .load_font(Path::new(&String::from("assets/OpenSans-Regular.ttf")), 16)
+                .unwrap();
 
-        c.set_draw_color(border_color);
-        self.draw_bounding_box(c);
+            font.set_style(sdl2::ttf::FontStyle::NORMAL);
 
-        None
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                let list_height: u32 = 30;
+
+                for i in 0..list_size {
+                    let mut text_color = Color::RGB(0, 0, 0);
+                    let mut color = if highlighted_item == i as i32 {
+                        hover_color
+                    } else {
+                        Color::RGB(255, 255, 255)
+                    };
+
+                    if selected_item == i as i32 {
+                        color = Color::RGB(0, 0, 0);
+                        text_color = Color::RGB(255, 255, 255);
+                    }
+
+                    texture.set_draw_color(color);
+                    texture
+                        .fill_rect(Rect::new(
+                            0,
+                            (list_height * i as u32) as i32,
+                            bounds[SIZE_WIDTH],
+                            30,
+                        ))
+                        .unwrap();
+
+                    let surface = font
+                        .render(&list_items[i].clone())
+                        .blended_wrapped(text_color, bounds[SIZE_WIDTH])
+                        .map_err(|e| e.to_string())
+                        .unwrap();
+                    let font_texture = texture_creator
+                        .create_texture_from_surface(&surface)
+                        .map_err(|e| e.to_string())
+                        .unwrap();
+
+                    let TextureQuery { width, height, .. } = font_texture.query();
+                    let texture_y = (list_height * i as u32) as i32 + 3;
+                    let texture_x = 10;
+
+                    texture
+                        .copy(
+                            &font_texture,
+                            None,
+                            Rect::new(texture_x, texture_y, width, height),
+                        )
+                        .unwrap();
+                }
+
+                texture.set_draw_color(border_color);
+                texture
+                    .draw_rect(Rect::new(0, 0, bounds[0], bounds[1]))
+                    .unwrap();
+            })
+            .unwrap();
+        }
+
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.

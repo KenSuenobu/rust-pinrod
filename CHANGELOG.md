@@ -1,5 +1,14 @@
 # Pushrod Change Log
 
+## 0.4.26
+
+- `TextureStore` changes:
+  - SliderWidget
+  - ListWidget
+- Removed unused code from `CheckboxWidget`.
+- Converted all `Widget`s over to use `Texture` cache. (#29)
+- Fixed `SliderWidget` so it draws a slider area 10 pixels within each border (#270)
+
 ## 0.4.25
 
 - Removed default() derive from TextureCache, as it needs to create a TTL Context from SDL2.

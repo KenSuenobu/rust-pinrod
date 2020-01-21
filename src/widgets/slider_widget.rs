@@ -38,7 +38,7 @@ pub type OnValueChangedCallbackType =
     Option<Box<dyn FnMut(&mut SliderWidget, &[WidgetContainer], &[LayoutContainer], u32)>>;
 
 /// These are the possible slider orientations.
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 pub enum SliderOrientation {
     /// Indicates a horizontally controllable slider.
     SliderHorizontal,
@@ -52,7 +52,7 @@ pub struct SliderWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     min: u32,
     max: u32,
     current: u32,
@@ -80,7 +80,7 @@ impl SliderWidget {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             min,
             max,
             current,
@@ -119,159 +119,123 @@ impl CanvasHelper for SliderWidget {}
 impl Widget for SliderWidget {
     /// Draws the `SliderWidget` contents.
     fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        if self.orientation == SliderHorizontal {
-            let base_color = self.get_color(CONFIG_COLOR_BASE);
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
 
-            c.set_draw_color(base_color);
-            c.fill_rect(self.get_drawing_area()).unwrap();
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
             // Draw base - three lines in the center
             let half_height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT] / 2) as i32;
-            let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
-
-            c.set_draw_color(Color::RGB(192, 192, 192));
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(0),
-                    self.get_config().to_y(half_height),
-                ),
-                Point::new(
-                    self.get_config().to_x(width),
-                    self.get_config().to_y(half_height),
-                ),
-            )
-            .unwrap();
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(0),
-                    self.get_config().to_y(half_height - 1),
-                ),
-                Point::new(
-                    self.get_config().to_x(width),
-                    self.get_config().to_y(half_height - 1),
-                ),
-            )
-            .unwrap();
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(0),
-                    self.get_config().to_y(half_height + 1),
-                ),
-                Point::new(
-                    self.get_config().to_x(width),
-                    self.get_config().to_y(half_height + 1),
-                ),
-            )
-            .unwrap();
-
-            // Draw slider at current value
-            let full_range = self.max - self.min;
-            let slider_center =
-                ((width as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
-            let slider_start = if slider_center >= width as u32 - 15 {
-                width as u32 - 30
-            } else if slider_center <= 15 {
-                0
-            } else {
-                slider_center - 15
-            };
-
-            c.set_draw_color(base_color);
-            c.fill_rect(Rect::new(
-                self.get_config().to_x(slider_start as i32),
-                self.get_config().to_y(0),
-                30,
-                self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
-            ))
-            .unwrap();
-
-            c.set_draw_color(Color::RGB(0, 0, 0));
-            c.draw_rect(Rect::new(
-                self.get_config().to_x(slider_start as i32),
-                self.get_config().to_y(0),
-                30,
-                self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT],
-            ))
-            .unwrap();
-        } else if self.orientation == SliderVertical {
-            let base_color = self.get_color(CONFIG_COLOR_BASE);
-
-            c.set_draw_color(base_color);
-            c.fill_rect(self.get_drawing_area()).unwrap();
-
-            // Draw base - three lines in the center
             let half_width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH] / 2) as i32;
             let height = (self.get_config().get_size(CONFIG_SIZE)[SIZE_HEIGHT]) as i32;
+            let width = (self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH]) as i32;
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+            let orientation = self.orientation.clone();
+            let min = self.min;
+            let max = self.max;
+            let current = self.current;
 
-            c.set_draw_color(Color::RGB(192, 192, 192));
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(half_width),
-                    self.get_config().to_y(0),
-                ),
-                Point::new(
-                    self.get_config().to_x(half_width),
-                    self.get_config().to_y(height),
-                ),
-            )
-            .unwrap();
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(half_width - 1),
-                    self.get_config().to_y(0),
-                ),
-                Point::new(
-                    self.get_config().to_x(half_width - 1),
-                    self.get_config().to_y(height),
-                ),
-            )
-            .unwrap();
-            c.draw_line(
-                Point::new(
-                    self.get_config().to_x(half_width + 1),
-                    self.get_config().to_y(0),
-                ),
-                Point::new(
-                    self.get_config().to_x(half_width + 1),
-                    self.get_config().to_y(height),
-                ),
-            )
-            .unwrap();
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
 
-            // Draw slider at current value
-            let full_range = self.max - self.min;
-            let slider_center =
-                ((height as f64 / full_range as f64) * (self.current - self.min) as f64) as u32;
-            let slider_start = if slider_center >= height as u32 - 15 {
-                height as u32 - 30
-            } else if slider_center <= 15 {
-                0
-            } else {
-                slider_center - 15
-            };
+                if orientation == SliderHorizontal {
+                    texture.set_draw_color(Color::RGB(192, 192, 192));
+                    texture
+                        .draw_line(
+                            Point::new(10, half_height),
+                            Point::new(width - 10, half_height),
+                        )
+                        .unwrap();
 
-            c.set_draw_color(base_color);
-            c.fill_rect(Rect::new(
-                self.get_config().to_x(0),
-                self.get_config().to_y(slider_start as i32),
-                self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
-                30,
-            ))
-            .unwrap();
+                    texture
+                        .draw_line(
+                            Point::new(10, half_height - 1),
+                            Point::new(width - 10, half_height - 1),
+                        )
+                        .unwrap();
 
-            c.set_draw_color(Color::RGB(0, 0, 0));
-            c.draw_rect(Rect::new(
-                self.get_config().to_x(0),
-                self.get_config().to_y(slider_start as i32),
-                self.get_config().get_size(CONFIG_SIZE)[SIZE_WIDTH],
-                30,
-            ))
+                    texture
+                        .draw_line(
+                            Point::new(10, half_height + 1),
+                            Point::new(width - 10, half_height + 1),
+                        )
+                        .unwrap();
+
+                    // Draw slider at current value
+                    let full_range = max - min;
+                    let slider_center =
+                        ((width as f64 / full_range as f64) * (current - min) as f64) as u32;
+                    let slider_start = if slider_center >= width as u32 - 15 {
+                        width as u32 - 30
+                    } else if slider_center <= 15 {
+                        0
+                    } else {
+                        slider_center - 15
+                    };
+
+                    texture.set_draw_color(base_color);
+                    texture
+                        .fill_rect(Rect::new(slider_start as i32, 0, 30, bounds[SIZE_HEIGHT]))
+                        .unwrap();
+
+                    texture.set_draw_color(Color::RGB(0, 0, 0));
+                    texture
+                        .draw_rect(Rect::new(slider_start as i32, 0, 30, bounds[SIZE_HEIGHT]))
+                        .unwrap();
+                } else if orientation == SliderVertical {
+                    // Draw base - three lines in the center
+
+                    texture.set_draw_color(Color::RGB(192, 192, 192));
+                    texture
+                        .draw_line(
+                            Point::new(half_width, 10),
+                            Point::new(half_width, height - 10),
+                        )
+                        .unwrap();
+
+                    texture
+                        .draw_line(
+                            Point::new(half_width - 1, 10),
+                            Point::new(half_width - 1, height - 10),
+                        )
+                        .unwrap();
+
+                    texture
+                        .draw_line(
+                            Point::new(half_width + 1, 10),
+                            Point::new(half_width + 1, height - 10),
+                        )
+                        .unwrap();
+
+                    // Draw slider at current value
+                    let full_range = max - min;
+                    let slider_center =
+                        ((height as f64 / full_range as f64) * (current - min) as f64) as u32;
+                    let slider_start = if slider_center >= height as u32 - 15 {
+                        height as u32 - 30
+                    } else if slider_center <= 15 {
+                        0
+                    } else {
+                        slider_center - 15
+                    };
+
+                    texture.set_draw_color(base_color);
+                    texture
+                        .fill_rect(Rect::new(0, slider_start as i32, bounds[SIZE_WIDTH], 30))
+                        .unwrap();
+
+                    texture.set_draw_color(Color::RGB(0, 0, 0));
+                    texture
+                        .draw_rect(Rect::new(0, slider_start as i32, bounds[SIZE_WIDTH], 30))
+                        .unwrap();
+                }
+            })
             .unwrap();
         }
 
-        self.draw_bounding_box(c);
-
-        None
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.
