@@ -26,6 +26,10 @@ These design ideas are critical.  **Keep it simple.  Keep it stupid simple.**
 
 [Click here to view my Blog!](https://kensuenobu.github.io/)
 
+## Pushrod Widgets
+
+[Click here to get a list of the Widgets available!](src/widgets/README.md)
+
 ## 0.4.x Status
 
 Please [see here](https://github.com/KenSuenobu/rust-pushrod/milestone/5) for more details on issues.
