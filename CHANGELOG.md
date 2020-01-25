@@ -5,6 +5,7 @@
 - Added documentation for Widgets
 - Added screenshots for each type of Widget (#289)
 - Fixed slider example title
+- Added numeric images for Tile test application, and others
 
 ## 0.4.26
 
