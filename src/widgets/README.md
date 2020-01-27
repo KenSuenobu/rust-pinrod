@@ -10,5 +10,6 @@
 - [Push Button Widget](../../images/push_button.png) - A clickable button
 - [Slider Widgets](../../images/slider.png) - A slider that handles min/max values
 - [Text Widget](../../images/text.png) - A text widget with left, right, and center justification
+- [Tile Widget](../../images/tile.png) - A selectable tile widget that can be used in a tool/group box
 - [Toggle Button Widget](../../images/toggle_button.png) - A toggleable button
 

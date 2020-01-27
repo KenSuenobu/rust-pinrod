@@ -57,8 +57,8 @@ pub struct TileWidget {
 
 /// This is the implementation of the `TileWidget`, which displays an image next to some text.
 impl TileWidget {
-    /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
-    /// `font_size` to use, and the `image_name` to load and display.
+    /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, the `image_name` to load and
+    /// display, and the text to show in the tile.
     pub fn new(points: Points, size: Size, image_name: String, tile_text: String) -> Self {
         let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
