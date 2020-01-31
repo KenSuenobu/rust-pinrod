@@ -27,8 +27,6 @@ use sdl2::video::Window;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
-use crate::render::widget_config::CompassPosition::Center;
-use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
@@ -230,11 +228,9 @@ impl Widget for TileWidget {
             if _state {
                 self.originated = true;
             } else {
-                if self.originated {
-                    if self.hovered {
-                        self.selected = !self.selected;
-                        self.call_click_callback(_widgets, _layouts, self.selected);
-                    }
+                if self.originated && self.hovered {
+                    self.selected = !self.selected;
+                    self.call_click_callback(_widgets, _layouts, self.selected);
                 }
 
                 self.originated = false;

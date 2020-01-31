@@ -380,3 +380,9 @@ impl WidgetCache {
             .is_enabled()
     }
 }
+
+impl Default for WidgetCache {
+    fn default() -> Self {
+        Self::new()
+    }
+}

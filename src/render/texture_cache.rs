@@ -53,3 +53,9 @@ impl TextureCache {
         })
     }
 }
+
+impl Default for TextureCache {
+    fn default() -> Self {
+        Self::new()
+    }
+}
