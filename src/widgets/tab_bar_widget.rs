@@ -189,11 +189,11 @@ impl Widget for TabBarWidget {
 
                 for i in 0..tab_widths.len() {
                     if selected_tab == i as i16 {
-                        texture.set_draw_color(Color::RGB(0, 255, 0));
+                        texture.set_draw_color(Color::RGB(128, 128, 128));
                     } else if hovered_tab == i as i16 {
-                        texture.set_draw_color(Color::RGB(0, 0, 255));
+                        texture.set_draw_color(Color::RGB(192, 192, 192));
                     } else {
-                        texture.set_draw_color(Color::RGB(255, 0, 0));
+                        texture.set_draw_color(Color::RGB(255, 255, 255));
                     }
 
                     texture.fill_rect(
@@ -222,6 +222,8 @@ impl Widget for TabBarWidget {
     /// implementation is **optional**.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
+        self.hovered_item = -1;
+        self.set_invalidated(true);
     }
 
     fn mouse_moved(
