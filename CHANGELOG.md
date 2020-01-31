@@ -8,6 +8,7 @@
 - Added numeric images for Tile test application, and others
 - Added convenience method to calculate the inverse of a color
 - Created TileWidget and demo (#256)
+- Clippy and Formatting updates
 
 ## 0.4.26
 
