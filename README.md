@@ -40,7 +40,7 @@ Pushrod only requires:
 
 | Library | Version |
 | ------- | ------- |
-| SDL2    | 0.32 |
+| SDL2    | 0.33 |
 
 ### Ubuntu
 
