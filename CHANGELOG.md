@@ -9,6 +9,7 @@
 - Added convenience method to calculate the inverse of a color
 - Created TileWidget and demo (#256)
 - Clippy and Formatting updates
+- Submitted updates for `invert` and static color defines in SDL2 (PR #965 in Rust-SDL2)
 
 ## 0.4.26
 
