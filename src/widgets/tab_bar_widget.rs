@@ -141,12 +141,12 @@ impl TabBarWidget {
         let mut start_x: i32 = 20;
 
         for i in 0..self.tab_widths.len() {
-            if x >= start_x && x <= start_x + self.tab_widths[i] as i32 {
+            if x >= start_x && x <= (start_x + self.tab_widths[i] as i32 + 30) {
                 selected_item = i as i16;
                 break;
             }
 
-            start_x += self.tab_widths[i] as i32 + 1;
+            start_x += self.tab_widths[i] as i32 + 31;
         }
 
         selected_item
@@ -199,11 +199,11 @@ impl Widget for TabBarWidget {
                     texture.fill_rect(
                         Rect::new(start_x as i32,
                         0,
-                        tab_widths[i],
+                        tab_widths[i] + 30,
                         bounds[SIZE_HEIGHT])
                     ).unwrap();
 
-                    start_x += tab_widths[i] + 1;
+                    start_x += tab_widths[i] + 30 + 1;
                 }
             })
                 .unwrap();
