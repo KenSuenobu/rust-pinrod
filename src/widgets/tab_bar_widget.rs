@@ -176,14 +176,6 @@ impl Widget for TabBarWidget {
                 texture.set_draw_color(base_color);
                 texture.clear();
 
-                texture.set_draw_color(Color::RGB(0, 0, 0));
-                texture
-                    .draw_line(
-                        Point::new(0, bounds[SIZE_HEIGHT] as i32 - 1),
-                        Point::new(bounds[SIZE_WIDTH] as i32, bounds[SIZE_HEIGHT] as i32 - 1),
-                    )
-                    .unwrap();
-
                 let mut start_x: u32 = 20;
                 let num_tabs = tab_widths.len();
 
@@ -193,7 +185,7 @@ impl Widget for TabBarWidget {
                     } else if hovered_tab == i as i16 {
                         texture.set_draw_color(Color::RGB(192, 192, 192));
                     } else {
-                        texture.set_draw_color(Color::RGB(255, 255, 255));
+                        texture.set_draw_color(Color::RGB(224, 224, 224));
                     }
 
                     texture.fill_rect(
@@ -205,6 +197,14 @@ impl Widget for TabBarWidget {
 
                     start_x += tab_widths[i] + 30 + 1;
                 }
+
+                texture.set_draw_color(Color::RGB(0, 0, 0));
+                texture
+                    .draw_line(
+                        Point::new(0, bounds[SIZE_HEIGHT] as i32 - 1),
+                        Point::new(bounds[SIZE_WIDTH] as i32, bounds[SIZE_HEIGHT] as i32 - 1),
+                    )
+                    .unwrap();
             })
                 .unwrap();
         }
@@ -261,7 +261,10 @@ impl Widget for TabBarWidget {
             if self.hovered_item != -1 {
                 self.selected_item = self.hovered_item;
                 self.set_invalidated(true);
-                eprintln!("Clicked: {}", self.selected_item);
+
+                if self.selected_item > -1 {
+                    self.call_tab_selected_callback(_widgets, _layouts, self.selected_item as u16);
+                }
             }
         }
     }
