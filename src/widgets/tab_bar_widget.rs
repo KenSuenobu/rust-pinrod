@@ -136,7 +136,7 @@ impl TabBarWidget {
         self.calculated = true;
     }
 
-    fn find_hovered_item(&self, x: i32, y: i32) -> i16 {
+    fn find_hovered_item(&self, x: i32) -> i16 {
         let mut selected_item = -1;
         let mut start_x: i32 = 20;
 
@@ -237,9 +237,9 @@ impl Widget for TabBarWidget {
             let true_x = points[POINT_X] - origin[POINT_X];
             let true_y = points[POINT_Y] - origin[POINT_Y];
             let previous_hovered_item = self.hovered_item;
-            let hovered_item = self.find_hovered_item(true_x, true_y);
+            let hovered_item = self.find_hovered_item(true_x);
 
-            eprintln!("Mouse moved: {} x {} hovered={}", true_x, true_y, hovered_item);
+            eprintln!("Mouse moved: {} hovered={}", true_x, hovered_item);
 
             self.hovered_item = hovered_item;
 
