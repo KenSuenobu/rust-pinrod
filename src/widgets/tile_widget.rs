@@ -18,7 +18,7 @@ use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
 use crate::render::{
-    make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
+    inverse_color, make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
 };
 
 use sdl2::render::{Canvas, Texture};
@@ -27,10 +27,9 @@ use sdl2::video::Window;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
-use crate::render::widget_config::CompassPosition::Center;
-use crate::widgets::image_widget::ImageWidget;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
+use sdl2::rect::Rect;
 use std::any::Any;
 use std::collections::HashMap;
 
@@ -44,29 +43,21 @@ pub struct TileWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
     callback_registry: CallbackRegistry,
-    _texture_store: TextureStore,
+    texture_store: TextureStore,
     on_click: OnClickedCallbackType,
-    //    image_filename: String,
-    //    image_size: Size,
-    //    tile_text: String,
     base_widget: BaseWidget,
     text_widget: TextWidget,
-    image_widget: ImageWidget,
+    image_name: String,
     selected: bool,
     hovered: bool,
+    originated: bool,
 }
 
 /// This is the implementation of the `TileWidget`, which displays an image next to some text.
 impl TileWidget {
-    /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, a block of `text`, the
-    /// `font_size` to use, and the `image_name` to load and display.
-    pub fn new(
-        points: Points,
-        size: Size,
-        image_filename: String,
-        image_size: Size,
-        tile_text: String,
-    ) -> Self {
+    /// Creates a new `TileWidget`, given the `x, y, w, h` coordinates, the `image_name` to load and
+    /// display, and the text to show in the tile.
+    pub fn new(points: Points, size: Size, image_name: String, tile_text: String) -> Self {
         let mut base_widget = BaseWidget::new(points.clone(), size.clone());
         let mut text_widget = TextWidget::new(
             String::from("assets/OpenSans-Regular.ttf"),
@@ -80,37 +71,25 @@ impl TileWidget {
             ),
             make_size(size[SIZE_WIDTH] - 2, 18),
         );
-        let mut image_widget = ImageWidget::new(
-            image_filename,
-            make_points(
-                points[POINT_X] + size[SIZE_WIDTH] as i32 / 2 - image_size[SIZE_WIDTH] as i32 / 2,
-                points[POINT_Y] + image_size[SIZE_HEIGHT] as i32 / 2 + 1,
-            ),
-            make_size(image_size[SIZE_WIDTH], image_size[SIZE_HEIGHT]),
-            false,
-        );
 
         base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
         base_widget.set_numeric(CONFIG_BORDER_WIDTH, 1);
         base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
         text_widget.set_color(CONFIG_COLOR_BASE, Color::RGBA(255, 255, 255, 255));
         text_widget.set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
-        image_widget.set_compass(CONFIG_IMAGE_POSITION, Center);
 
         Self {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
-            _texture_store: TextureStore::default(),
+            texture_store: TextureStore::default(),
             on_click: None,
-            //            image_filename: image_filename.clone(),
-            //            image_size,
-            //            tile_text: tile_text.clone(),
             base_widget,
             text_widget,
-            image_widget,
+            image_name,
             selected: false,
             hovered: false,
+            originated: false,
         }
     }
 
@@ -134,30 +113,93 @@ impl TileWidget {
             self.on_click = Some(cb);
         }
     }
-}
 
-/// This is the `Widget` implementation of the `TileWidget`.
-impl Widget for TileWidget {
-    fn draw(&mut self, c: &mut Canvas<Window>, _t: &mut TextureCache) -> Option<&Texture> {
-        // Paint the base widget first.  Forcing a draw() call here will ignore invalidation.
-        // Invalidation is controlled by the top level widget (this box).
+    fn adjust_widgets(&mut self) {
         if self.selected {
             let selected_color = self.get_color(CONFIG_COLOR_SELECTED);
             self.base_widget
                 .set_color(CONFIG_COLOR_BASE, selected_color);
+            self.text_widget
+                .set_color(CONFIG_COLOR_BASE, selected_color);
+            self.text_widget
+                .set_color(CONFIG_COLOR_TEXT, inverse_color(selected_color));
         } else if self.hovered {
             let hover_color = self.get_color(CONFIG_COLOR_HOVER);
             self.base_widget.set_color(CONFIG_COLOR_BASE, hover_color);
+            self.text_widget.set_color(CONFIG_COLOR_BASE, hover_color);
+            self.text_widget
+                .set_color(CONFIG_COLOR_TEXT, inverse_color(hover_color));
         } else {
             self.base_widget
                 .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+            self.text_widget
+                .set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
+            self.text_widget
+                .set_color(CONFIG_COLOR_TEXT, Color::RGB(0, 0, 0));
+        }
+    }
+}
+
+/// This is the `Widget` implementation of the `TileWidget`.
+impl Widget for TileWidget {
+    fn draw(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) -> Option<&Texture> {
+        if self.get_config().invalidated() {
+            let bounds = self.get_config().get_size(CONFIG_SIZE);
+            let base_color = self.get_color(CONFIG_COLOR_BASE);
+
+            self.texture_store
+                .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
+
+            self.adjust_widgets();
+
+            let base_widget_texture = self.base_widget.draw(c, t).unwrap();
+            let text_widget_texture = self.text_widget.draw(c, t).unwrap();
+            let image_texture = t.get_image(c, self.image_name.clone());
+
+            c.with_texture_canvas(self.texture_store.get_mut_ref(), |texture| {
+                texture.set_draw_color(base_color);
+                texture.clear();
+
+                let size_center = bounds[SIZE_WIDTH] / 2;
+
+                texture
+                    .copy(
+                        base_widget_texture,
+                        None,
+                        Rect::new(0, 0, bounds[0], bounds[1]),
+                    )
+                    .unwrap();
+
+                texture
+                    .copy(
+                        text_widget_texture,
+                        None,
+                        Rect::new(
+                            1,
+                            bounds[SIZE_HEIGHT] as i32 - 20,
+                            bounds[SIZE_WIDTH] - 2,
+                            18,
+                        ),
+                    )
+                    .unwrap();
+
+                texture
+                    .copy(
+                        image_texture,
+                        None,
+                        Rect::new(
+                            (size_center - 16) as i32,
+                            (bounds[SIZE_HEIGHT] / 2 - 32) as i32,
+                            32,
+                            32,
+                        ),
+                    )
+                    .unwrap();
+            })
+            .unwrap();
         }
 
-        self.base_widget.draw(c, _t);
-        self.image_widget.draw(c, _t);
-        self.text_widget.draw(c, _t);
-
-        None
+        self.texture_store.get_optional_ref()
     }
 
     /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
@@ -183,8 +225,16 @@ impl Widget for TileWidget {
         _state: bool,
     ) {
         if _button == 1 {
-            self.selected = !self.selected;
-            self.call_click_callback(_widgets, _layouts, self.selected);
+            if _state {
+                self.originated = true;
+            } else {
+                if self.originated && self.hovered {
+                    self.selected = !self.selected;
+                    self.call_click_callback(_widgets, _layouts, self.selected);
+                }
+
+                self.originated = false;
+            }
         }
     }
 

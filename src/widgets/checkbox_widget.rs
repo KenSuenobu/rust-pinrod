@@ -156,19 +156,15 @@ impl Widget for CheckboxWidget {
                     } else {
                         self.checked_widget.draw(c, t).unwrap()
                     }
-                } else {
-                    if self.selected {
-                        self.checked_widget.draw(c, t).unwrap()
-                    } else {
-                        self.unchecked_widget.draw(c, t).unwrap()
-                    }
-                }
-            } else {
-                if self.selected {
+                } else if self.selected {
                     self.checked_widget.draw(c, t).unwrap()
                 } else {
                     self.unchecked_widget.draw(c, t).unwrap()
                 }
+            } else if self.selected {
+                self.checked_widget.draw(c, t).unwrap()
+            } else {
+                self.unchecked_widget.draw(c, t).unwrap()
             };
 
             let text_widget_texture = self.text_widget.draw(c, t).unwrap();

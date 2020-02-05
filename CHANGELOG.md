@@ -1,5 +1,18 @@
 # Pushrod Change Log
 
+## 0.4.27
+
+- Added documentation for Widgets
+- Added screenshots for each type of Widget (#289)
+- Fixed slider example title
+- Added numeric images for Tile test application, and others
+- Added convenience method to calculate the inverse of a color
+- Created TileWidget and demo (#256)
+- Clippy and Formatting updates
+- Submitted updates for `invert` and static color defines in SDL2 (PR #965 in Rust-SDL2)
+- Created text helper function (render_text) (#276)
+- Created Tab Bar Widget (#50)
+
 ## 0.4.26
 
 - `TextureStore` changes:

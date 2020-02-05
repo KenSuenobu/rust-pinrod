@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use sdl2::pixels::Color;
+
 /// This is a type that defines two points: X and Y coordinates.
 pub type Points = Vec<i32>;
 
@@ -44,6 +46,11 @@ pub fn make_points_origin() -> Points {
 /// Convenience method to create a `Size` type.
 pub fn make_size(w: u32, h: u32) -> Size {
     vec![w, h]
+}
+
+/// Calculates the inverse of a color.
+pub fn inverse_color(color: Color) -> Color {
+    Color::RGBA(255 - color.r, 255 - color.g, 255 - color.b, color.a)
 }
 
 /// This is a store used by `Widget`s for drawing against.  Once the drawing is complete, the

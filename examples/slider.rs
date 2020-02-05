@@ -32,7 +32,7 @@ pub fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
     let window = video_subsystem
-        .window("pushrod-render toggle button demo", 400, 300)
+        .window("pushrod-render slider demo", 400, 300)
         .position_centered()
         .opengl()
         .build()

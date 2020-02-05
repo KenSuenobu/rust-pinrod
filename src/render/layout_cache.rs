@@ -81,3 +81,9 @@ impl LayoutCache {
         }
     }
 }
+
+impl Default for LayoutCache {
+    fn default() -> Self {
+        Self::new()
+    }
+}

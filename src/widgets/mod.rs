@@ -60,3 +60,5 @@ pub mod list_widget;
 /// the widget is hovered over by a mouse enter event.  This is mainly used in conjunction with the
 /// `ToolbarWidget`, which contains a list of `TileWidget`s
 pub mod tile_widget;
+
+pub mod tab_bar_widget;

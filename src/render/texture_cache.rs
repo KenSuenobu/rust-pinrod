@@ -14,8 +14,9 @@
 // limitations under the License.
 
 use sdl2::image::LoadTexture;
-use sdl2::render::{Canvas, Texture};
-use sdl2::ttf::Sdl2TtfContext;
+use sdl2::pixels::Color;
+use sdl2::render::{Canvas, Texture, TextureQuery};
+use sdl2::ttf::{FontStyle, Sdl2TtfContext};
 use sdl2::video::Window;
 use std::collections::HashMap;
 use std::path::Path;
@@ -51,5 +52,48 @@ impl TextureCache {
                 .load_texture(Path::new(&image_name))
                 .unwrap()
         })
+    }
+
+    /// Renders text, given the font name, size, style, color, string, and max width.  Transfers
+    /// ownership of the `Texture` to the calling function, returns the width and height of the
+    /// texture after rendering.  By using the identical font name, size, and style, if SDL2 caches
+    /// the font data, this will allow the font to be cached internally.
+    pub fn render_text(
+        &mut self,
+        c: &mut Canvas<Window>,
+        font_name: String,
+        font_size: u16,
+        font_style: FontStyle,
+        font_string: String,
+        font_color: Color,
+        width: u32,
+    ) -> (Texture, u32, u32) {
+        let ttf_context = self.get_ttf_context();
+        let texture_creator = c.texture_creator();
+        let mut font = ttf_context
+            .load_font(Path::new(&font_name), font_size as u16)
+            .unwrap();
+
+        font.set_style(font_style);
+
+        let surface = font
+            .render(&font_string)
+            .blended_wrapped(font_color, width)
+            .map_err(|e| e.to_string())
+            .unwrap();
+        let font_texture = texture_creator
+            .create_texture_from_surface(&surface)
+            .map_err(|e| e.to_string())
+            .unwrap();
+
+        let TextureQuery { width, height, .. } = font_texture.query();
+
+        (font_texture, width, height)
+    }
+}
+
+impl Default for TextureCache {
+    fn default() -> Self {
+        Self::new()
     }
 }
