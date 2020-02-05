@@ -31,12 +31,13 @@ use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
 
-/// This is the callback type that is used when an `on_click` callback is triggered from this
-/// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
+/// This is the callback type that is used when an `on_tab_selected` callback is triggered from this
+/// `Widget`.  Returns a number indicating the tab that was selected, starting from `0`.
 pub type OnTabSelectedCallbackType =
     Option<Box<dyn FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16)>>;
 
-/// This is the storage object for the `TabBarWidget`.  It stores the config, properties, callback registry.
+/// This is the storage object for the `TabBarWidget`.  It stores the config, properties, callback registry, tab
+/// items, and other storage values for internal rendering.
 pub struct TabBarWidget {
     config: WidgetConfig,
     system_properties: HashMap<i32, String>,
@@ -51,9 +52,12 @@ pub struct TabBarWidget {
     calculated: bool,
 }
 
-/// This is the implementation of the `TabBarWidget`, which displays an image next to some text.
+/// This is the implementation of the `TabBarWidget`, which displays a series of tabs specified by the
+/// tab items in the constructor.  Tab bar items are automatically sized and rendered depending on the
+/// number of items specified.
 impl TabBarWidget {
-    /// Creates a new `TabBarWidget`, given the `x, y, w, h` coordinates.
+    /// Creates a new `TabBarWidget`, given the `x, y, w, h` coordinates, and the tab items to be shown
+    /// in the tab bar area.
     pub fn new(points: Points, size: Size, tab_items: Vec<String>) -> Self {
         Self {
             config: WidgetConfig::new(points, size),
@@ -70,7 +74,7 @@ impl TabBarWidget {
         }
     }
 
-    /// Assigns the callback closure that will be used when a button click is triggered.
+    /// Assigns the callback closure that will be used when a tab is selected.
     pub fn on_tab_selected<F>(&mut self, callback: F)
     where
         F: FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16) + 'static,
@@ -78,7 +82,7 @@ impl TabBarWidget {
         self.on_tab_selected = Some(Box::new(callback));
     }
 
-    /// Internal function that triggers the `on_click` callback.
+    /// Internal function that triggers the `on_tab_selected` callback.
     fn call_tab_selected_callback(
         &mut self,
         widgets: &[WidgetContainer],
@@ -91,6 +95,7 @@ impl TabBarWidget {
         }
     }
 
+    /// Adjusts the widgets being displayed on screen.  Internal function.
     fn adjust_widgets(&mut self, c: &mut Canvas<Window>, t: &mut TextureCache) {
         let ttf_context = t.get_ttf_context();
         let texture_creator = c.texture_creator();
@@ -117,14 +122,14 @@ impl TabBarWidget {
             let TextureQuery { width, .. } = font_texture.query();
 
             tab_widths.push((width + 20) as u32);
-
-            eprintln!("Pushed width: {}", width + 20);
         }
 
         self.tab_widths = tab_widths;
         self.calculated = true;
     }
 
+    /// Determines the tab item that matches the X coordinates of the mouse within the bounds of
+    /// the `Widget`.
     fn find_hovered_item(&self, x: i32) -> i16 {
         let mut selected_item = -1;
         let mut start_x: i32 = 20;
@@ -228,20 +233,22 @@ impl Widget for TabBarWidget {
         self.texture_store.get_optional_ref()
     }
 
-    /// When a mouse enters the bounds of the `Widget`, this function is triggered.  This function
-    /// implementation is **optional**.
+    /// When a mouse enters the bounds of the `Widget`, this function is triggered.  Overridden by
+    /// this `Widget`.
     fn mouse_entered(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = true;
     }
 
-    /// When a mouse exits the bounds of the `Widget`, this function is triggered.  This function
-    /// implementation is **optional**.
+    /// When a mouse exits the bounds of the `Widget`, this function is triggered.  Overidden by
+    /// this `Widget`.
     fn mouse_exited(&mut self, _widgets: &[WidgetContainer], _layouts: &[LayoutContainer]) {
         self.in_bounds = false;
         self.hovered_item = -1;
         self.set_invalidated(true);
     }
 
+    /// Overrides the `mouse_moved` function, used to determine the position of the tab bar that is
+    /// currently under the mouse coordinates.
     fn mouse_moved(
         &mut self,
         _widgets: &[WidgetContainer],
@@ -262,6 +269,8 @@ impl Widget for TabBarWidget {
         }
     }
 
+    /// Overrides the `button_clicked` function, used to determine when a mouse clicks inside the bounds
+    /// of a tab, triggering the `on_tab_selected` callback where appropriate.
     fn button_clicked(
         &mut self,
         _widgets: &[WidgetContainer],
