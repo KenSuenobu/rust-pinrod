@@ -29,7 +29,7 @@ use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
 use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
-use sdl2::rect::{Rect, Point};
+use sdl2::rect::{Point, Rect};
 use std::any::Any;
 use std::collections::HashMap;
 use std::path::Path;
@@ -37,7 +37,7 @@ use std::path::Path;
 /// This is the callback type that is used when an `on_click` callback is triggered from this
 /// `Widget`.  Returns a flag indicating the selected state - toggled on or off.
 pub type OnTabSelectedCallbackType =
-Option<Box<dyn FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16)>>;
+    Option<Box<dyn FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16)>>;
 
 /// This is the storage object for the `TabBarWidget`.  It stores the config, properties, callback registry.
 pub struct TabBarWidget {
@@ -72,7 +72,7 @@ impl TabBarWidget {
             texture_store: TextureStore::default(),
             on_tab_selected: None,
             tab_items: tab_items.clone(),
-            tab_widths: vec!(0),
+            tab_widths: vec![0],
             base_widget,
             selected_item: -1,
             hovered_item: -1,
@@ -83,8 +83,8 @@ impl TabBarWidget {
 
     /// Assigns the callback closure that will be used when a button click is triggered.
     pub fn on_tab_selected<F>(&mut self, callback: F)
-        where
-            F: FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16) + 'static,
+    where
+        F: FnMut(&mut TabBarWidget, &[WidgetContainer], &[LayoutContainer], u16) + 'static,
     {
         self.on_tab_selected = Some(Box::new(callback));
     }
@@ -188,12 +188,14 @@ impl Widget for TabBarWidget {
                         texture.set_draw_color(Color::RGB(224, 224, 224));
                     }
 
-                    texture.fill_rect(
-                        Rect::new(start_x as i32,
-                        0,
-                        tab_widths[i] + 30,
-                        bounds[SIZE_HEIGHT])
-                    ).unwrap();
+                    texture
+                        .fill_rect(Rect::new(
+                            start_x as i32,
+                            0,
+                            tab_widths[i] + 30,
+                            bounds[SIZE_HEIGHT],
+                        ))
+                        .unwrap();
 
                     start_x += tab_widths[i] + 30 + 1;
                 }
@@ -206,7 +208,7 @@ impl Widget for TabBarWidget {
                     )
                     .unwrap();
             })
-                .unwrap();
+            .unwrap();
         }
 
         self.texture_store.get_optional_ref()

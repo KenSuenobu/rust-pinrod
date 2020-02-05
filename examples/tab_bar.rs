@@ -9,8 +9,8 @@ use pushrod::render::widget_config::{
 };
 use pushrod::render::{make_points, make_size};
 use pushrod::widgets::list_widget::*;
-use sdl2::pixels::Color;
 use pushrod::widgets::tab_bar_widget::TabBarWidget;
+use sdl2::pixels::Color;
 
 pub fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -22,11 +22,14 @@ pub fn main() {
         .build()
         .unwrap();
     let mut engine = Engine::new(400, 300, 60);
-    let mut widget1 = TabBarWidget::new(make_points(20, 20), make_size(360, 30),
-        vec![String::from("First"),
-        String::from("Second"),
-        String::from("Third"),
-        ]
+    let mut widget1 = TabBarWidget::new(
+        make_points(20, 20),
+        make_size(360, 30),
+        vec![
+            String::from("First"),
+            String::from("Second"),
+            String::from("Third"),
+        ],
     );
 
     widget1.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));

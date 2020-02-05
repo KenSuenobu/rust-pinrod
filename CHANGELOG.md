@@ -10,6 +10,7 @@
 - Created TileWidget and demo (#256)
 - Clippy and Formatting updates
 - Submitted updates for `invert` and static color defines in SDL2 (PR #965 in Rust-SDL2)
+- Created text helper function (render_text) (#276)
 
 ## 0.4.26
 
