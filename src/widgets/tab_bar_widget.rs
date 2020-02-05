@@ -17,9 +17,7 @@ use crate::render::callbacks::CallbackRegistry;
 use crate::render::widget::*;
 use crate::render::widget_cache::WidgetContainer;
 use crate::render::widget_config::*;
-use crate::render::{
-    inverse_color, make_points, make_size, Points, Size, POINT_X, POINT_Y, SIZE_HEIGHT, SIZE_WIDTH,
-};
+use crate::render::{Points, Size, POINT_X, SIZE_HEIGHT, SIZE_WIDTH};
 
 use sdl2::render::{Canvas, Texture, TextureQuery};
 use sdl2::video::Window;
@@ -27,7 +25,6 @@ use sdl2::video::Window;
 use crate::render::layout_cache::LayoutContainer;
 use crate::render::texture_cache::TextureCache;
 use crate::render::texture_store::TextureStore;
-use crate::widgets::text_widget::{TextJustify, TextWidget};
 use sdl2::pixels::Color;
 use sdl2::rect::{Point, Rect};
 use std::any::Any;
@@ -48,7 +45,6 @@ pub struct TabBarWidget {
     tab_items: Vec<String>,
     tab_widths: Vec<u32>,
     on_tab_selected: OnTabSelectedCallbackType,
-    base_widget: BaseWidget,
     selected_item: i16,
     hovered_item: i16,
     in_bounds: bool,
@@ -59,21 +55,14 @@ pub struct TabBarWidget {
 impl TabBarWidget {
     /// Creates a new `TabBarWidget`, given the `x, y, w, h` coordinates.
     pub fn new(points: Points, size: Size, tab_items: Vec<String>) -> Self {
-        let mut base_widget = BaseWidget::new(points.clone(), size.clone());
-
-        base_widget.set_color(CONFIG_COLOR_BORDER, Color::RGB(0, 0, 0));
-        base_widget.set_numeric(CONFIG_BORDER_WIDTH, 1);
-        base_widget.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
-
         Self {
             config: WidgetConfig::new(points, size),
             system_properties: HashMap::new(),
             callback_registry: CallbackRegistry::new(),
             texture_store: TextureStore::default(),
             on_tab_selected: None,
-            tab_items: tab_items.clone(),
+            tab_items,
             tab_widths: vec![0],
-            base_widget,
             selected_item: -1,
             hovered_item: -1,
             in_bounds: false,
@@ -132,7 +121,7 @@ impl TabBarWidget {
             eprintln!("Pushed width: {}", width + 20);
         }
 
-        self.tab_widths = tab_widths.clone();
+        self.tab_widths = tab_widths;
         self.calculated = true;
     }
 
@@ -167,8 +156,8 @@ impl Widget for TabBarWidget {
             self.texture_store
                 .create_or_resize_texture(c, bounds[0] as u32, bounds[1] as u32);
 
-            let base_widget_texture = self.base_widget.draw(c, t).unwrap();
             let tab_widths = self.tab_widths.clone();
+            let tab_items = self.tab_items.clone();
             let selected_tab = self.selected_item;
             let hovered_tab = self.hovered_item;
 
@@ -177,11 +166,13 @@ impl Widget for TabBarWidget {
                 texture.clear();
 
                 let mut start_x: u32 = 20;
-                let num_tabs = tab_widths.len();
 
                 for i in 0..tab_widths.len() {
+                    let mut font_color = Color::RGB(0, 0, 0);
+
                     if selected_tab == i as i16 {
                         texture.set_draw_color(Color::RGB(128, 128, 128));
+                        font_color = Color::RGB(255, 255, 255);
                     } else if hovered_tab == i as i16 {
                         texture.set_draw_color(Color::RGB(192, 192, 192));
                     } else {
@@ -195,6 +186,29 @@ impl Widget for TabBarWidget {
                             tab_widths[i] + 30,
                             bounds[SIZE_HEIGHT],
                         ))
+                        .unwrap();
+
+                    let (font_texture, font_width, font_height) = t.render_text(
+                        texture,
+                        String::from("assets/OpenSans-Regular.ttf"),
+                        14,
+                        sdl2::ttf::FontStyle::NORMAL,
+                        tab_items[i].clone(),
+                        font_color,
+                        bounds[SIZE_WIDTH],
+                    );
+
+                    texture
+                        .copy(
+                            &font_texture,
+                            None,
+                            Rect::new(
+                                start_x as i32 + 10,
+                                (bounds[SIZE_HEIGHT] / 2 - 10) as i32,
+                                font_width,
+                                font_height,
+                            ),
+                        )
                         .unwrap();
 
                     start_x += tab_widths[i] + 30 + 1;
@@ -237,11 +251,8 @@ impl Widget for TabBarWidget {
         if self.calculated {
             let origin = self.get_config().get_point(CONFIG_ORIGIN);
             let true_x = points[POINT_X] - origin[POINT_X];
-            let true_y = points[POINT_Y] - origin[POINT_Y];
             let previous_hovered_item = self.hovered_item;
             let hovered_item = self.find_hovered_item(true_x);
-
-            eprintln!("Mouse moved: {} hovered={}", true_x, hovered_item);
 
             self.hovered_item = hovered_item;
 
@@ -259,14 +270,12 @@ impl Widget for TabBarWidget {
         _clicks: u8,
         state: bool,
     ) {
-        if button == 1 && self.in_bounds && self.calculated && state {
-            if self.hovered_item != -1 {
-                self.selected_item = self.hovered_item;
-                self.set_invalidated(true);
+        if button == 1 && self.in_bounds && self.calculated && state && self.hovered_item != -1 {
+            self.selected_item = self.hovered_item;
+            self.set_invalidated(true);
 
-                if self.selected_item > -1 {
-                    self.call_tab_selected_callback(_widgets, _layouts, self.selected_item as u16);
-                }
+            if self.selected_item > -1 {
+                self.call_tab_selected_callback(_widgets, _layouts, self.selected_item as u16);
             }
         }
     }

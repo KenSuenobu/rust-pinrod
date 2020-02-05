@@ -34,6 +34,9 @@ pub fn main() {
 
     widget1.set_color(CONFIG_COLOR_BASE, Color::RGB(255, 255, 255));
     widget1.set_color(CONFIG_COLOR_HOVER, Color::RGB(192, 192, 255));
+    widget1.on_tab_selected(|_, _, _, selected_tab| {
+        eprintln!("Selected tab: {}", selected_tab);
+    });
 
     engine.add_widget(Box::new(widget1), String::from("widget1"));
 
