@@ -2,6 +2,7 @@
 
 ## 0.4.28
 
+- Added workflow to use GitHub Actions for building the project.
 
 ## 0.4.27
 
