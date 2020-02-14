@@ -61,4 +61,11 @@ pub mod list_widget;
 /// `ToolbarWidget`, which contains a list of `TileWidget`s
 pub mod tile_widget;
 
+/// This is a `TabBarWidget` that provides a selectable set of tabs along the top-most part of a
+/// selectable area containing multiple pages of layouts.  It provides a callback to indicate which
+/// page has been selected.
 pub mod tab_bar_widget;
+
+/// This is a `ViewportWidget` that provides a scrollable view within a container.  It provides
+/// a callback indicating when the visible viewport area is altered.
+pub mod viewport_widget;

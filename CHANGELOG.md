@@ -3,6 +3,7 @@
 ## 0.4.28
 
 - Added workflow to use GitHub Actions for building the project.
+- Font cache implemented in `TextureCache` class. (#283)
 
 ## 0.4.27
 
