@@ -44,8 +44,6 @@ pub struct ViewportWidget {
     texture_store: TextureStore,
     view_point: Points,
     view_size: Size,
-    vertical_scroll: SliderWidget,
-    horizontal_scroll: SliderWidget,
 }
 
 /// This is the implementation of the `ViewportWidget` that contains a viewable area within a scrollable
@@ -60,13 +58,13 @@ impl ViewportWidget {
             texture_store: TextureStore::default(),
             view_point: make_points_origin(),
             view_size: size.clone(),
-            vertical_scroll: SliderWidget::new(make_points(size[SIZE_WIDTH] as i32 - 20, 0),
-                                               make_size(20, size[SIZE_HEIGHT] as u32 - 20), 0, 100, 0,
-                                               SliderVertical),
-            horizontal_scroll: SliderWidget::new(make_points(0, size[SIZE_HEIGHT] as i32 - 20),
-                                                 make_size(size[SIZE_WIDTH] - 20, 20), 0, 100, 0,
-                                                 SliderHorizontal),
         }
+    }
+
+    /// Moves the position of the viewable area and redraws it after moving.
+    pub fn move_viewport(&mut self, points: Points) {
+        self.view_point = points;
+        self.config.set_invalidated(true);
     }
 }
 
@@ -90,22 +88,6 @@ impl Widget for ViewportWidget {
 
                 texture.set_draw_color(Color::RGB(0, 0, 0));
                 texture.draw_rect(Rect::new(0, 0, bounds[SIZE_WIDTH] - 28, bounds[SIZE_HEIGHT] - 28))
-                    .unwrap();
-
-                texture
-                    .copy(
-                        vertical_scroll_texture,
-                        None,
-                        Rect::new(bounds[SIZE_WIDTH] as i32 - 20, 0,  20, bounds[SIZE_HEIGHT] - 20),
-                    )
-                    .unwrap();
-
-                texture
-                    .copy(
-                        horizontal_scroll_texture,
-                        None,
-                        Rect::new(0, bounds[SIZE_HEIGHT] as i32 - 20,  bounds[SIZE_WIDTH] - 20, 20),
-                    )
                     .unwrap();
             })
                 .unwrap();
