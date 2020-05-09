@@ -1,5 +1,21 @@
 # rust-pushrod
 
+## Attention
+
+This project is being split into separate modules to make the project more manageable,
+and as such will soon deprecate this project.
+
+Pushrod is now split into:
+
+- [Pushrod Events](https://www.github.com/KenSuenobu/pushrod-events)
+- [Pushrod Widgets](https://www.github.com/KenSuenobu/pushrod-widgets)
+- [Pushrod Core](https://www.github.com/KenSuenobu/pushrod)
+
+This project will be shut down soon, but the tickets will be migrated over, as will the
+widgets and some of the code.  Callbacks are being deprecated, as they are too complicated
+to work as expected.  As a result, an event-based system is planned, and will soon be
+explained and covered in a blog post.
+
 ## Project Description
 
 [![Build Status](https://travis-ci.org/KenSuenobu/rust-pushrod.svg?branch=master)](https://travis-ci.org/KenSuenobu/rust-pushrod)
